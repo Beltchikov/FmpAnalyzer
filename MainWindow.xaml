@@ -5,24 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FmpAnalyzer"
         mc:Ignorable="d"
-        Title="FMP Analyzer" Height="450" Width="800">
+        Title="FMP Analyzer" Height="800" Width="1400">
+    <Window.Resources>
+        <local:MainWindowViewModel x:Key="ViewModel" />
+    </Window.Resources>
+    <Window.DataContext>
+        <StaticResource ResourceKey="ViewModel" />
+    </Window.DataContext>
     <Grid>
         <TabControl>
             <TabItem Header="Compounder">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="10"></ColumnDefinition>
-                   </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="10"></RowDefinition>
                         <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="10"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Button Grid.Row="1" Grid.Column="1">Go</Button>
-                    <TextBox Grid.Row="2" 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="10"></ColumnDefinition>
+                   </Grid.ColumnDefinitions>
+                    <Label Grid.Row="1" Grid.Column="1"  Content="{Binding ConnectionString}"></Label>
+                    <Button Grid.Row="3" Grid.Column="1" Cursor="Hand">Go</Button>
+                    <TextBox Grid.Row="4" 
                              Grid.Column="1" 
                              x:Name="txtResult"></TextBox>
                 </Grid>
