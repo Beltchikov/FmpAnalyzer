@@ -112,7 +112,7 @@ namespace FmpAnalyzer
         /// <returns></returns>
         public List<string> Compounder(string date, double roe)
         {
-            return (from income in IncomeStatements
+            var roeFiltered = (from income in IncomeStatements
                     join balance in BalanceSheets
                     on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
                     where income.Date == date
@@ -134,6 +134,10 @@ namespace FmpAnalyzer
                     orderby selectionSecond.Roe descending
                     select selectionSecond.Symbol)
                          .ToList();
+
+
+
+            return roeFiltered;
         }
     }
 }
