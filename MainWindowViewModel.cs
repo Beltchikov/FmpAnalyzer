@@ -49,10 +49,10 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandGo(object p)
         {
-            var topStocks = DataContext.Instance.Stocks.Take(10).Select(s => new { Symbol = s.Symbol, Name = s.Name });
-            foreach (var stock in topStocks)
+            var topRoe = Companies.Instance.WithBestRoe(10, "2019-12-31");
+            foreach (var obj in topRoe)
             {
-                Results += $"\r\n{stock.Symbol}\t{stock.Name}";
+                Results += $"\r\n{obj}";
             }
 
         }

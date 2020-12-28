@@ -1,0 +1,74 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace FmpAnalyzer
+{
+    /// <summary>
+    /// Companies
+    /// </summary>
+    public class Companies : DataContext
+    {
+        private static Companies _companies;
+        private static readonly object lockObject = new object();
+
+        Companies() { }
+
+        /// <summary>
+        /// Instance
+        /// </summary>
+        public new static Companies Instance
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (_companies == null)
+                    {
+                        _companies = new Companies();
+                    }
+                    return _companies;
+                }
+            }
+        }
+
+        /// <summary>
+        /// WithBestRoe
+        /// </summary>
+        /// <param name="top"></param>
+        /// <param name="date">Date should be in format '2019-12-31' </param>
+        /// <returns></returns>
+        /*
+        SELECT TOP 10 I.symbol, I.Date, I.NetIncome, B.TotalStockholdersEquity,
+        (CASE WHEN B.TotalStockholdersEquity = 0 THEN 0 ELSE I.NetIncome * 100 / B.TotalStockholdersEquity END) ROE
+        FROM IncomeStatements I
+        INNER JOIN BalanceSheets B ON I.Symbol = B.Symbol AND I.Date = B.Date
+        WHERE I.Date = '2019-12-31' 
+        AND I.NetIncome > 0
+        ORDER BY ROE DESC
+        */
+        public List<string> WithBestRoe(int top, string date)
+        {
+            return (from income in IncomeStatements
+                    join balance in BalanceSheets
+                    on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
+                    where income.Date == date
+                    && income.NetIncome > 0
+                    select new
+                    {
+                        Symbol = income.Symbol,
+                        Equity = balance.TotalStockholdersEquity,
+                        Roe = balance.TotalStockholdersEquity == 0
+                           ? 0
+                           : income.NetIncome * 100 / balance.TotalStockholdersEquity
+                    } into unordered
+                    orderby unordered.Roe descending
+                    select unordered.Symbol)
+                         .Take(top)
+                         .ToList();
+        }
+    }
+}
+
+
