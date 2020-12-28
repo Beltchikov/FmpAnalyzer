@@ -76,7 +76,11 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private async Task OnCommandGoAsync(object p)
         {
-            var symbols = await Companies.Instance.Compounder("2019-12-31", RoeFilter);
+            // TODO -> GUI
+            var historyDepth = 5;
+            var growthGrad = 3;
+            
+            var symbols = await Companies.Instance.Compounder("2019-12-31", RoeFilter, historyDepth, growthGrad);
             Dispatcher.Invoke(() =>
             {
                 Results = $"Found {symbols.Count()} companies:";

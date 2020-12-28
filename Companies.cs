@@ -110,14 +110,10 @@ namespace FmpAnalyzer
             return resultList;
         }
 
-        /// <summary>
-        /// Compounder
-        /// </summary>
-        /// <param name="date"></param>
-        /// <param name="roe"></param>
-        /// <returns></returns>
-        public async Task<List<string>> Compounder(string date, double roe)
+        public async Task<List<string>> Compounder(string date, double roe, int historyDepth, int growthGrad)
         {
+            List<string> resultList = new List<string>();
+
             DatabaseAction?.Invoke(this, new DatabaseActionEventArgs
             {
                 Action = $"Retrieving companies with ROE > {roe}",
@@ -146,9 +142,34 @@ namespace FmpAnalyzer
                                } into selectionSecond
                                orderby selectionSecond.Roe descending
                                select selectionSecond.Symbol)
-                         .ToListAsync();
+                         .ToList();
 
-            return await roeFiltered;
+            // Stable ROW growth
+            DatabaseAction?.Invoke(this, new DatabaseActionEventArgs
+            {
+                Action = $"filtering companies without stable ROE growth out...",
+                ProgressValue = 20,
+                MaxValue = 100
+            });
+
+            foreach (var symbol in roeFiltered)
+            {
+                var historyRoe = HistoryRoe(symbol, date, historyDepth);
+                if (historyRoe.Count() < historyDepth || !historyRoe.AllPositive())
+                {
+                    continue;
+                }
+
+                // Decline is used for growth determination because of reverse order
+                if (historyRoe.Declines() < growthGrad)
+                {
+                    continue;
+                }
+
+                resultList.Add(symbol);
+            }
+
+            return await Task<List<string>>.Run(() => resultList);
         }
     }
 }
