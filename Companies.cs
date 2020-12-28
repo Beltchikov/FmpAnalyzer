@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FmpAnalyzer
 {
@@ -110,7 +112,7 @@ namespace FmpAnalyzer
         /// <param name="date"></param>
         /// <param name="roe"></param>
         /// <returns></returns>
-        public List<string> Compounder(string date, double roe)
+        public async Task<List<string>> Compounder(string date, double roe)
         {
             var roeFiltered = (from income in IncomeStatements
                     join balance in BalanceSheets
@@ -133,11 +135,9 @@ namespace FmpAnalyzer
                     } into selectionSecond
                     orderby selectionSecond.Roe descending
                     select selectionSecond.Symbol)
-                         .ToList();
+                         .ToListAsync();
 
-
-
-            return roeFiltered;
+            return await roeFiltered;
         }
     }
 }

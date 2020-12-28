@@ -57,13 +57,23 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Button  
                             Cursor="Hand"
                             Command="{Binding CommandGo}">Go</Button>
-                        <TextBox Grid.Row="2" 
+                        <Label Content="{Binding CurrentAction}"
+                               Grid.Row="2"></Label>
+                        <ProgressBar x:Name="prgTotal"
+                                Maximum="100" Minimum="0" 
+                                 Value="50"
+                                 Grid.Row="4"/>
+                        <TextBox Grid.Row="6" 
                              x:Name="txtResults"
                              Text="{Binding Results}">
 
