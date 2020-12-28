@@ -29,10 +29,12 @@ namespace FmpAnalyzer
             RoeFilter = 15;
             CurrentAction = "Willkommen!";
 
+            Companies.Instance.DatabaseAction += Instance_DatabaseAction;
+
             CommandGo = new RelayCommand(async p => { await OnCommandGoAsync(p); });
         }
 
-        /// <summary>
+         /// <summary>
         /// ConnectionString
         /// </summary>
         public string ConnectionString
@@ -113,6 +115,16 @@ namespace FmpAnalyzer
             //    Results += Environment.NewLine;
             //}
 
+        }
+
+        /// <summary>
+        /// Instance_DatabaseAction
+        /// </summary>
+        /// <param name="sendet"></param>
+        /// <param name="e"></param>
+        private void Instance_DatabaseAction(object sendet, DatabaseActionEventArgs e)
+        {
+            CurrentAction = e.Action;
         }
 
     }

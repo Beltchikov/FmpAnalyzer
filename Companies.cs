@@ -35,6 +35,10 @@ namespace FmpAnalyzer
             }
         }
 
+        public delegate void DatabaseActionDelegate(object sendet, DatabaseActionEventArgs e);
+
+        public event DatabaseActionDelegate DatabaseAction;
+
         /// <summary>
         /// WithBestRoe
         /// </summary>
@@ -114,27 +118,34 @@ namespace FmpAnalyzer
         /// <returns></returns>
         public async Task<List<string>> Compounder(string date, double roe)
         {
+            DatabaseAction?.Invoke(this, new DatabaseActionEventArgs
+            {
+                Action = $"Retrieving companies with ROE > {roe}",
+                ProgressValue = 10,
+                MaxValue = 100
+            });
+
             var roeFiltered = (from income in IncomeStatements
-                    join balance in BalanceSheets
-                    on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
-                    where income.Date == date
-                    && income.NetIncome > 0
-                    select new
-                    {
-                        Symbol = income.Symbol,
-                        Equity = balance.TotalStockholdersEquity,
-                        Roe = balance.TotalStockholdersEquity == 0
-                           ? 0
-                           : income.NetIncome * 100 / balance.TotalStockholdersEquity
-                    } into selectionFirst
-                    where selectionFirst.Roe >= roe
-                    select new
-                    {
-                        Symbol = selectionFirst.Symbol,
-                        Roe = selectionFirst.Roe
-                    } into selectionSecond
-                    orderby selectionSecond.Roe descending
-                    select selectionSecond.Symbol)
+                               join balance in BalanceSheets
+                               on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
+                               where income.Date == date
+                               && income.NetIncome > 0
+                               select new
+                               {
+                                   Symbol = income.Symbol,
+                                   Equity = balance.TotalStockholdersEquity,
+                                   Roe = balance.TotalStockholdersEquity == 0
+                                      ? 0
+                                      : income.NetIncome * 100 / balance.TotalStockholdersEquity
+                               } into selectionFirst
+                               where selectionFirst.Roe >= roe
+                               select new
+                               {
+                                   Symbol = selectionFirst.Symbol,
+                                   Roe = selectionFirst.Roe
+                               } into selectionSecond
+                               orderby selectionSecond.Roe descending
+                               select selectionSecond.Symbol)
                          .ToListAsync();
 
             return await roeFiltered;
