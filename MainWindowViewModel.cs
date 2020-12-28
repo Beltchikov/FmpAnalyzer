@@ -16,7 +16,7 @@ namespace FmpAnalyzer
         {
             ConnectionStringProperty = DependencyProperty.Register("ConnectionString", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             ResultsProperty = DependencyProperty.Register("Results", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-    }
+        }
 
         public MainWindowViewModel()
         {
@@ -49,12 +49,31 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandGo(object p)
         {
-            var topRoe = Companies.Instance.WithBestRoe(10, "2019-12-31");
-            foreach (var obj in topRoe)
+            Dictionary<string, List<double>> dictResults = new Dictionary<string, List<double>>();
+
+            // ROE
+            var topRoeList = Companies.Instance.WithBestRoe(10, "2019-12-31");
+            foreach (var symbol in topRoeList)
             {
-                Results += $"\r\n{obj}";
+                dictResults[symbol] = null;
             }
 
+            // ROE History
+            foreach (var symbol in topRoeList)
+            {
+                dictResults[symbol] = Companies.Instance.HistoryRoe(symbol, "2019-12-31", 5);
+            }
+
+            // Output
+            foreach (var symbol in dictResults.Keys)
+            {
+                Results += symbol;
+                foreach (var roe in dictResults[symbol])
+                {
+                    Results += $"\t{roe}";
+                }
+                Results += Environment.NewLine;
+            }
         }
 
     }
