@@ -103,6 +103,38 @@ namespace FmpAnalyzer
 
             return resultList;
         }
+
+        /// <summary>
+        /// Compounder
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="roe"></param>
+        /// <returns></returns>
+        public List<string> Compounder(string date, double roe)
+        {
+            return (from income in IncomeStatements
+                    join balance in BalanceSheets
+                    on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
+                    where income.Date == date
+                    && income.NetIncome > 0
+                    select new
+                    {
+                        Symbol = income.Symbol,
+                        Equity = balance.TotalStockholdersEquity,
+                        Roe = balance.TotalStockholdersEquity == 0
+                           ? 0
+                           : income.NetIncome * 100 / balance.TotalStockholdersEquity
+                    } into selectionFirst
+                    where selectionFirst.Roe >= roe
+                    select new
+                    {
+                        Symbol = selectionFirst.Symbol,
+                        Roe = selectionFirst.Roe
+                    } into selectionSecond
+                    orderby selectionSecond.Roe descending
+                    select selectionSecond.Symbol)
+                         .ToList();
+        }
     }
 }
 

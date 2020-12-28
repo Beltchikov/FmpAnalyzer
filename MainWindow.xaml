@@ -21,6 +21,8 @@
                         <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="10"></RowDefinition>
                         <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="10"></RowDefinition>
                     </Grid.RowDefinitions>
@@ -30,10 +32,24 @@
                         <ColumnDefinition Width="10"></ColumnDefinition>
                    </Grid.ColumnDefinitions>
                     <Label Grid.Row="1" Grid.Column="1"  Content="{Binding ConnectionString}"></Label>
-                    <Button Grid.Row="3" Grid.Column="1" 
+
+                    <Grid Grid.Row="3" Grid.Column="1" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="45"></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0"
+                           Content="ROE >"></Label>
+                        <TextBox x:Name="txtRoeFilter" Margin="0,2,0,5"
+                             Text="{Binding RoeFilter}"
+                                 Grid.Column="1"></TextBox>
+                    </Grid>
+
+                    <Button Grid.Row="5" Grid.Column="1" 
                             Cursor="Hand"
                             Command="{Binding CommandGo}">Go</Button>
-                    <TextBox Grid.Row="4" 
+                    <TextBox Grid.Row="6" 
                              Grid.Column="1" 
                              x:Name="txtResults"
                              Text="{Binding Results}"></TextBox>
