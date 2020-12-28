@@ -30,7 +30,9 @@
                         <ColumnDefinition Width="10"></ColumnDefinition>
                    </Grid.ColumnDefinitions>
                     <Label Grid.Row="1" Grid.Column="1"  Content="{Binding ConnectionString}"></Label>
-                    <Button Grid.Row="3" Grid.Column="1" Cursor="Hand">Go</Button>
+                    <Button Grid.Row="3" Grid.Column="1" 
+                            Cursor="Hand"
+                            Command="{Binding CommandGo}">Go</Button>
                     <TextBox Grid.Row="4" 
                              Grid.Column="1" 
                              x:Name="txtResult"></TextBox>
