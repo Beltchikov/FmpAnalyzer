@@ -14,6 +14,9 @@ namespace FmpAnalyzer
         private static DataContext _dataContext;
         private static readonly object lockObject = new object();
 
+        /// <summary>
+        /// Instance
+        /// </summary>
         public static DataContext Instance
         {
             get
@@ -37,6 +40,19 @@ namespace FmpAnalyzer
         {
             optionsBuilder.UseSqlServer(Configuration.Instance["ConnectionString"]);
             base.OnConfiguring(optionsBuilder);
+        }
+
+        /// <summary>
+        /// OnModelCreating
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<IncomeStatement>().HasKey(p => new { p.Symbol, p.Date });
+            modelBuilder.Entity<BalanceSheet>().HasKey(p => new { p.Symbol, p.Date });
+            modelBuilder.Entity<CashFlowStatement>().HasKey(p => new { p.Symbol, p.Date });
         }
 
         public DbSet<Stock> Stocks { get; set; }

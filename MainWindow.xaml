@@ -35,7 +35,8 @@
                             Command="{Binding CommandGo}">Go</Button>
                     <TextBox Grid.Row="4" 
                              Grid.Column="1" 
-                             x:Name="txtResult"></TextBox>
+                             x:Name="txtResults"
+                             Text="{Binding Results}"></TextBox>
                 </Grid>
             </TabItem>
             <TabItem Header="..."></TabItem>
