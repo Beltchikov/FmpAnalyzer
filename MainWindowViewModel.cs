@@ -196,8 +196,7 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandGo(object p)
         {
-            Results = string.Empty;
-            BackgroundResults = Brushes.DarkGray;
+            LockControls();
 
             CompounderQueryParams = new CompounderQueryParams
             {
@@ -222,11 +221,28 @@ namespace FmpAnalyzer
             };
             worker.RunWorkerCompleted += (s, e) =>
             {
-                BackgroundResults = Brushes.White;
+                UnlockControls();
                 Results = $"Found {Symbols.Count()} companies:";
                 Symbols.ForEach(s => Results += $"\r\n{s}");
             };
             worker.RunWorkerAsync();
+        }
+
+        /// <summary>
+        /// LockControls
+        /// </summary>
+        private void LockControls()
+        {
+            Results = string.Empty;
+            BackgroundResults = Brushes.DarkGray;
+        }
+
+        /// <summary>
+        /// UnlockControls
+        /// </summary>
+        private void UnlockControls()
+        {
+            BackgroundResults = Brushes.White;
         }
     }
 }
