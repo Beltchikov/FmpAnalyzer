@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FmpAnalyzer.Queries;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -80,8 +81,9 @@ namespace FmpAnalyzer
             var historyDepth = 5;
             var growthGrad = 3;
             
-            var symbols = await Companies.Instance.Compounder("2019-12-31", RoeFilter, historyDepth, growthGrad);
-            Dispatcher.Invoke(() =>
+            //var symbols = await Companies.Instance.Compounder("2019-12-31", RoeFilter, historyDepth, growthGrad);
+            var symbols = await QueryFactory.CompounderQuery.Compounder("2019-12-31", RoeFilter, historyDepth, growthGrad);
+           Dispatcher.Invoke(() =>
             {
                 Results = $"Found {symbols.Count()} companies:";
                 symbols.ForEach(s => Results += $"\r\n{s}");
