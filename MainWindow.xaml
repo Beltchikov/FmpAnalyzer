@@ -102,8 +102,9 @@
                         <Label Content="{Binding CurrentAction}"
                                Grid.Row="2"></Label>
                         <ProgressBar x:Name="prgTotal"
-                                Maximum="100" Minimum="0" 
-                                 Value="50"
+                                Maximum="{Binding ProgressMax}" 
+                                 Minimum="0" 
+                                 Value="{Binding ProgressCurrent}"
                                  Grid.Row="4"/>
                         <TextBox Grid.Row="6" 
                              x:Name="txtResults"

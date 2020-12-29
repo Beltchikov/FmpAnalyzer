@@ -8,6 +8,9 @@ using System.Windows;
 
 namespace FmpAnalyzer
 {
+    /// <summary>
+    /// MainWindowViewModel
+    /// </summary>
     public class MainWindowViewModel : DependencyObject
     {
         public static readonly DependencyProperty ConnectionStringProperty;
@@ -17,8 +20,10 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty StableRowGrowthProperty;
         public static readonly DependencyProperty HistoryDepthProperty;
         public static readonly DependencyProperty GrowthGradProperty;
+        public static readonly DependencyProperty ProgressMaxProperty;
+        public static readonly DependencyProperty ProgressCurrentProperty;
         public RelayCommand CommandGo { get; set; }
-        
+
         static MainWindowViewModel()
         {
             ConnectionStringProperty = DependencyProperty.Register("ConnectionString", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
@@ -28,6 +33,8 @@ namespace FmpAnalyzer
             StableRowGrowthProperty = DependencyProperty.Register("StableRowGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
             HistoryDepthProperty = DependencyProperty.Register("HistoryDepth", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             GrowthGradProperty = DependencyProperty.Register("GrowthGrad", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            ProgressMaxProperty = DependencyProperty.Register("ProgressMax", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
         }
 
         public MainWindowViewModel()
@@ -35,7 +42,7 @@ namespace FmpAnalyzer
             ConnectionString = Configuration.Instance["ConnectionString"];
             RoeFilter = 15;
             CurrentAction = "Willkommen!";
-            StableRowGrowth= true;
+            StableRowGrowth = true;
             HistoryDepth = 5;
             GrowthGrad = 3;
 
@@ -106,17 +113,40 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
+        /// ProgressMax
+        /// </summary>
+        public int ProgressMax
+        {
+            get { return (int)GetValue(ProgressMaxProperty); }
+            set { SetValue(ProgressMaxProperty, value); }
+        }
+
+        /// <summary>
+        /// ProgressCurrent
+        /// </summary>
+        public int ProgressCurrent
+        {
+            get { return (int)GetValue(ProgressCurrentProperty); }
+            set { SetValue(ProgressCurrentProperty, value); }
+        }
+
+        /// <summary>
         /// OnCommandGo
         /// </summary>
         /// <param name="p"></param>
         private async Task OnCommandGoAsync(object p)
         {
-            QueryFactory.CompounderQuery.DatabaseAction += (s, e) => { CurrentAction = e.Action; };
+            QueryFactory.CompounderQuery.DatabaseAction += (s, e) => 
+            { 
+                CurrentAction = e.Action;
+                ProgressMax = e.MaxValue;
+                ProgressCurrent = e.ProgressValue;
+            };
 
             var historyDepth = StableRowGrowth ? HistoryDepth : 0;
             var growthGrad = StableRowGrowth ? GrowthGrad : 0;
             var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, historyDepth, growthGrad);
-            
+
             Dispatcher.Invoke(() =>
              {
                  Results = $"Found {symbols.Count()} companies:";

@@ -30,6 +30,7 @@ namespace FmpAnalyzer.Queries
                 resultList = CompounderStableRowGrowth(resultList, date, historyDepth, growthGrad);
             }
 
+            ReportProgress(100, 100, $"OK! Finished query.");
             return await Task<List<string>>.Run(() => resultList);
         }
 
@@ -65,6 +66,8 @@ namespace FmpAnalyzer.Queries
                                orderby selectionSecond.Roe descending
                                select selectionSecond.Symbol)
                          .ToList();
+
+            ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");
             return roeFiltered;
         }
 
@@ -78,7 +81,7 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         public List<string> CompounderStableRowGrowth(List<string> inputSymbolList, string date, int historyDepth, int growthGrad)
         {
-            ReportProgress(100, 20, $"filtering companies without stable ROE growth out...");
+            ReportProgress(100, 30, $"filtering companies without stable ROE growth out...");
 
             List<string> resultList = new List<string>();
             foreach (var symbol in inputSymbolList)
@@ -98,6 +101,7 @@ namespace FmpAnalyzer.Queries
                 resultList.Add(symbol);
             }
 
+            ReportProgress(100, 40, $"OK! {resultList.Count()} companies found.");
             return resultList;
         }
 
