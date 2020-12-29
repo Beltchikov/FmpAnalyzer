@@ -13,21 +13,14 @@ namespace FmpAnalyzer.Queries
     {
         public CompounderQuery(DataContext dataContext) : base(dataContext) {}
 
-        /// <summary>
-        /// Run
-        /// </summary>
-        /// <param name="date"></param>
-        /// <param name="roe"></param>
-        /// <param name="historyDepth"></param>
-        /// <param name="growthGrad"></param>
-        /// <returns></returns>
-        public async Task<List<string>> Run(string date, double roe, int historyDepth, int growthGrad)
+        public async Task<List<string>> Run(string date, double roe, int historyDepthRoe, int growthGradRoe, 
+            int historyDepthReinvestment, int growthGradReinvestment)
         {
             List<string> resultList = CompounderHighRoe(date, roe);
 
-            if (historyDepth > 0 && growthGrad > 0)
+            if (historyDepthRoe > 0 && growthGradRoe > 0)
             {
-                resultList = CompounderStableRowGrowth(resultList, date, historyDepth, growthGrad);
+                resultList = CompounderStableRowGrowth(resultList, date, historyDepthRoe, growthGradRoe);
             }
 
             ReportProgress(100, 100, $"OK! Finished query.");

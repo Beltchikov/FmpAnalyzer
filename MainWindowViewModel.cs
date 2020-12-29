@@ -178,9 +178,13 @@ namespace FmpAnalyzer
                 ProgressCurrent = e.ProgressValue;
             };
 
-            var historyDepth = StableRoeGrowth ? HistoryDepthRoe : 0;
-            var growthGrad = StableRoeGrowth ? GrowthGradRoe : 0;
-            var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, historyDepth, growthGrad);
+            var historyDepthRoe = StableRoeGrowth ? HistoryDepthRoe : 0;
+            var growthGradRoe = StableRoeGrowth ? GrowthGradRoe : 0;
+            var historyDepthReinvestment = StableReinvestmentGrowth ? HistoryDepthReinvestment : 0;
+            var growthGradReinvestment = StableReinvestmentGrowth ? GrowthGradReinvestment : 0;
+
+            var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, historyDepthRoe, growthGradRoe,
+                historyDepthReinvestment, growthGradReinvestment);
 
             Dispatcher.Invoke(() =>
              {
