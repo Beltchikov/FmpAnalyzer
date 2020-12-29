@@ -36,7 +36,7 @@
                           Grid.RowSpan="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"></RowDefinition>
-                           <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
@@ -142,8 +142,8 @@
                                  Grid.Row="4"/>
                         <TextBox Grid.Row="6" 
                              x:Name="txtResults"
-                             Text="{Binding Results}">
-
+                             Text="{Binding Results}"
+                                 Background="{Binding BackgroundResults}">
                         </TextBox>
                     </Grid>
 

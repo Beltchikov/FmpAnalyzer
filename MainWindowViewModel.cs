@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace FmpAnalyzer
 {
@@ -25,6 +26,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty StableReinvestmentGrowthProperty;
         public static readonly DependencyProperty HistoryDepthReinvestmentProperty;
         public static readonly DependencyProperty GrowthGradReinvestmentProperty;
+        public static readonly DependencyProperty BackgroundResultsProperty;
         public RelayCommand CommandGo { get; set; }
 
         static MainWindowViewModel()
@@ -41,6 +43,7 @@ namespace FmpAnalyzer
             StableReinvestmentGrowthProperty = DependencyProperty.Register("StableReinvestmentGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
             HistoryDepthReinvestmentProperty = DependencyProperty.Register("HistoryDepthReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             GrowthGradReinvestmentProperty = DependencyProperty.Register("GrowthGradReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            BackgroundResultsProperty = DependencyProperty.Register("BackgroundResults", typeof(Brush), typeof(MainWindowViewModel), new PropertyMetadata(default(Brush)));
         }
 
         public MainWindowViewModel()
@@ -164,6 +167,15 @@ namespace FmpAnalyzer
         {
             get { return (int)GetValue(GrowthGradReinvestmentProperty); }
             set { SetValue(GrowthGradReinvestmentProperty, value); }
+        }
+
+        /// <summary>
+        /// BackgroundResults
+        /// </summary>
+        public Brush BackgroundResults
+        {
+            get { return (Brush)GetValue(BackgroundResultsProperty); }
+            set { SetValue(BackgroundResultsProperty, value); }
         }
 
         /// <summary>
