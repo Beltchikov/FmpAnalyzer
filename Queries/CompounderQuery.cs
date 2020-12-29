@@ -13,7 +13,7 @@ namespace FmpAnalyzer.Queries
     {
         public CompounderQuery(DataContext dataContext) : base(dataContext) { }
 
-        public async Task<List<string>> Run(CompounderQueryParams parameters)
+        public List<string> Run(CompounderQueryParams parameters)
         {
             List<string> resultList = CompounderHighRoe(parameters.Date, parameters.Roe);
 
@@ -28,7 +28,7 @@ namespace FmpAnalyzer.Queries
             }
 
             ReportProgress(100, 100, $"OK! Finished query.");
-            return await Task<List<string>>.Run(() => resultList);
+            return resultList;
         }
 
         /// <summary>

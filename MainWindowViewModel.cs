@@ -1,8 +1,10 @@
 ﻿using FmpAnalyzer.Queries;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -58,7 +60,7 @@ namespace FmpAnalyzer
             HistoryDepthReinvestment = 5;
             GrowthGradReinvestment = 3;
 
-            CommandGo = new RelayCommand(async p => { await OnCommandGoAsync(p); });
+            CommandGo = new RelayCommand(p => { OnCommandGo(p); });
         }
 
         /// <summary>
@@ -179,19 +181,25 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
+        /// CompounderQueryParams
+        /// </summary>
+        public CompounderQueryParams CompounderQueryParams { get; set; }
+
+        /// <summary>
+        /// Symbols
+        /// </summary>
+        public List<string> Symbols { get; set; }
+
+        /// <summary>
         /// OnCommandGo
         /// </summary>
         /// <param name="p"></param>
-        private async Task OnCommandGoAsync(object p)
+        private void OnCommandGo(object p)
         {
-            QueryFactory.CompounderQuery.DatabaseAction += (s, e) =>
-            {
-                CurrentAction = e.Action;
-                ProgressMax = e.MaxValue;
-                ProgressCurrent = e.ProgressValue;
-            };
+            Results = string.Empty;
+            BackgroundResults = Brushes.DarkGray;
 
-            var compounderQueryParams = new CompounderQueryParams
+            CompounderQueryParams = new CompounderQueryParams
             {
                 Date = "2019-12-31",
                 Roe = RoeFilter,
@@ -201,13 +209,24 @@ namespace FmpAnalyzer
                 GrowthGradReinvestment = StableReinvestmentGrowth ? GrowthGradReinvestment : 0
             };
 
-            var symbols = await QueryFactory.CompounderQuery.Run(compounderQueryParams);
-
-            Dispatcher.Invoke(() =>
-             {
-                 Results = $"Found {symbols.Count()} companies:";
-                 symbols.ForEach(s => Results += $"\r\n{s}");
-             });
+            var worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += (s, e) =>
+            {
+                var symbols = QueryFactory.CompounderQuery.Run(CompounderQueryParams);
+                (s as BackgroundWorker).ReportProgress(100, symbols);
+            };
+            worker.ProgressChanged += (s, e) =>
+            {
+                Symbols = (List<string>)e.UserState;
+            };
+            worker.RunWorkerCompleted += (s, e) =>
+            {
+                BackgroundResults = Brushes.White;
+                Results = $"Found {Symbols.Count()} companies:";
+                Symbols.ForEach(s => Results += $"\r\n{s}");
+            };
+            worker.RunWorkerAsync();
         }
     }
 }
