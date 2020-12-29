@@ -35,7 +35,7 @@ namespace FmpAnalyzer
             CommandGo = new RelayCommand(async p => { await OnCommandGoAsync(p); });
         }
 
-         /// <summary>
+        /// <summary>
         /// ConnectionString
         /// </summary>
         public string ConnectionString
@@ -80,14 +80,13 @@ namespace FmpAnalyzer
             // TODO -> GUI
             var historyDepth = 5;
             var growthGrad = 3;
-            
-            //var symbols = await Companies.Instance.Compounder("2019-12-31", RoeFilter, historyDepth, growthGrad);
-            var symbols = await QueryFactory.CompounderQuery.Compounder("2019-12-31", RoeFilter, historyDepth, growthGrad);
-           Dispatcher.Invoke(() =>
-            {
-                Results = $"Found {symbols.Count()} companies:";
-                symbols.ForEach(s => Results += $"\r\n{s}");
-            });
+
+            var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, historyDepth, growthGrad);
+            Dispatcher.Invoke(() =>
+             {
+                 Results = $"Found {symbols.Count()} companies:";
+                 symbols.ForEach(s => Results += $"\r\n{s}");
+             });
         }
 
         /// <summary>
