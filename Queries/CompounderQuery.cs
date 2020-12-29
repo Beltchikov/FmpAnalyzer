@@ -11,7 +11,7 @@ namespace FmpAnalyzer.Queries
     /// </summary>
     public class CompounderQuery : QueryBase
     {
-        public CompounderQuery(DataContext dataContext) : base(dataContext) {}
+        public CompounderQuery(DataContext dataContext) : base(dataContext) { }
 
         public async Task<List<string>> Run(CompounderQueryParams parameters)
         {
@@ -20,6 +20,11 @@ namespace FmpAnalyzer.Queries
             if (parameters.HistoryDepthRoe > 0 && parameters.GrowthGradRoe > 0)
             {
                 resultList = CompounderStableRowGrowth(resultList, parameters.Date, parameters.HistoryDepthRoe, parameters.GrowthGradRoe);
+            }
+
+            if (parameters.HistoryDepthReinvestment > 0 && parameters.GrowthGradReinvestment > 0)
+            {
+                resultList = CompounderStableReinvestmentGrowth(resultList, parameters.Date, parameters.HistoryDepthRoe, parameters.GrowthGradRoe);
             }
 
             ReportProgress(100, 100, $"OK! Finished query.");
@@ -32,7 +37,7 @@ namespace FmpAnalyzer.Queries
         /// <param name="date"></param>
         /// <param name="roe"></param>
         /// <returns></returns>
-        public List<string> CompounderHighRoe(string date, double roe)
+        private List<string> CompounderHighRoe(string date, double roe)
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
 
@@ -71,11 +76,11 @@ namespace FmpAnalyzer.Queries
         /// <param name="historyDepth"></param>
         /// <param name="growthGrad"></param>
         /// <returns></returns>
-        public List<string> CompounderStableRowGrowth(List<string> inputSymbolList, string date, int historyDepth, int growthGrad)
+        private List<string> CompounderStableRowGrowth(List<string> inputSymbolList, string date, int historyDepth, int growthGrad)
         {
             ReportProgress(100, 30, $"filtering companies without stable ROE growth out...");
-
             List<string> resultList = new List<string>();
+            
             foreach (var symbol in inputSymbolList)
             {
                 var historyRoe = QueryFactory.RoeHistoryQuery.Run(symbol, date, historyDepth);
@@ -94,6 +99,40 @@ namespace FmpAnalyzer.Queries
             }
 
             ReportProgress(100, 40, $"OK! {resultList.Count()} companies found.");
+            return resultList;
+        }
+
+        /// <summary>
+        /// CompounderStableReinvestmentGrowth
+        /// </summary>
+        /// <param name="inputSymbolList"></param>
+        /// <param name="date"></param>
+        /// <param name="historyDepth"></param>
+        /// <param name="growthGrad"></param>
+        /// <returns></returns>
+        private List<string> CompounderStableReinvestmentGrowth(List<string> inputSymbolList, string date, int historyDepth, int growthGrad)
+        {
+            ReportProgress(100, 50, $"filtering companies without stable reinvestment growth out...");
+            List<string> resultList = new List<string>();
+
+            foreach (var symbol in inputSymbolList)
+            {
+                var historyReinvestment = QueryFactory.ReinvestmentHistoryQuery.Run(symbol, date, historyDepth);
+                if (historyReinvestment.Count() < historyDepth || !historyReinvestment.AllPositive())
+                {
+                    continue;
+                }
+
+                // Decline is used for growth determination because of reverse order
+                if (historyReinvestment.Declines() < growthGrad)
+                {
+                    continue;
+                }
+
+                resultList.Add(symbol);
+            }
+
+            ReportProgress(100, 60, $"OK! {resultList.Count()} companies found.");
             return resultList;
         }
 

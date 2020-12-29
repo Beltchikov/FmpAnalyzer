@@ -18,7 +18,7 @@ namespace FmpAnalyzer
         {
             foreach (var doubleValue in listOfDouble)
             {
-                if (doubleValue < 0)
+                if (doubleValue <= 0)
                 {
                     return false;
                 }
