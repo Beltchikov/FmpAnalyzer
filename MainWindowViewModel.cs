@@ -18,7 +18,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty HistoryDepthProperty;
         public static readonly DependencyProperty GrowthGradProperty;
         public RelayCommand CommandGo { get; set; }
-
+        
         static MainWindowViewModel()
         {
             ConnectionStringProperty = DependencyProperty.Register("ConnectionString", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));

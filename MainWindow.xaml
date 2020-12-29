@@ -55,6 +55,7 @@
                              Text="{Binding RoeFilter}"
                                  Grid.Column="1"></TextBox>
                         <CheckBox Content="Stable ROE Growth" 
+                                  x:Name="chkStableRoeGrowth"
                                   IsChecked="{Binding StableRowGrowth}"
                                   Grid.Row="2"
                                   Grid.ColumnSpan="3"
@@ -67,14 +68,20 @@
                         <TextBox x:Name="txtHistoryDepth" Margin="0,2,0,5"
                              Text="{Binding HistoryDepth}"
                                  Grid.Column="2"
-                                 Grid.Row="3"></TextBox>
+                                 Grid.Row="3"
+                                 IsEnabled="{Binding 
+                            ElementName=chkStableRoeGrowth, 
+                            Path=IsChecked}"></TextBox>
                         <Label Grid.Column="0" Grid.Row="4"
                                Grid.ColumnSpan="2"
                            Content="Growth Grad:"></Label>
                         <TextBox x:Name="txtGrowthGrad" Margin="0,2,0,5"
                              Text="{Binding GrowthGrad}"
                                  Grid.Column="2"
-                                 Grid.Row="4"></TextBox>
+                                 Grid.Row="4"
+                                 IsEnabled="{Binding 
+                            ElementName=chkStableRoeGrowth, 
+                            Path=IsChecked}"></TextBox>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="2"
