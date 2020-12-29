@@ -110,16 +110,31 @@ namespace FmpAnalyzer
             return resultList;
         }
 
+        /// <summary>
+        /// Compounder
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="roe"></param>
+        /// <param name="historyDepth"></param>
+        /// <param name="growthGrad"></param>
+        /// <returns></returns>
         public async Task<List<string>> Compounder(string date, double roe, int historyDepth, int growthGrad)
         {
-            List<string> resultList = new List<string>();
+            List<string> resultList = CompounderHighRoe(date, roe);
+            resultList = CompounderStableRowGrowth(resultList, date, historyDepth, growthGrad);
 
-            DatabaseAction?.Invoke(this, new DatabaseActionEventArgs
-            {
-                Action = $"Retrieving companies with ROE > {roe}",
-                ProgressValue = 10,
-                MaxValue = 100
-            });
+            return await Task<List<string>>.Run(() => resultList);
+        }
+
+        /// <summary>
+        /// CompounderStep1
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="roe"></param>
+        /// <returns></returns>
+        public List<string> CompounderHighRoe(string date, double roe)
+        {
+            ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
 
             var roeFiltered = (from income in IncomeStatements
                                join balance in BalanceSheets
@@ -143,16 +158,23 @@ namespace FmpAnalyzer
                                orderby selectionSecond.Roe descending
                                select selectionSecond.Symbol)
                          .ToList();
+            return roeFiltered;
+        }
 
-            // Stable ROW growth
-            DatabaseAction?.Invoke(this, new DatabaseActionEventArgs
-            {
-                Action = $"filtering companies without stable ROE growth out...",
-                ProgressValue = 20,
-                MaxValue = 100
-            });
+        /// <summary>
+        /// CompounderStableRowGrowth
+        /// </summary>
+        /// <param name="inputSymbolList"></param>
+        /// <param name="date"></param>
+        /// <param name="historyDepth"></param>
+        /// <param name="growthGrad"></param>
+        /// <returns></returns>
+        public List<string> CompounderStableRowGrowth(List<string> inputSymbolList, string date, int historyDepth, int growthGrad)
+        {
+            ReportProgress(100, 20, $"filtering companies without stable ROE growth out...");
 
-            foreach (var symbol in roeFiltered)
+            List<string> resultList = new List<string>();
+            foreach (var symbol in inputSymbolList)
             {
                 var historyRoe = HistoryRoe(symbol, date, historyDepth);
                 if (historyRoe.Count() < historyDepth || !historyRoe.AllPositive())
@@ -169,7 +191,23 @@ namespace FmpAnalyzer
                 resultList.Add(symbol);
             }
 
-            return await Task<List<string>>.Run(() => resultList);
+            return resultList;
+        }
+
+        /// <summary>
+        /// ReportProgress
+        /// </summary>
+        /// <param name="max"></param>
+        /// <param name="current"></param>
+        /// <param name="message"></param>
+        private void ReportProgress(int max, int current, string message)
+        {
+            DatabaseAction?.Invoke(this, new DatabaseActionEventArgs
+            {
+                Action = $"filtering companies without stable ROE growth out...",
+                ProgressValue = current,
+                MaxValue = max
+            });
         }
     }
 }
