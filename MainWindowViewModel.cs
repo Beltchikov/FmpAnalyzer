@@ -112,7 +112,11 @@ namespace FmpAnalyzer
         private async Task OnCommandGoAsync(object p)
         {
             QueryFactory.CompounderQuery.DatabaseAction += (s, e) => { CurrentAction = e.Action; };
-            var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, HistoryDepth, GrowthGrad);
+
+            var historyDepth = StableRowGrowth ? HistoryDepth : 0;
+            var growthGrad = StableRowGrowth ? GrowthGrad : 0;
+            var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, historyDepth, growthGrad);
+            
             Dispatcher.Invoke(() =>
              {
                  Results = $"Found {symbols.Count()} companies:";

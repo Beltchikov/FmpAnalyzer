@@ -24,7 +24,11 @@ namespace FmpAnalyzer.Queries
         public async Task<List<string>> Run(string date, double roe, int historyDepth, int growthGrad)
         {
             List<string> resultList = CompounderHighRoe(date, roe);
-            resultList = CompounderStableRowGrowth(resultList, date, historyDepth, growthGrad);
+
+            if (historyDepth > 0 && growthGrad > 0)
+            {
+                resultList = CompounderStableRowGrowth(resultList, date, historyDepth, growthGrad);
+            }
 
             return await Task<List<string>>.Run(() => resultList);
         }
