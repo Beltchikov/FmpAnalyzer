@@ -36,7 +36,9 @@
                           Grid.RowSpan="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"></RowDefinition>
-                            <RowDefinition Height="5"></RowDefinition>
+                           <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
@@ -56,32 +58,40 @@
                                  Grid.Column="1"></TextBox>
                         <CheckBox Content="Stable ROE Growth" 
                                   x:Name="chkStableRoeGrowth"
-                                  IsChecked="{Binding StableRowGrowth}"
-                                  Grid.Row="2"
+                                  IsChecked="{Binding StableRoeGrowth}"
+                                  Grid.Row="1"
                                   Grid.ColumnSpan="3"
                                   FlowDirection="RightToLeft"
                                   HorizontalAlignment="Left"
                                   Margin="4,0,0,0"></CheckBox>
-                        <Label Grid.Column="0" Grid.Row="3"
+                        <Label Grid.Column="0" Grid.Row="2"
                                Grid.ColumnSpan="2"
                            Content="History Depth:"></Label>
-                        <TextBox x:Name="txtHistoryDepth" Margin="0,2,0,5"
-                             Text="{Binding HistoryDepth}"
+                        <TextBox x:Name="txtHistoryDepthRoe" Margin="0,2,0,5"
+                             Text="{Binding HistoryDepthRoe}"
+                                 Grid.Column="2"
+                                 Grid.Row="2"
+                                 IsEnabled="{Binding 
+                            ElementName=chkStableRoeGrowth, 
+                            Path=IsChecked}"></TextBox>
+                        <Label Grid.Column="0" Grid.Row="3"
+                               Grid.ColumnSpan="2"
+                           Content="Growth Grad:"></Label>
+                        <TextBox x:Name="txtGrowthGradRow" Margin="0,2,0,5"
+                             Text="{Binding GrowthGradRoe}"
                                  Grid.Column="2"
                                  Grid.Row="3"
                                  IsEnabled="{Binding 
                             ElementName=chkStableRoeGrowth, 
                             Path=IsChecked}"></TextBox>
-                        <Label Grid.Column="0" Grid.Row="4"
-                               Grid.ColumnSpan="2"
-                           Content="Growth Grad:"></Label>
-                        <TextBox x:Name="txtGrowthGrad" Margin="0,2,0,5"
-                             Text="{Binding GrowthGrad}"
-                                 Grid.Column="2"
-                                 Grid.Row="4"
-                                 IsEnabled="{Binding 
-                            ElementName=chkStableRoeGrowth, 
-                            Path=IsChecked}"></TextBox>
+                        <CheckBox Content="Stable Reinvestment Growth" 
+                                  x:Name="chkStableReinvestmentGrowth"
+                                  IsChecked="{Binding StableRoeGrowth}"
+                                  Grid.Row="4"
+                                  Grid.ColumnSpan="4"
+                                  FlowDirection="RightToLeft"
+                                  HorizontalAlignment="Left"
+                                  Margin="4,0,0,0"></CheckBox>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="2"

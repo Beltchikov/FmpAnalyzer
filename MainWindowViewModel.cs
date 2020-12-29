@@ -17,9 +17,9 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty ResultsProperty;
         public static readonly DependencyProperty RoeFilterProperty;
         public static readonly DependencyProperty CurrentActionProperty;
-        public static readonly DependencyProperty StableRowGrowthProperty;
-        public static readonly DependencyProperty HistoryDepthProperty;
-        public static readonly DependencyProperty GrowthGradProperty;
+        public static readonly DependencyProperty StableRoeGrowthProperty;
+        public static readonly DependencyProperty HistoryDepthRoeProperty;
+        public static readonly DependencyProperty GrowthGradRoeProperty;
         public static readonly DependencyProperty ProgressMaxProperty;
         public static readonly DependencyProperty ProgressCurrentProperty;
         public RelayCommand CommandGo { get; set; }
@@ -30,9 +30,9 @@ namespace FmpAnalyzer
             ResultsProperty = DependencyProperty.Register("Results", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             RoeFilterProperty = DependencyProperty.Register("RoeFilter", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(Double)));
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            StableRowGrowthProperty = DependencyProperty.Register("StableRowGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
-            HistoryDepthProperty = DependencyProperty.Register("HistoryDepth", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-            GrowthGradProperty = DependencyProperty.Register("GrowthGrad", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            StableRoeGrowthProperty = DependencyProperty.Register("StableRoeGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
+            HistoryDepthRoeProperty = DependencyProperty.Register("HistoryDepthRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            GrowthGradRoeProperty = DependencyProperty.Register("GrowthGradRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             ProgressMaxProperty = DependencyProperty.Register("ProgressMax", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
         }
@@ -42,9 +42,9 @@ namespace FmpAnalyzer
             ConnectionString = Configuration.Instance["ConnectionString"];
             RoeFilter = 15;
             CurrentAction = "Willkommen!";
-            StableRowGrowth = true;
-            HistoryDepth = 5;
-            GrowthGrad = 3;
+            StableRoeGrowth = true;
+            HistoryDepthRoe = 5;
+            GrowthGradRoe = 3;
 
             CommandGo = new RelayCommand(async p => { await OnCommandGoAsync(p); });
         }
@@ -86,30 +86,30 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
-        /// StableRowGrowth
+        /// StableRoeGrowth
         /// </summary>
-        public bool StableRowGrowth
+        public bool StableRoeGrowth
         {
-            get { return (bool)GetValue(StableRowGrowthProperty); }
-            set { SetValue(StableRowGrowthProperty, value); }
+            get { return (bool)GetValue(StableRoeGrowthProperty); }
+            set { SetValue(StableRoeGrowthProperty, value); }
         }
 
         /// <summary>
-        /// HistoryDepth
+        /// HistoryDepthRoe
         /// </summary>
-        public int HistoryDepth
+        public int HistoryDepthRoe
         {
-            get { return (int)GetValue(HistoryDepthProperty); }
-            set { SetValue(HistoryDepthProperty, value); }
+            get { return (int)GetValue(HistoryDepthRoeProperty); }
+            set { SetValue(HistoryDepthRoeProperty, value); }
         }
 
         /// <summary>
-        /// GrowthGrad
+        /// GrowthGradRoe
         /// </summary>
-        public int GrowthGrad
+        public int GrowthGradRoe
         {
-            get { return (int)GetValue(GrowthGradProperty); }
-            set { SetValue(GrowthGradProperty, value); }
+            get { return (int)GetValue(GrowthGradRoeProperty); }
+            set { SetValue(GrowthGradRoeProperty, value); }
         }
 
         /// <summary>
@@ -143,8 +143,8 @@ namespace FmpAnalyzer
                 ProgressCurrent = e.ProgressValue;
             };
 
-            var historyDepth = StableRowGrowth ? HistoryDepth : 0;
-            var growthGrad = StableRowGrowth ? GrowthGrad : 0;
+            var historyDepth = StableRoeGrowth ? HistoryDepthRoe : 0;
+            var growthGrad = StableRoeGrowth ? GrowthGradRoe : 0;
             var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, historyDepth, growthGrad);
 
             Dispatcher.Invoke(() =>
