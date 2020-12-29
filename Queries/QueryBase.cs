@@ -9,8 +9,6 @@ namespace FmpAnalyzer.Queries
     /// </summary>
     public class QueryBase
     {
-        private Companies _companies;
-
         public delegate void DatabaseActionDelegate(object sender, DatabaseActionEventArgs e);
         public event DatabaseActionDelegate DatabaseAction;
 
@@ -20,9 +18,9 @@ namespace FmpAnalyzer.Queries
         /// QueryBase
         /// </summary>
         /// <param name="companies"></param>
-        protected QueryBase(Companies companies)
+        protected QueryBase(DataContext companies)
         {
-            _companies = companies;
+            DataContext = companies;
         }
 
         /// <summary>
@@ -42,14 +40,8 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
-        /// Companies
+        /// DataContext
         /// </summary>
-        public Companies Companies
-        {
-            get
-            {
-                return _companies;
-            }
-        }
+        public DataContext DataContext { get; }
     }
 }

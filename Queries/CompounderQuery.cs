@@ -11,7 +11,7 @@ namespace FmpAnalyzer.Queries
     /// </summary>
     public class CompounderQuery : QueryBase
     {
-        public CompounderQuery(Companies companies) : base(companies){}
+        public CompounderQuery(DataContext dataContext) : base(dataContext) {}
 
         /// <summary>
         /// Run
@@ -39,8 +39,8 @@ namespace FmpAnalyzer.Queries
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
 
-            var roeFiltered = (from income in Companies.IncomeStatements
-                               join balance in Companies.BalanceSheets
+            var roeFiltered = (from income in DataContext.IncomeStatements
+                               join balance in DataContext.BalanceSheets
                                on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
                                where income.Date == date
                                && income.NetIncome > 0

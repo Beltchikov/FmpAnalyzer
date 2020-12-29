@@ -10,7 +10,7 @@ namespace FmpAnalyzer.Queries
     /// </summary>
     public class WithBestRoeQuery : QueryBase
     {
-        public WithBestRoeQuery(Companies companies) : base(companies) { }
+        public WithBestRoeQuery(DataContext dataContext) : base(dataContext) { }
 
         /// <summary>
         /// WithBestRoe
@@ -29,8 +29,8 @@ namespace FmpAnalyzer.Queries
         */
         public List<string> Run(int top, string date)
         {
-            return (from income in Companies.IncomeStatements
-                    join balance in Companies.BalanceSheets
+            return (from income in DataContext.IncomeStatements
+                    join balance in DataContext.BalanceSheets
                     on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
                     where income.Date == date
                     && income.NetIncome > 0

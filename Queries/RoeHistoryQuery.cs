@@ -10,7 +10,7 @@ namespace FmpAnalyzer.Queries
     /// </summary>
     public class RoeHistoryQuery : QueryBase
     {
-        public RoeHistoryQuery(Companies companies) : base(companies) { }
+        public RoeHistoryQuery(DataContext dataContext) : base(dataContext) { }
 
         /// <summary>
         /// Run
@@ -26,8 +26,8 @@ namespace FmpAnalyzer.Queries
             var currentDate = oldestDate;
             for (int i = 0; i < depth; i++)
             {
-                var queryResult = (from income in Companies.IncomeStatements
-                                   join balance in Companies.BalanceSheets
+                var queryResult = (from income in DataContext.IncomeStatements
+                                   join balance in DataContext.BalanceSheets
                                    on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
                                    where income.Symbol == symbol
                                    && income.Date == currentDate

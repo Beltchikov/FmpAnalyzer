@@ -26,7 +26,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_compounderQuery == null)
                     {
-                        _compounderQuery = new CompounderQuery(Companies.Instance);
+                        _compounderQuery = new CompounderQuery(DataContext.Instance);
                     }
                     return _compounderQuery;
                 }
@@ -44,7 +44,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_withBestRoeQuery == null)
                     {
-                        _withBestRoeQuery = new WithBestRoeQuery(Companies.Instance);
+                        _withBestRoeQuery = new WithBestRoeQuery(DataContext.Instance);
                     }
                     return _withBestRoeQuery;
                 }
@@ -62,7 +62,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_roeHistoryQuery == null)
                     {
-                        _roeHistoryQuery = new RoeHistoryQuery(Companies.Instance);
+                        _roeHistoryQuery = new RoeHistoryQuery(DataContext.Instance);
                     }
                     return _roeHistoryQuery;
                 }
