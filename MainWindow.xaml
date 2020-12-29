@@ -86,12 +86,34 @@
                             Path=IsChecked}"></TextBox>
                         <CheckBox Content="Stable Reinvestment Growth" 
                                   x:Name="chkStableReinvestmentGrowth"
-                                  IsChecked="{Binding StableRoeGrowth}"
+                                  IsChecked="{Binding StableReinvestmentGrowth}"
                                   Grid.Row="4"
                                   Grid.ColumnSpan="4"
                                   FlowDirection="RightToLeft"
                                   HorizontalAlignment="Left"
                                   Margin="4,0,0,0"></CheckBox>
+                        <Label Grid.Column="0" Grid.Row="5"
+                               Grid.ColumnSpan="2"
+                           Content="History Depth:"></Label>
+                        <TextBox x:Name="txtHistoryDepthRReinvestment" 
+                                 Margin="0,2,0,5"
+                             Text="{Binding HistoryDepthReinvestment}"
+                                 Grid.Column="2"
+                                 Grid.Row="5"
+                                 IsEnabled="{Binding 
+                            ElementName=chkStableReinvestmentGrowth, 
+                            Path=IsChecked}"></TextBox>
+                        <Label Grid.Column="0" Grid.Row="6"
+                               Grid.ColumnSpan="2"
+                           Content="Growth Grad:"></Label>
+                        <TextBox x:Name="txtGrowthGradReinvestment" 
+                                 Margin="0,2,0,5"
+                             Text="{Binding GrowthGradReinvestment}"
+                                 Grid.Column="2"
+                                 Grid.Row="6"
+                                 IsEnabled="{Binding 
+                            ElementName=chkStableReinvestmentGrowth, 
+                            Path=IsChecked}"></TextBox>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="2"

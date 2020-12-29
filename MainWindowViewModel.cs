@@ -22,6 +22,9 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty GrowthGradRoeProperty;
         public static readonly DependencyProperty ProgressMaxProperty;
         public static readonly DependencyProperty ProgressCurrentProperty;
+        public static readonly DependencyProperty StableReinvestmentGrowthProperty;
+        public static readonly DependencyProperty HistoryDepthReinvestmentProperty;
+        public static readonly DependencyProperty GrowthGradReinvestmentProperty;
         public RelayCommand CommandGo { get; set; }
 
         static MainWindowViewModel()
@@ -35,7 +38,10 @@ namespace FmpAnalyzer
             GrowthGradRoeProperty = DependencyProperty.Register("GrowthGradRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             ProgressMaxProperty = DependencyProperty.Register("ProgressMax", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-        }
+            StableReinvestmentGrowthProperty = DependencyProperty.Register("StableReinvestmentGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
+            HistoryDepthReinvestmentProperty = DependencyProperty.Register("HistoryDepthReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            GrowthGradReinvestmentProperty = DependencyProperty.Register("GrowthGradReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+    }
 
         public MainWindowViewModel()
         {
@@ -45,6 +51,8 @@ namespace FmpAnalyzer
             StableRoeGrowth = true;
             HistoryDepthRoe = 5;
             GrowthGradRoe = 3;
+            HistoryDepthReinvestment = 5;
+            GrowthGradReinvestment = 3;
 
             CommandGo = new RelayCommand(async p => { await OnCommandGoAsync(p); });
         }
@@ -131,13 +139,40 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
+        /// StableReinvestmentGrowth
+        /// </summary>
+        public bool StableReinvestmentGrowth
+        {
+            get { return (bool)GetValue(StableReinvestmentGrowthProperty); }
+            set { SetValue(StableReinvestmentGrowthProperty, value); }
+        }
+
+        /// <summary>
+        /// HistoryDepthReinvestment
+        /// </summary>
+        public int HistoryDepthReinvestment
+        {
+            get { return (int)GetValue(HistoryDepthReinvestmentProperty); }
+            set { SetValue(HistoryDepthReinvestmentProperty, value); }
+        }
+
+        /// <summary>
+        /// GrowthGradReinvestment
+        /// </summary>
+        public int GrowthGradReinvestment
+        {
+            get { return (int)GetValue(GrowthGradReinvestmentProperty); }
+            set { SetValue(GrowthGradReinvestmentProperty, value); }
+        }
+
+        /// <summary>
         /// OnCommandGo
         /// </summary>
         /// <param name="p"></param>
         private async Task OnCommandGoAsync(object p)
         {
-            QueryFactory.CompounderQuery.DatabaseAction += (s, e) => 
-            { 
+            QueryFactory.CompounderQuery.DatabaseAction += (s, e) =>
+            {
                 CurrentAction = e.Action;
                 ProgressMax = e.MaxValue;
                 ProgressCurrent = e.ProgressValue;
