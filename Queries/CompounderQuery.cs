@@ -37,7 +37,7 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         public List<string> CompounderHighRoe(string date, double roe)
         {
-            Companies.ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
+            ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
 
             var roeFiltered = (from income in Companies.IncomeStatements
                                join balance in Companies.BalanceSheets
@@ -74,7 +74,7 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         public List<string> CompounderStableRowGrowth(List<string> inputSymbolList, string date, int historyDepth, int growthGrad)
         {
-            Companies.ReportProgress(100, 20, $"filtering companies without stable ROE growth out...");
+            ReportProgress(100, 20, $"filtering companies without stable ROE growth out...");
 
             List<string> resultList = new List<string>();
             foreach (var symbol in inputSymbolList)

@@ -35,27 +35,11 @@ namespace FmpAnalyzer
             }
         }
 
-        public delegate void DatabaseActionDelegate(object sendet, DatabaseActionEventArgs e);
-
-        public event DatabaseActionDelegate DatabaseAction;
+        
 
         
 
-        /// <summary>
-        /// ReportProgress
-        /// </summary>
-        /// <param name="max"></param>
-        /// <param name="current"></param>
-        /// <param name="message"></param>
-        public void ReportProgress(int max, int current, string message)
-        {
-            DatabaseAction?.Invoke(this, new DatabaseActionEventArgs
-            {
-                Action = $"filtering companies without stable ROE growth out...",
-                ProgressValue = current,
-                MaxValue = max
-            });
-        }
+        
     }
 }
 

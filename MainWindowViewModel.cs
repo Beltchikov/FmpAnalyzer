@@ -30,8 +30,6 @@ namespace FmpAnalyzer
             RoeFilter = 15;
             CurrentAction = "Willkommen!";
 
-            Companies.Instance.DatabaseAction += Instance_DatabaseAction;
-
             CommandGo = new RelayCommand(async p => { await OnCommandGoAsync(p); });
         }
 
@@ -81,55 +79,13 @@ namespace FmpAnalyzer
             var historyDepth = 5;
             var growthGrad = 3;
 
+            QueryFactory.CompounderQuery.DatabaseAction += (s, e) => { CurrentAction = e.Action; };
             var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, historyDepth, growthGrad);
             Dispatcher.Invoke(() =>
              {
                  Results = $"Found {symbols.Count()} companies:";
                  symbols.ForEach(s => Results += $"\r\n{s}");
              });
-        }
-
-        /// <summary>
-        /// Diverse
-        /// </summary>
-        private void Diverse()
-        {
-            //Dictionary<string, List<double>> dictResults = new Dictionary<string, List<double>>();
-
-            //// ROE
-            //var topRoeList = Companies.Instance.WithBestRoe(10, "2019-12-31");
-            //foreach (var symbol in topRoeList)
-            //{
-            //    dictResults[symbol] = null;
-            //}
-
-            //// ROE History
-            //foreach (var symbol in topRoeList)
-            //{
-            //    dictResults[symbol] = Companies.Instance.HistoryRoe(symbol, "2019-12-31", 5);
-            //}
-
-            //// Output
-            //foreach (var symbol in dictResults.Keys)
-            //{
-            //    Results += symbol;
-            //    foreach (var roe in dictResults[symbol])
-            //    {
-            //        Results += $"\t{roe}";
-            //    }
-            //    Results += Environment.NewLine;
-            //}
-
-        }
-
-        /// <summary>
-        /// Instance_DatabaseAction
-        /// </summary>
-        /// <param name="sendet"></param>
-        /// <param name="e"></param>
-        private void Instance_DatabaseAction(object sendet, DatabaseActionEventArgs e)
-        {
-            CurrentAction = e.Action;
         }
 
     }
