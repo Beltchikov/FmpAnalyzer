@@ -14,6 +14,8 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty ResultsProperty;
         public static readonly DependencyProperty RoeFilterProperty;
         public static readonly DependencyProperty CurrentActionProperty;
+        public static readonly DependencyProperty HistoryDepthProperty;
+        public static readonly DependencyProperty GrowthGradProperty;
         public RelayCommand CommandGo { get; set; }
 
         static MainWindowViewModel()
@@ -22,6 +24,8 @@ namespace FmpAnalyzer
             ResultsProperty = DependencyProperty.Register("Results", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             RoeFilterProperty = DependencyProperty.Register("RoeFilter", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(Double)));
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
+            HistoryDepthProperty = DependencyProperty.Register("HistoryDepth", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            GrowthGradProperty = DependencyProperty.Register("GrowthGrad", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
         }
 
         public MainWindowViewModel()
@@ -29,6 +33,8 @@ namespace FmpAnalyzer
             ConnectionString = Configuration.Instance["ConnectionString"];
             RoeFilter = 15;
             CurrentAction = "Willkommen!";
+            HistoryDepth = 5;
+            GrowthGrad = 3;
 
             CommandGo = new RelayCommand(async p => { await OnCommandGoAsync(p); });
         }
@@ -70,17 +76,31 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
+        /// HistoryDepth
+        /// </summary>
+        public int HistoryDepth
+        {
+            get { return (int)GetValue(HistoryDepthProperty); }
+            set { SetValue(HistoryDepthProperty, value); }
+        }
+
+        /// <summary>
+        /// GrowthGrad
+        /// </summary>
+        public int GrowthGrad
+        {
+            get { return (int)GetValue(GrowthGradProperty); }
+            set { SetValue(GrowthGradProperty, value); }
+        }
+
+        /// <summary>
         /// OnCommandGo
         /// </summary>
         /// <param name="p"></param>
         private async Task OnCommandGoAsync(object p)
         {
-            // TODO -> GUI
-            var historyDepth = 5;
-            var growthGrad = 3;
-
             QueryFactory.CompounderQuery.DatabaseAction += (s, e) => { CurrentAction = e.Action; };
-            var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, historyDepth, growthGrad);
+            var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, HistoryDepth, GrowthGrad);
             Dispatcher.Invoke(() =>
              {
                  Results = $"Found {symbols.Count()} companies:";

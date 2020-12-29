@@ -34,22 +34,44 @@
 
                     <Grid Grid.Row="3" Grid.Column="1"
                           Grid.RowSpan="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="45"></ColumnDefinition>
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"></RowDefinition>
-                            <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="5"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="45"></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
                         <Label Grid.Column="0"
                            Content="ROE >"></Label>
                         <TextBox x:Name="txtRoeFilter" Margin="0,2,0,5"
                              Text="{Binding RoeFilter}"
                                  Grid.Column="1"></TextBox>
+                        <CheckBox Content="Stable ROE Growth" 
+                                  IsChecked="True"
+                                  Grid.Row="2"
+                                  Grid.ColumnSpan="3"></CheckBox>
+                        <Label Grid.Column="0" Grid.Row="3"
+                               Grid.ColumnSpan="2"
+                           Content="History Depth:"></Label>
+                        <TextBox x:Name="txtHistoryDepth" Margin="0,2,0,5"
+                             Text="{Binding HistoryDepth}"
+                                 Grid.Column="2"
+                                 Grid.Row="3"></TextBox>
+                        <Label Grid.Column="0" Grid.Row="4"
+                               Grid.ColumnSpan="2"
+                           Content="Growth Grad:"></Label>
+                        <TextBox x:Name="txtGrowthGrad" Margin="0,2,0,5"
+                             Text="{Binding GrowthGrad}"
+                                 Grid.Column="2"
+                                 Grid.Row="4"></TextBox>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="2"
