@@ -78,7 +78,7 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         private List<string> CompounderStableRowGrowth(List<string> inputSymbolList, string date, int historyDepth, int growthGrad)
         {
-            ReportProgress(100, 30, $"filtering companies without stable ROE growth out...");
+            ReportProgress(100, 30, $"Filtering companies without stable ROE growth out...");
             List<string> resultList = new List<string>();
             
             foreach (var symbol in inputSymbolList)
@@ -112,7 +112,7 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         private List<string> CompounderStableReinvestmentGrowth(List<string> inputSymbolList, string date, int historyDepth, int growthGrad)
         {
-            ReportProgress(100, 50, $"filtering companies without stable reinvestment growth out...");
+            ReportProgress(100, 50, $"Filtering companies without stable reinvestment growth out...");
             List<string> resultList = new List<string>();
 
             foreach (var symbol in inputSymbolList)

@@ -23,7 +23,6 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty StableRoeGrowthProperty;
         public static readonly DependencyProperty HistoryDepthRoeProperty;
         public static readonly DependencyProperty GrowthGradRoeProperty;
-        public static readonly DependencyProperty ProgressMaxProperty;
         public static readonly DependencyProperty ProgressCurrentProperty;
         public static readonly DependencyProperty StableReinvestmentGrowthProperty;
         public static readonly DependencyProperty HistoryDepthReinvestmentProperty;
@@ -40,7 +39,6 @@ namespace FmpAnalyzer
             StableRoeGrowthProperty = DependencyProperty.Register("StableRoeGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
             HistoryDepthRoeProperty = DependencyProperty.Register("HistoryDepthRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             GrowthGradRoeProperty = DependencyProperty.Register("GrowthGradRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-            ProgressMaxProperty = DependencyProperty.Register("ProgressMax", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             StableReinvestmentGrowthProperty = DependencyProperty.Register("StableReinvestmentGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
             HistoryDepthReinvestmentProperty = DependencyProperty.Register("HistoryDepthReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
@@ -61,6 +59,8 @@ namespace FmpAnalyzer
             GrowthGradReinvestment = 3;
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
+
+            QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
         }
 
         /// <summary>
@@ -124,15 +124,6 @@ namespace FmpAnalyzer
         {
             get { return (int)GetValue(GrowthGradRoeProperty); }
             set { SetValue(GrowthGradRoeProperty, value); }
-        }
-
-        /// <summary>
-        /// ProgressMax
-        /// </summary>
-        public int ProgressMax
-        {
-            get { return (int)GetValue(ProgressMaxProperty); }
-            set { SetValue(ProgressMaxProperty, value); }
         }
 
         /// <summary>
@@ -208,17 +199,13 @@ namespace FmpAnalyzer
                 GrowthGradReinvestment = StableReinvestmentGrowth ? GrowthGradReinvestment : 0
             };
 
-            var worker = new BackgroundWorker();
-            worker.WorkerReportsProgress = true;
+            var worker = new BackgroundWorker() { WorkerReportsProgress = true };
             worker.DoWork += (s, e) =>
             {
                 var symbols = QueryFactory.CompounderQuery.Run(CompounderQueryParams);
                 (s as BackgroundWorker).ReportProgress(100, symbols);
             };
-            worker.ProgressChanged += (s, e) =>
-            {
-                Symbols = (List<string>)e.UserState;
-            };
+            worker.ProgressChanged += Worker_ProgressChanged;
             worker.RunWorkerCompleted += (s, e) =>
             {
                 UnlockControls();
@@ -226,6 +213,32 @@ namespace FmpAnalyzer
                 Symbols.ForEach(s => Results += $"\r\n{s}");
             };
             worker.RunWorkerAsync();
+
+        }
+
+        /// <summary>
+        /// Worker_ProgressChanged
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            Symbols = (List<string>)e.UserState;
+
+        }
+
+        /// <summary>
+        /// CompounderQuery_DatabaseAction
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CompounderQuery_DatabaseAction(object sender, DatabaseActionEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                ProgressCurrent = e.ProgressValue;
+                CurrentAction = e.Action;
+            });
         }
 
         /// <summary>
@@ -234,6 +247,7 @@ namespace FmpAnalyzer
         private void LockControls()
         {
             Results = string.Empty;
+            ProgressCurrent = 0;
             BackgroundResults = Brushes.DarkGray;
         }
 

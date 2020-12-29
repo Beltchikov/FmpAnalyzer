@@ -136,7 +136,7 @@
                         <Label Content="{Binding CurrentAction}"
                                Grid.Row="2"></Label>
                         <ProgressBar x:Name="prgTotal"
-                                Maximum="{Binding ProgressMax}" 
+                                Maximum="100" 
                                  Minimum="0" 
                                  Value="{Binding ProgressCurrent}"
                                  Grid.Row="4"/>
