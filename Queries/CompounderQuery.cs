@@ -79,7 +79,7 @@ namespace FmpAnalyzer.Queries
             List<string> resultList = new List<string>();
             foreach (var symbol in inputSymbolList)
             {
-                var historyRoe = Companies.HistoryRoe(symbol, date, historyDepth);
+                var historyRoe = QueryFactory.RoeHistoryQuery.Run(symbol, date, historyDepth);
                 if (historyRoe.Count() < historyDepth || !historyRoe.AllPositive())
                 {
                     continue;
