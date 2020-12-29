@@ -24,7 +24,7 @@ namespace FmpAnalyzer.Queries
 
             if (parameters.HistoryDepthReinvestment > 0 && parameters.GrowthGradReinvestment > 0)
             {
-                resultList = CompounderStableReinvestmentGrowth(resultList, parameters.Date, parameters.HistoryDepthRoe, parameters.GrowthGradRoe);
+                resultList = CompounderStableReinvestmentGrowth(resultList, parameters.Date, parameters.HistoryDepthReinvestment, parameters.GrowthGradReinvestment);
             }
 
             ReportProgress(100, 100, $"OK! Finished query.");

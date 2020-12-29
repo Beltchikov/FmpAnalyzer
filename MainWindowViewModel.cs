@@ -51,6 +51,7 @@ namespace FmpAnalyzer
             StableRoeGrowth = true;
             HistoryDepthRoe = 5;
             GrowthGradRoe = 3;
+            StableReinvestmentGrowth = true;
             HistoryDepthReinvestment = 5;
             GrowthGradReinvestment = 3;
 

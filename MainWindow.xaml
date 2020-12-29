@@ -63,7 +63,8 @@
                                   Grid.ColumnSpan="3"
                                   FlowDirection="RightToLeft"
                                   HorizontalAlignment="Left"
-                                  Margin="4,0,0,0"></CheckBox>
+                                  Margin="4,0,0,0"
+                                  VerticalAlignment="Bottom"></CheckBox>
                         <Label Grid.Column="0" Grid.Row="2"
                                Grid.ColumnSpan="2"
                            Content="History Depth:"></Label>
@@ -91,7 +92,8 @@
                                   Grid.ColumnSpan="4"
                                   FlowDirection="RightToLeft"
                                   HorizontalAlignment="Left"
-                                  Margin="4,0,0,0"></CheckBox>
+                                  Margin="4,0,0,0"
+                                  VerticalAlignment="Bottom"></CheckBox>
                         <Label Grid.Column="0" Grid.Row="5"
                                Grid.ColumnSpan="2"
                            Content="History Depth:"></Label>
