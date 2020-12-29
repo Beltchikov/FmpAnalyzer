@@ -14,6 +14,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty ResultsProperty;
         public static readonly DependencyProperty RoeFilterProperty;
         public static readonly DependencyProperty CurrentActionProperty;
+        public static readonly DependencyProperty StableRowGrowthProperty;
         public static readonly DependencyProperty HistoryDepthProperty;
         public static readonly DependencyProperty GrowthGradProperty;
         public RelayCommand CommandGo { get; set; }
@@ -24,6 +25,7 @@ namespace FmpAnalyzer
             ResultsProperty = DependencyProperty.Register("Results", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             RoeFilterProperty = DependencyProperty.Register("RoeFilter", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(Double)));
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
+            StableRowGrowthProperty = DependencyProperty.Register("StableRowGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
             HistoryDepthProperty = DependencyProperty.Register("HistoryDepth", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             GrowthGradProperty = DependencyProperty.Register("GrowthGrad", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
         }
@@ -33,6 +35,7 @@ namespace FmpAnalyzer
             ConnectionString = Configuration.Instance["ConnectionString"];
             RoeFilter = 15;
             CurrentAction = "Willkommen!";
+            StableRowGrowth= true;
             HistoryDepth = 5;
             GrowthGrad = 3;
 
@@ -73,6 +76,15 @@ namespace FmpAnalyzer
         {
             get { return (string)GetValue(CurrentActionProperty); }
             set { SetValue(CurrentActionProperty, value); }
+        }
+
+        /// <summary>
+        /// StableRowGrowth
+        /// </summary>
+        public bool StableRowGrowth
+        {
+            get { return (bool)GetValue(StableRowGrowthProperty); }
+            set { SetValue(StableRowGrowthProperty, value); }
         }
 
         /// <summary>

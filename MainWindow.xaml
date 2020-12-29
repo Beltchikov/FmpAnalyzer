@@ -55,9 +55,12 @@
                              Text="{Binding RoeFilter}"
                                  Grid.Column="1"></TextBox>
                         <CheckBox Content="Stable ROE Growth" 
-                                  IsChecked="True"
+                                  IsChecked="{Binding StableRowGrowth}"
                                   Grid.Row="2"
-                                  Grid.ColumnSpan="3"></CheckBox>
+                                  Grid.ColumnSpan="3"
+                                  FlowDirection="RightToLeft"
+                                  HorizontalAlignment="Left"
+                                  Margin="4,0,0,0"></CheckBox>
                         <Label Grid.Column="0" Grid.Row="3"
                                Grid.ColumnSpan="2"
                            Content="History Depth:"></Label>
