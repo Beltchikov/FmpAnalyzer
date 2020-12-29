@@ -41,7 +41,7 @@ namespace FmpAnalyzer
             StableReinvestmentGrowthProperty = DependencyProperty.Register("StableReinvestmentGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
             HistoryDepthReinvestmentProperty = DependencyProperty.Register("HistoryDepthReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             GrowthGradReinvestmentProperty = DependencyProperty.Register("GrowthGradReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-    }
+        }
 
         public MainWindowViewModel()
         {
@@ -178,13 +178,17 @@ namespace FmpAnalyzer
                 ProgressCurrent = e.ProgressValue;
             };
 
-            var historyDepthRoe = StableRoeGrowth ? HistoryDepthRoe : 0;
-            var growthGradRoe = StableRoeGrowth ? GrowthGradRoe : 0;
-            var historyDepthReinvestment = StableReinvestmentGrowth ? HistoryDepthReinvestment : 0;
-            var growthGradReinvestment = StableReinvestmentGrowth ? GrowthGradReinvestment : 0;
+            var compounderQueryParams = new CompounderQueryParams
+            {
+                Date = "2019-12-31",
+                Roe = RoeFilter,
+                HistoryDepthRoe = StableRoeGrowth ? HistoryDepthRoe : 0,
+                GrowthGradRoe = StableRoeGrowth ? GrowthGradRoe : 0,
+                HistoryDepthReinvestment = StableReinvestmentGrowth ? HistoryDepthReinvestment : 0,
+                GrowthGradReinvestment = StableReinvestmentGrowth ? GrowthGradReinvestment : 0
+            };
 
-            var symbols = await QueryFactory.CompounderQuery.Run("2019-12-31", RoeFilter, historyDepthRoe, growthGradRoe,
-                historyDepthReinvestment, growthGradReinvestment);
+            var symbols = await QueryFactory.CompounderQuery.Run(compounderQueryParams);
 
             Dispatcher.Invoke(() =>
              {
@@ -192,6 +196,5 @@ namespace FmpAnalyzer
                  symbols.ForEach(s => Results += $"\r\n{s}");
              });
         }
-
     }
 }
