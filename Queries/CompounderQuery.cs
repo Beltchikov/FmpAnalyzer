@@ -30,6 +30,8 @@ namespace FmpAnalyzer.Queries
                 resultSetList = CompounderStableReinvestmentGrowth(resultSetList, parameters.Date, parameters.HistoryDepthReinvestment, parameters.GrowthGradReinvestment);
             }
 
+            resultSetList = AddCompanyName(resultSetList);
+
             ReportProgress(100, 100, $"OK! Finished query.");
             return resultSetList;
         }
@@ -45,26 +47,26 @@ namespace FmpAnalyzer.Queries
             ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
 
             List<ResultSet> roeFiltered = (from income in DataContext.IncomeStatements
-                               join balance in DataContext.BalanceSheets
-                               on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
-                               where income.Date == date
-                               && income.NetIncome > 0
-                               select new
-                               {
-                                   Symbol = income.Symbol,
-                                   Equity = balance.TotalStockholdersEquity,
-                                   Roe = balance.TotalStockholdersEquity == 0
-                                      ? 0
-                                      : income.NetIncome * 100 / balance.TotalStockholdersEquity
-                               } into selectionFirst
-                               where selectionFirst.Roe >= roe
-                               select new
-                               {
-                                   Symbol = selectionFirst.Symbol,
-                                   Roe = selectionFirst.Roe
-                               } into selectionSecond
-                               orderby selectionSecond.Roe descending
-                               select new ResultSet { Symbol = selectionSecond.Symbol, Roe = selectionSecond.Roe })
+                                           join balance in DataContext.BalanceSheets
+                                           on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
+                                           where income.Date == date
+                                           && income.NetIncome > 0
+                                           select new
+                                           {
+                                               Symbol = income.Symbol,
+                                               Equity = balance.TotalStockholdersEquity,
+                                               Roe = balance.TotalStockholdersEquity == 0
+                                                  ? 0
+                                                  : income.NetIncome * 100 / balance.TotalStockholdersEquity
+                                           } into selectionFirst
+                                           where selectionFirst.Roe >= roe
+                                           select new
+                                           {
+                                               Symbol = selectionFirst.Symbol,
+                                               Roe = selectionFirst.Roe
+                                           } into selectionSecond
+                                           orderby selectionSecond.Roe descending
+                                           select new ResultSet { Symbol = selectionSecond.Symbol, Roe = selectionSecond.Roe })
                          .ToList();
 
             ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");
@@ -136,6 +138,19 @@ namespace FmpAnalyzer.Queries
             }
 
             ReportProgress(100, 60, $"OK! {resultSetList.Count()} companies found.");
+            return resultSetList;
+        }
+
+        /// <summary>
+        /// AddCompanyName
+        /// </summary>
+        /// <param name="inputResultSetList"></param>
+        /// <returns></returns>
+        private List<ResultSet> AddCompanyName(List<ResultSet> inputResultSetList)
+        {
+            ReportProgress(100, 70, $"Searching for the companies names ...");
+            List<ResultSet> resultSetList = QueryFactory.CompanyNameQuery.Run(inputResultSetList);
+            ReportProgress(100, 80, $"Search for the companies names ended ...");
             return resultSetList;
         }
 

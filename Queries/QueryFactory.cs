@@ -16,6 +16,7 @@ namespace FmpAnalyzer.Queries
         private static WithBestRoeQuery _withBestRoeQuery;
         private static RoeHistoryQuery _roeHistoryQuery;
         private static ReinvestmentHistoryQuery _reinvestmentHistoryQuery;
+        private static CompanyNameQuery _companyNameQuery;
 
         /// <summary>
         /// CompounderQuery
@@ -85,6 +86,24 @@ namespace FmpAnalyzer.Queries
                         _reinvestmentHistoryQuery = new ReinvestmentHistoryQuery(DataContext.Instance);
                     }
                     return _reinvestmentHistoryQuery;
+                }
+            }
+        }
+
+        /// <summary>
+        /// CompanyNameQuery
+        /// </summary>
+        public static CompanyNameQuery CompanyNameQuery
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (_companyNameQuery == null)
+                    {
+                        _companyNameQuery = new CompanyNameQuery(DataContext.Instance);
+                    }
+                    return _companyNameQuery;
                 }
             }
         }
