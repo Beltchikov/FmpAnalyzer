@@ -202,12 +202,20 @@
                                  Value="{Binding ProgressCurrent}"
                                  Grid.Row="4"
                                      Grid.Column="1"/>
-                        <TextBox Grid.Row="6"
-                                 Grid.Column="1"
-                             x:Name="txtResults"
-                             Text="{Binding Results}"
-                                 Background="{Binding BackgroundResults}" Grid.RowSpan="2">
-                        </TextBox>
+                       <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                                      Grid.Row="6"
+                                       Grid.Column="1">
+                            <ListBox x:Name="listAssets"
+                             ItemsSource="{Binding Symbols, Mode=OneWay}"
+                             MinWidth="400"
+                                     Background="{Binding BackgroundResults}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </ScrollViewer>
                     </Grid>
 
                 </Grid>

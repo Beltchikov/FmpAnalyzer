@@ -17,7 +17,6 @@ namespace FmpAnalyzer
     public class MainWindowViewModel : DependencyObject
     {
         public static readonly DependencyProperty ConnectionStringProperty;
-        public static readonly DependencyProperty ResultsProperty;
         public static readonly DependencyProperty RoeProperty;
         public static readonly DependencyProperty CurrentActionProperty;
         public static readonly DependencyProperty StableRoeGrowthProperty;
@@ -33,12 +32,12 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty HistoryDepthIncrementalRoeProperty;
         public static readonly DependencyProperty GrowthGradIncrementalRoeProperty;
         public static readonly DependencyProperty RoeYearProperty;
+        public static readonly DependencyProperty SymbolsProperty;
         public RelayCommand CommandGo { get; set; }
 
         static MainWindowViewModel()
         {
             ConnectionStringProperty = DependencyProperty.Register("ConnectionString", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            ResultsProperty = DependencyProperty.Register("Results", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             RoeProperty = DependencyProperty.Register("Roe", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(Double)));
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             StableRoeGrowthProperty = DependencyProperty.Register("StableRoeGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
@@ -54,7 +53,8 @@ namespace FmpAnalyzer
             HistoryDepthIncrementalRoeProperty = DependencyProperty.Register("HistoryDepthIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             GrowthGradIncrementalRoeProperty = DependencyProperty.Register("GrowthGradIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             RoeYearProperty = DependencyProperty.Register("RoeYear", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(string.Empty));
-    }
+            SymbolsProperty = DependencyProperty.Register("Symbols", typeof(List<string>), typeof(MainWindowViewModel), new PropertyMetadata(new List<string>()));
+        }
 
         public MainWindowViewModel()
         {
@@ -85,15 +85,6 @@ namespace FmpAnalyzer
         {
             get { return (string)GetValue(ConnectionStringProperty); }
             set { SetValue(ConnectionStringProperty, value); }
-        }
-
-        /// <summary>
-        /// Results
-        /// </summary>
-        public string Results
-        {
-            get { return (string)GetValue(ResultsProperty); }
-            set { SetValue(ResultsProperty, value); }
         }
 
         /// <summary>
@@ -191,10 +182,16 @@ namespace FmpAnalyzer
         /// </summary>
         public CompounderQueryParams CompounderQueryParams { get; set; }
 
+
         /// <summary>
         /// Symbols
         /// </summary>
-        public List<string> Symbols { get; set; }
+        public List<string> Symbols
+        {
+            get { return (List<string>)GetValue(SymbolsProperty); }
+            set { SetValue(SymbolsProperty, value); }
+        }
+
 
         /// <summary>
         /// AverageIncrementalRoe
@@ -272,8 +269,6 @@ namespace FmpAnalyzer
             worker.RunWorkerCompleted += (s, e) =>
             {
                 UnlockControls();
-                Results = $"Found {Symbols.Count()} companies:";
-                Symbols.ForEach(s => Results += $"\r\n{s}");
             };
             worker.RunWorkerAsync();
 
@@ -309,8 +304,8 @@ namespace FmpAnalyzer
         /// </summary>
         private void LockControls()
         {
-            Results = string.Empty;
             ProgressCurrent = 0;
+            Symbols = new List<string>();
             BackgroundResults = Brushes.DarkGray;
         }
 
