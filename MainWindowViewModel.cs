@@ -1,4 +1,5 @@
-﻿using FmpAnalyzer.Queries;
+﻿using FmpAnalyzer.Data;
+using FmpAnalyzer.Queries;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

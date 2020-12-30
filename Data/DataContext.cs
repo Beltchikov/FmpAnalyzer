@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FmpAnalyzer
+namespace FmpAnalyzer.Data
 {
     /// <summary>
     /// DataContext
