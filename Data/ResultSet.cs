@@ -9,5 +9,6 @@ namespace FmpAnalyzer.Data
         public string Symbol { get; set; }
         public string Name { get; set; }
         public double Roe { get; set; }
+        public double ReinvestmentRate { get; set; }
     }
 }

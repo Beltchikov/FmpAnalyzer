@@ -18,7 +18,7 @@ namespace FmpAnalyzer.Queries
         {
             List<ResultSet> resultSetList = new List<ResultSet>();
 
-            resultSetList = CompounderHighRoe(parameters.Date, parameters.Roe);
+            resultSetList = CompounderMainQuery(parameters.Date, parameters.Roe, parameters.ReinvestmentRate);
 
             if (parameters.HistoryDepthRoe > 0 && parameters.GrowthGradRoe > 0)
             {
@@ -36,19 +36,16 @@ namespace FmpAnalyzer.Queries
             return resultSetList;
         }
 
-        /// <summary>
-        /// CompounderHighRoe
-        /// </summary>
-        /// <param name="date"></param>
-        /// <param name="roe"></param>
-        /// <returns></returns>
-        private List<ResultSet> CompounderHighRoe(string date, double roe)
+       
+        private List<ResultSet> CompounderMainQuery(string date, double roe, double reinvestmentRate)
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
 
             List<ResultSet> roeFiltered = (from income in DataContext.IncomeStatements
                                            join balance in DataContext.BalanceSheets
                                            on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
+                                           join cash in DataContext.CashFlowStatements
+                                           on new { a = income.Symbol, b = income.Date } equals new { a = cash.Symbol, b = cash.Date }
                                            where income.Date == date
                                            && income.NetIncome > 0
                                            select new
@@ -57,16 +54,21 @@ namespace FmpAnalyzer.Queries
                                                Equity = balance.TotalStockholdersEquity,
                                                Roe = balance.TotalStockholdersEquity == 0
                                                   ? 0
-                                                  : income.NetIncome * 100 / balance.TotalStockholdersEquity
+                                                  : income.NetIncome * 100 / balance.TotalStockholdersEquity,
+                                               ReinvestmentRate = income.NetIncome == 0
+                                                  ? 0
+                                                  : cash.InvestmentsInPropertyPlantAndEquipment * -100 / income.NetIncome
                                            } into selectionFirst
                                            where selectionFirst.Roe >= roe
+                                           && selectionFirst.ReinvestmentRate >= reinvestmentRate
                                            select new
                                            {
                                                Symbol = selectionFirst.Symbol,
-                                               Roe = selectionFirst.Roe
+                                               Roe = selectionFirst.Roe,
+                                               ReinvestmentRate = selectionFirst.ReinvestmentRate
                                            } into selectionSecond
                                            orderby selectionSecond.Roe descending
-                                           select new ResultSet { Symbol = selectionSecond.Symbol, Roe = selectionSecond.Roe })
+                                           select new ResultSet { Symbol = selectionSecond.Symbol, Roe = selectionSecond.Roe, ReinvestmentRate = selectionSecond.ReinvestmentRate })
                          .ToList();
 
             ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");

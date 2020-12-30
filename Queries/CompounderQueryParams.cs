@@ -12,6 +12,8 @@ namespace FmpAnalyzer.Queries
         public int GrowthGradRoe { get; set; }
         public int HistoryDepthReinvestment { get; set; }
         public int GrowthGradReinvestment { get; set; }
+        public double ReinvestmentRate { get; set; }
+        public double AverageReinvestmentRate { get; set; }
 
     }
 }

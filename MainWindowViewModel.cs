@@ -285,6 +285,7 @@ namespace FmpAnalyzer
             {
                 Date = RoeYear + Configuration.Instance["DateSuffix"],
                 Roe = Roe,
+                ReinvestmentRate = ReinvestmentRate,
                 HistoryDepthRoe = StableRoeGrowth ? HistoryDepthRoe : 0,
                 GrowthGradRoe = StableRoeGrowth ? GrowthGradRoe : 0,
                 HistoryDepthReinvestment = StableReinvestmentGrowth ? HistoryDepthReinvestment : 0,
