@@ -3,11 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FmpAnalyzer"
+        xmlns:local="clr-namespace:FmpAnalyzer" 
+        xmlns:local1="clr-namespace:FmpAnalyzer.Converters"
         mc:Ignorable="d"
         Title="FMP Analyzer" Height="800" Width="1400">
     <Window.Resources>
         <local:MainWindowViewModel x:Key="ViewModel" />
+        <local1:RoeConverter x:Key="RoeConverter"/>
+        <!--RoeConverter-->
     </Window.Resources>
     <Window.DataContext>
         <StaticResource ResourceKey="ViewModel" />
@@ -67,7 +70,7 @@
                         <Label Grid.Column="0"
                            Content="ROE >"></Label>
                         <TextBox x:Name="txtRoeFilter" Margin="0,2,0,5"
-                             Text="{Binding Roe}"
+                             Text="{Binding Roe, Converter={StaticResource RoeConverter}}"
                                  Grid.Column="1"></TextBox>
                         <CheckBox Content="Stable ROE Growth" 
                                   x:Name="chkStableRoeGrowth"

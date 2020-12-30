@@ -15,7 +15,9 @@ namespace FmpAnalyzer.Queries
 
         public List<string> Run(CompounderQueryParams parameters)
         {
-            List<string> resultList = CompounderHighRoe(parameters.Date, parameters.Roe);
+            List<string> resultList = new List<string>();
+
+            resultList = CompounderHighRoe(parameters.Date, parameters.Roe);
 
             if (parameters.HistoryDepthRoe > 0 && parameters.GrowthGradRoe > 0)
             {
@@ -80,7 +82,7 @@ namespace FmpAnalyzer.Queries
         {
             ReportProgress(100, 30, $"Filtering companies without stable ROE growth out...");
             List<string> resultList = new List<string>();
-            
+
             foreach (var symbol in inputSymbolList)
             {
                 var historyRoe = QueryFactory.RoeHistoryQuery.Run(symbol, date, historyDepth);
