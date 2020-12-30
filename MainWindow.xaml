@@ -42,6 +42,10 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="15"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
@@ -99,7 +103,7 @@
                         <Label Grid.Column="0" Grid.Row="5"
                                Grid.ColumnSpan="2"
                            Content="History Depth:"></Label>
-                        <TextBox x:Name="txtHistoryDepthRReinvestment" 
+                        <TextBox x:Name="txtHistoryDepthReinvestment" 
                                  Margin="0,2,0,5"
                              Text="{Binding HistoryDepthReinvestment}"
                                  Grid.Column="2"
@@ -118,13 +122,40 @@
                                  IsEnabled="{Binding 
                             ElementName=chkStableReinvestmentGrowth, 
                             Path=IsChecked}"></TextBox>
-                        <Label Grid.Column="0" Grid.Row="7"
+                        <Label Grid.Column="0" Grid.Row="8"
                                Grid.ColumnSpan="4"
                            Content="Average incremental ROE >"></Label>
-                        <TextBox x:Name="txtAverageIncrementalRoe" Grid.Row="7" 
+                        <TextBox x:Name="txtAverageIncrementalRoe" Grid.Row="8" 
                                  Margin="0,2,0,5"
                              Text="{Binding AverageIncrementalRoe}"
                                  Grid.Column="4"></TextBox>
+                        <CheckBox Content="Stable Incremental ROE Growth" 
+                                  x:Name="chkStableIncrementalRoeGrowth"
+                                  IsChecked="{Binding StableIncrementalRoeGrowth}"
+                                  Grid.Row="9"
+                                  Grid.ColumnSpan="4"
+                                  FlowDirection="RightToLeft"
+                                  HorizontalAlignment="Left"
+                                  Margin="4,0,0,0"
+                                  VerticalAlignment="Bottom"></CheckBox>
+                        <Label Content="History Depth:" 
+                               Grid.Row="10" Grid.ColumnSpan="2"></Label>
+                        <TextBox Text="{Binding HistoryDepthIncrementalRoe}"
+                                 x:Name="txtHistoryDepthIncrementalRoe" 
+                                 Grid.Row="10" Grid.Column="2"
+                                 Margin="0,2,0,5"
+                                 IsEnabled="{Binding 
+                            ElementName=chkStableIncrementalRoeGrowth, 
+                            Path=IsChecked}"></TextBox>
+                        <Label Content="Growth Grad:" 
+                               Grid.Row="11" Grid.ColumnSpan="2"></Label>
+                        <TextBox Text="{Binding GrowthGradIncrementalRoe}"
+                                 x:Name="txtGrowthGradIncrementalRoe" 
+                                 Grid.Row="11" Grid.Column="2"
+                                 Margin="0,2,0,5"
+                                 IsEnabled="{Binding 
+                            ElementName=chkStableIncrementalRoeGrowth, 
+                            Path=IsChecked}"></TextBox>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="2"

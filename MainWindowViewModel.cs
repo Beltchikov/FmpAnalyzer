@@ -29,6 +29,9 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty GrowthGradReinvestmentProperty;
         public static readonly DependencyProperty BackgroundResultsProperty;
         public static readonly DependencyProperty AverageIncrementalRoeProperty;
+        public static readonly DependencyProperty StableIncrementalRoeGrowthProperty;
+        public static readonly DependencyProperty HistoryDepthIncrementalRoeProperty;
+        public static readonly DependencyProperty GrowthGradIncrementalRoeProperty;
         public RelayCommand CommandGo { get; set; }
 
         static MainWindowViewModel()
@@ -46,11 +49,12 @@ namespace FmpAnalyzer
             GrowthGradReinvestmentProperty = DependencyProperty.Register("GrowthGradReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             BackgroundResultsProperty = DependencyProperty.Register("BackgroundResults", typeof(Brush), typeof(MainWindowViewModel), new PropertyMetadata(default(Brush)));
             AverageIncrementalRoeProperty = DependencyProperty.Register("AverageIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            StableIncrementalRoeGrowthProperty = DependencyProperty.Register("StableIncrementalRoeGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
+            HistoryDepthIncrementalRoeProperty = DependencyProperty.Register("HistoryDepthIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            GrowthGradIncrementalRoeProperty = DependencyProperty.Register("GrowthGradIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+        }
 
-
-    }
-
-    public MainWindowViewModel()
+        public MainWindowViewModel()
         {
             ConnectionString = Configuration.Instance["ConnectionString"];
             Roe = 15;
@@ -61,7 +65,10 @@ namespace FmpAnalyzer
             StableReinvestmentGrowth = true;
             HistoryDepthReinvestment = 5;
             GrowthGradReinvestment = 3;
-            AverageIncrementalRoe= 15;
+            AverageIncrementalRoe = 15;
+            StableIncrementalRoeGrowth = true;
+            HistoryDepthIncrementalRoe = 5;
+            GrowthGradIncrementalRoe = 2;
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
 
@@ -193,6 +200,33 @@ namespace FmpAnalyzer
         {
             get { return (int)GetValue(AverageIncrementalRoeProperty); }
             set { SetValue(AverageIncrementalRoeProperty, value); }
+        }
+
+        /// <summary>
+        ///  StableIncrementalRoeGrowth
+        /// </summary>
+        public bool StableIncrementalRoeGrowth
+        {
+            get { return (bool)GetValue(StableIncrementalRoeGrowthProperty); }
+            set { SetValue(StableIncrementalRoeGrowthProperty, value); }
+        }
+
+        /// <summary>
+        /// HistoryDepthIncrementalRoe
+        /// </summary>
+        public int HistoryDepthIncrementalRoe
+        {
+            get { return (int)GetValue(HistoryDepthIncrementalRoeProperty); }
+            set { SetValue(HistoryDepthIncrementalRoeProperty, value); }
+        }
+
+        /// <summary>
+        /// GrowthGradIncrementalRoe
+        /// </summary>
+        public int GrowthGradIncrementalRoe
+        {
+            get { return (int)GetValue(GrowthGradIncrementalRoeProperty); }
+            set { SetValue(GrowthGradIncrementalRoeProperty, value); }
         }
 
         /// <summary>
