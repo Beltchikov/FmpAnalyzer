@@ -19,24 +19,13 @@ namespace FmpAnalyzer.Queries
             List<ResultSet> resultSetList = new List<ResultSet>();
 
             resultSetList = CompounderMainQuery(parameters.Date, parameters.Roe, parameters.ReinvestmentRate);
-
-            if (parameters.HistoryDepthRoe > 0 && parameters.GrowthGradRoe > 0)
-            {
-                resultSetList = CompounderStableRowGrowth(resultSetList, parameters.Date, parameters.HistoryDepthRoe, parameters.GrowthGradRoe);
-            }
-
-            if (parameters.HistoryDepthReinvestment > 0 && parameters.GrowthGradReinvestment > 0)
-            {
-                resultSetList = CompounderStableReinvestmentGrowth(resultSetList, parameters.Date, parameters.HistoryDepthReinvestment, parameters.GrowthGradReinvestment);
-            }
-
             resultSetList = AddCompanyName(resultSetList);
 
             ReportProgress(100, 100, $"OK! Finished query.");
             return resultSetList;
         }
 
-       
+
         private List<ResultSet> CompounderMainQuery(string date, double roe, double reinvestmentRate)
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
@@ -69,7 +58,7 @@ namespace FmpAnalyzer.Queries
                                            } into selectionSecond
                                            orderby selectionSecond.Roe descending
                                            select new ResultSet { Symbol = selectionSecond.Symbol, Roe = selectionSecond.Roe, ReinvestmentRate = selectionSecond.ReinvestmentRate })
-                         .ToList();
+                                           .ToList();
 
             ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");
             return roeFiltered;

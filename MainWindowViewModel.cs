@@ -20,23 +20,13 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty ConnectionStringProperty;
         public static readonly DependencyProperty RoeProperty;
         public static readonly DependencyProperty CurrentActionProperty;
-        public static readonly DependencyProperty StableRoeGrowthProperty;
-        public static readonly DependencyProperty HistoryDepthRoeProperty;
-        public static readonly DependencyProperty GrowthGradRoeProperty;
         public static readonly DependencyProperty ProgressCurrentProperty;
-        public static readonly DependencyProperty StableReinvestmentGrowthProperty;
-        public static readonly DependencyProperty HistoryDepthReinvestmentProperty;
-        public static readonly DependencyProperty GrowthGradReinvestmentProperty;
         public static readonly DependencyProperty BackgroundResultsProperty;
-        public static readonly DependencyProperty AverageIncrementalRoeProperty;
-        public static readonly DependencyProperty StableIncrementalRoeGrowthProperty;
-        public static readonly DependencyProperty HistoryDepthIncrementalRoeProperty;
-        public static readonly DependencyProperty GrowthGradIncrementalRoeProperty;
         public static readonly DependencyProperty RoeYearProperty;
         public static readonly DependencyProperty SymbolsProperty;
         public static readonly DependencyProperty ResultSetListProperty;
         public static readonly DependencyProperty ReinvestmentRateProperty;
-        public static readonly DependencyProperty AverageReinvestmentRateProperty;
+
         public RelayCommand CommandGo { get; set; }
 
         static MainWindowViewModel()
@@ -44,23 +34,12 @@ namespace FmpAnalyzer
             ConnectionStringProperty = DependencyProperty.Register("ConnectionString", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             RoeProperty = DependencyProperty.Register("Roe", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(Double)));
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            StableRoeGrowthProperty = DependencyProperty.Register("StableRoeGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
-            HistoryDepthRoeProperty = DependencyProperty.Register("HistoryDepthRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-            GrowthGradRoeProperty = DependencyProperty.Register("GrowthGradRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-            StableReinvestmentGrowthProperty = DependencyProperty.Register("StableReinvestmentGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
-            HistoryDepthReinvestmentProperty = DependencyProperty.Register("HistoryDepthReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-            GrowthGradReinvestmentProperty = DependencyProperty.Register("GrowthGradReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             BackgroundResultsProperty = DependencyProperty.Register("BackgroundResults", typeof(Brush), typeof(MainWindowViewModel), new PropertyMetadata(default(Brush)));
-            AverageIncrementalRoeProperty = DependencyProperty.Register("AverageIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-            StableIncrementalRoeGrowthProperty = DependencyProperty.Register("StableIncrementalRoeGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
-            HistoryDepthIncrementalRoeProperty = DependencyProperty.Register("HistoryDepthIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-            GrowthGradIncrementalRoeProperty = DependencyProperty.Register("GrowthGradIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             RoeYearProperty = DependencyProperty.Register("RoeYear", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(string.Empty));
             SymbolsProperty = DependencyProperty.Register("Symbols", typeof(List<string>), typeof(MainWindowViewModel), new PropertyMetadata(new List<string>()));
             ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
             ReinvestmentRateProperty = DependencyProperty.Register("ReinvestmentRate", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
-            AverageReinvestmentRateProperty = DependencyProperty.Register("AverageReinvestmentRate", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
         }
 
         public MainWindowViewModel()
@@ -68,19 +47,8 @@ namespace FmpAnalyzer
             ConnectionString = Configuration.Instance["ConnectionString"];
             Roe = 15;
             CurrentAction = "Willkommen!";
-            StableRoeGrowth = true;
-            HistoryDepthRoe = 5;
-            GrowthGradRoe = 3;
-            StableReinvestmentGrowth = true;
-            HistoryDepthReinvestment = 5;
-            GrowthGradReinvestment = 3;
-            AverageIncrementalRoe = 15;
-            StableIncrementalRoeGrowth = true;
-            HistoryDepthIncrementalRoe = 5;
-            GrowthGradIncrementalRoe = 2;
             RoeYear = "2019";
             ReinvestmentRate = 50;
-            AverageReinvestmentRate = 50;
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
 
@@ -115,66 +83,12 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
-        /// StableRoeGrowth
-        /// </summary>
-        public bool StableRoeGrowth
-        {
-            get { return (bool)GetValue(StableRoeGrowthProperty); }
-            set { SetValue(StableRoeGrowthProperty, value); }
-        }
-
-        /// <summary>
-        /// HistoryDepthRoe
-        /// </summary>
-        public int HistoryDepthRoe
-        {
-            get { return (int)GetValue(HistoryDepthRoeProperty); }
-            set { SetValue(HistoryDepthRoeProperty, value); }
-        }
-
-        /// <summary>
-        /// GrowthGradRoe
-        /// </summary>
-        public int GrowthGradRoe
-        {
-            get { return (int)GetValue(GrowthGradRoeProperty); }
-            set { SetValue(GrowthGradRoeProperty, value); }
-        }
-
-        /// <summary>
         /// ProgressCurrent
         /// </summary>
         public int ProgressCurrent
         {
             get { return (int)GetValue(ProgressCurrentProperty); }
             set { SetValue(ProgressCurrentProperty, value); }
-        }
-
-        /// <summary>
-        /// StableReinvestmentGrowth
-        /// </summary>
-        public bool StableReinvestmentGrowth
-        {
-            get { return (bool)GetValue(StableReinvestmentGrowthProperty); }
-            set { SetValue(StableReinvestmentGrowthProperty, value); }
-        }
-
-        /// <summary>
-        /// HistoryDepthReinvestment
-        /// </summary>
-        public int HistoryDepthReinvestment
-        {
-            get { return (int)GetValue(HistoryDepthReinvestmentProperty); }
-            set { SetValue(HistoryDepthReinvestmentProperty, value); }
-        }
-
-        /// <summary>
-        /// GrowthGradReinvestment
-        /// </summary>
-        public int GrowthGradReinvestment
-        {
-            get { return (int)GetValue(GrowthGradReinvestmentProperty); }
-            set { SetValue(GrowthGradReinvestmentProperty, value); }
         }
 
         /// <summary>
@@ -211,42 +125,6 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
-        /// AverageIncrementalRoe
-        /// </summary>
-        public int AverageIncrementalRoe
-        {
-            get { return (int)GetValue(AverageIncrementalRoeProperty); }
-            set { SetValue(AverageIncrementalRoeProperty, value); }
-        }
-
-        /// <summary>
-        ///  StableIncrementalRoeGrowth
-        /// </summary>
-        public bool StableIncrementalRoeGrowth
-        {
-            get { return (bool)GetValue(StableIncrementalRoeGrowthProperty); }
-            set { SetValue(StableIncrementalRoeGrowthProperty, value); }
-        }
-
-        /// <summary>
-        /// HistoryDepthIncrementalRoe
-        /// </summary>
-        public int HistoryDepthIncrementalRoe
-        {
-            get { return (int)GetValue(HistoryDepthIncrementalRoeProperty); }
-            set { SetValue(HistoryDepthIncrementalRoeProperty, value); }
-        }
-
-        /// <summary>
-        /// GrowthGradIncrementalRoe
-        /// </summary>
-        public int GrowthGradIncrementalRoe
-        {
-            get { return (int)GetValue(GrowthGradIncrementalRoeProperty); }
-            set { SetValue(GrowthGradIncrementalRoeProperty, value); }
-        }
-
-        /// <summary>
         /// RoeYear
         /// </summary>
         public string RoeYear
@@ -265,15 +143,6 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
-        /// AverageReinvestmentRate
-        /// </summary>
-        public double AverageReinvestmentRate
-        {
-            get { return (double)GetValue(AverageReinvestmentRateProperty); }
-            set { SetValue(AverageReinvestmentRateProperty, value); }
-        }
-
-        /// <summary>
         /// OnCommandGo
         /// </summary>
         /// <param name="p"></param>
@@ -285,11 +154,7 @@ namespace FmpAnalyzer
             {
                 Date = RoeYear + Configuration.Instance["DateSuffix"],
                 Roe = Roe,
-                ReinvestmentRate = ReinvestmentRate,
-                HistoryDepthRoe = StableRoeGrowth ? HistoryDepthRoe : 0,
-                GrowthGradRoe = StableRoeGrowth ? GrowthGradRoe : 0,
-                HistoryDepthReinvestment = StableReinvestmentGrowth ? HistoryDepthReinvestment : 0,
-                GrowthGradReinvestment = StableReinvestmentGrowth ? GrowthGradReinvestment : 0
+                ReinvestmentRate = ReinvestmentRate
             };
 
             var worker = new BackgroundWorker() { WorkerReportsProgress = true };
