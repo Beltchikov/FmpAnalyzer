@@ -69,9 +69,14 @@
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0"
                            Content="ROE >"></Label>
-                        <TextBox x:Name="txtRoeFilter" Margin="0,2,0,5"
+                        <TextBox x:Name="txtRoe" Margin="0,2,0,5"
                              Text="{Binding Roe, Converter={StaticResource RoeConverter}}"
                                  Grid.Column="1"></TextBox>
+                        <Label Grid.Column="2"
+                           Content="in" HorizontalContentAlignment="Center"></Label>
+                        <TextBox x:Name="txtRoeYear" Margin="0,2,0,5"
+                             Text="{Binding RoeYear}"
+                                 Grid.Column="3"></TextBox>
                         <CheckBox Content="Stable ROE Growth" 
                                   x:Name="chkStableRoeGrowth"
                                   IsChecked="{Binding StableRoeGrowth}"

@@ -32,6 +32,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty StableIncrementalRoeGrowthProperty;
         public static readonly DependencyProperty HistoryDepthIncrementalRoeProperty;
         public static readonly DependencyProperty GrowthGradIncrementalRoeProperty;
+        public static readonly DependencyProperty RoeYearProperty;
         public RelayCommand CommandGo { get; set; }
 
         static MainWindowViewModel()
@@ -52,7 +53,8 @@ namespace FmpAnalyzer
             StableIncrementalRoeGrowthProperty = DependencyProperty.Register("StableIncrementalRoeGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
             HistoryDepthIncrementalRoeProperty = DependencyProperty.Register("HistoryDepthIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             GrowthGradIncrementalRoeProperty = DependencyProperty.Register("GrowthGradIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-        }
+            RoeYearProperty = DependencyProperty.Register("RoeYear", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(string.Empty));
+    }
 
         public MainWindowViewModel()
         {
@@ -69,6 +71,7 @@ namespace FmpAnalyzer
             StableIncrementalRoeGrowth = true;
             HistoryDepthIncrementalRoe = 5;
             GrowthGradIncrementalRoe = 2;
+            RoeYear = "2019";
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
 
@@ -230,6 +233,18 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
+        /// RoeYear
+        /// </summary>
+        public string RoeYear
+        {
+            get { return (string)GetValue(RoeYearProperty); }
+            set { SetValue(RoeYearProperty, value); }
+        }
+
+
+
+
+        /// <summary>
         /// OnCommandGo
         /// </summary>
         /// <param name="p"></param>
@@ -239,7 +254,7 @@ namespace FmpAnalyzer
 
             CompounderQueryParams = new CompounderQueryParams
             {
-                Date = "2019-12-31",
+                Date = RoeYear + Configuration.Instance["DateSuffix"],
                 Roe = Roe,
                 HistoryDepthRoe = StableRoeGrowth ? HistoryDepthRoe : 0,
                 GrowthGradRoe = StableRoeGrowth ? GrowthGradRoe : 0,
