@@ -34,6 +34,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty GrowthGradIncrementalRoeProperty;
         public static readonly DependencyProperty RoeYearProperty;
         public static readonly DependencyProperty SymbolsProperty;
+        public static readonly DependencyProperty ResultSetListProperty;
         public RelayCommand CommandGo { get; set; }
 
         static MainWindowViewModel()
@@ -55,7 +56,8 @@ namespace FmpAnalyzer
             GrowthGradIncrementalRoeProperty = DependencyProperty.Register("GrowthGradIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             RoeYearProperty = DependencyProperty.Register("RoeYear", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(string.Empty));
             SymbolsProperty = DependencyProperty.Register("Symbols", typeof(List<string>), typeof(MainWindowViewModel), new PropertyMetadata(new List<string>()));
-        }
+            ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
+    }
 
         public MainWindowViewModel()
         {
@@ -193,6 +195,14 @@ namespace FmpAnalyzer
             set { SetValue(SymbolsProperty, value); }
         }
 
+        /// <summary>
+        /// ResultSetList
+        /// </summary>
+        public List<ResultSet> ResultSetList
+        {
+            get { return (List<ResultSet>)GetValue(ResultSetListProperty); }
+            set { SetValue(ResultSetListProperty, value); }
+        }
 
         /// <summary>
         /// AverageIncrementalRoe
@@ -282,7 +292,7 @@ namespace FmpAnalyzer
         /// <param name="e"></param>
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            Symbols = (List<string>)e.UserState;
+            ResultSetList = (List<ResultSet>)e.UserState;
 
         }
 

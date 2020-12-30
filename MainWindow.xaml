@@ -206,12 +206,18 @@
                                       Grid.Row="6"
                                        Grid.Column="1">
                             <ListBox x:Name="listAssets"
-                             ItemsSource="{Binding Symbols, Mode=OneWay}"
+                             ItemsSource="{Binding ResultSetList, Mode=OneWay}"
                              MinWidth="400"
                                      Background="{Binding BackgroundResults}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding}"/>
+                                        <DockPanel LastChildFill="True">
+                                            <TextBlock Text="{Binding Path=Symbol}"
+                                                       Margin="5,0,5,0"
+                                                       Width="100"/>
+                                            <TextBlock Text="{Binding Path=Roe}"
+                                                        Margin="5,0,5,0"/>
+                                        </DockPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>

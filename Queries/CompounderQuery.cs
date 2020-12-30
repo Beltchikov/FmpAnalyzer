@@ -14,24 +14,24 @@ namespace FmpAnalyzer.Queries
     {
         public CompounderQuery(DataContext dataContext) : base(dataContext) { }
 
-        public List<string> Run(CompounderQueryParams parameters)
+        public List<ResultSet> Run(CompounderQueryParams parameters)
         {
-            List<string> resultList = new List<string>();
+            List<ResultSet> resultSetList = new List<ResultSet>();
 
-            resultList = CompounderHighRoe(parameters.Date, parameters.Roe);
+            resultSetList = CompounderHighRoe(parameters.Date, parameters.Roe);
 
             if (parameters.HistoryDepthRoe > 0 && parameters.GrowthGradRoe > 0)
             {
-                resultList = CompounderStableRowGrowth(resultList, parameters.Date, parameters.HistoryDepthRoe, parameters.GrowthGradRoe);
+                resultSetList = CompounderStableRowGrowth(resultSetList, parameters.Date, parameters.HistoryDepthRoe, parameters.GrowthGradRoe);
             }
 
             if (parameters.HistoryDepthReinvestment > 0 && parameters.GrowthGradReinvestment > 0)
             {
-                resultList = CompounderStableReinvestmentGrowth(resultList, parameters.Date, parameters.HistoryDepthReinvestment, parameters.GrowthGradReinvestment);
+                resultSetList = CompounderStableReinvestmentGrowth(resultSetList, parameters.Date, parameters.HistoryDepthReinvestment, parameters.GrowthGradReinvestment);
             }
 
             ReportProgress(100, 100, $"OK! Finished query.");
-            return resultList;
+            return resultSetList;
         }
 
         /// <summary>
@@ -40,11 +40,11 @@ namespace FmpAnalyzer.Queries
         /// <param name="date"></param>
         /// <param name="roe"></param>
         /// <returns></returns>
-        private List<string> CompounderHighRoe(string date, double roe)
+        private List<ResultSet> CompounderHighRoe(string date, double roe)
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
 
-            var roeFiltered = (from income in DataContext.IncomeStatements
+            List<ResultSet> roeFiltered = (from income in DataContext.IncomeStatements
                                join balance in DataContext.BalanceSheets
                                on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
                                where income.Date == date
@@ -64,7 +64,7 @@ namespace FmpAnalyzer.Queries
                                    Roe = selectionFirst.Roe
                                } into selectionSecond
                                orderby selectionSecond.Roe descending
-                               select selectionSecond.Symbol)
+                               select new ResultSet { Symbol = selectionSecond.Symbol, Roe = selectionSecond.Roe })
                          .ToList();
 
             ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");
@@ -74,19 +74,19 @@ namespace FmpAnalyzer.Queries
         /// <summary>
         /// CompounderStableRowGrowth
         /// </summary>
-        /// <param name="inputSymbolList"></param>
+        /// <param name="inputResultSetList"></param>
         /// <param name="date"></param>
         /// <param name="historyDepth"></param>
         /// <param name="growthGrad"></param>
         /// <returns></returns>
-        private List<string> CompounderStableRowGrowth(List<string> inputSymbolList, string date, int historyDepth, int growthGrad)
+        private List<ResultSet> CompounderStableRowGrowth(List<ResultSet> inputResultSetList, string date, int historyDepth, int growthGrad)
         {
             ReportProgress(100, 30, $"Filtering companies without stable ROE growth out...");
-            List<string> resultList = new List<string>();
+            List<ResultSet> resultSetList = new List<ResultSet>();
 
-            foreach (var symbol in inputSymbolList)
+            foreach (var resultSet in inputResultSetList)
             {
-                var historyRoe = QueryFactory.RoeHistoryQuery.Run(symbol, date, historyDepth);
+                var historyRoe = QueryFactory.RoeHistoryQuery.Run(resultSet.Symbol, date, historyDepth);
                 if (historyRoe.Count() < historyDepth || !historyRoe.AllPositive())
                 {
                     continue;
@@ -98,29 +98,29 @@ namespace FmpAnalyzer.Queries
                     continue;
                 }
 
-                resultList.Add(symbol);
+                resultSetList.Add(resultSet);
             }
 
-            ReportProgress(100, 40, $"OK! {resultList.Count()} companies found.");
-            return resultList;
+            ReportProgress(100, 40, $"OK! {resultSetList.Count()} companies found.");
+            return resultSetList;
         }
 
         /// <summary>
         /// CompounderStableReinvestmentGrowth
         /// </summary>
-        /// <param name="inputSymbolList"></param>
+        /// <param name="inputResultSetList"></param>
         /// <param name="date"></param>
         /// <param name="historyDepth"></param>
         /// <param name="growthGrad"></param>
         /// <returns></returns>
-        private List<string> CompounderStableReinvestmentGrowth(List<string> inputSymbolList, string date, int historyDepth, int growthGrad)
+        private List<ResultSet> CompounderStableReinvestmentGrowth(List<ResultSet> inputResultSetList, string date, int historyDepth, int growthGrad)
         {
             ReportProgress(100, 50, $"Filtering companies without stable reinvestment growth out...");
-            List<string> resultList = new List<string>();
+            List<ResultSet> resultSetList = new List<ResultSet>();
 
-            foreach (var symbol in inputSymbolList)
+            foreach (var resultSet in inputResultSetList)
             {
-                var historyReinvestment = QueryFactory.ReinvestmentHistoryQuery.Run(symbol, date, historyDepth);
+                var historyReinvestment = QueryFactory.ReinvestmentHistoryQuery.Run(resultSet.Symbol, date, historyDepth);
                 if (historyReinvestment.Count() < historyDepth || !historyReinvestment.AllPositive())
                 {
                     continue;
@@ -132,11 +132,11 @@ namespace FmpAnalyzer.Queries
                     continue;
                 }
 
-                resultList.Add(symbol);
+                resultSetList.Add(resultSet);
             }
 
-            ReportProgress(100, 60, $"OK! {resultList.Count()} companies found.");
-            return resultList;
+            ReportProgress(100, 60, $"OK! {resultSetList.Count()} companies found.");
+            return resultSetList;
         }
 
     }
