@@ -35,6 +35,8 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty RoeYearProperty;
         public static readonly DependencyProperty SymbolsProperty;
         public static readonly DependencyProperty ResultSetListProperty;
+        public static readonly DependencyProperty ReinvestmentRateProperty;
+        public static readonly DependencyProperty AverageReinvestmentRateProperty;
         public RelayCommand CommandGo { get; set; }
 
         static MainWindowViewModel()
@@ -57,7 +59,9 @@ namespace FmpAnalyzer
             RoeYearProperty = DependencyProperty.Register("RoeYear", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(string.Empty));
             SymbolsProperty = DependencyProperty.Register("Symbols", typeof(List<string>), typeof(MainWindowViewModel), new PropertyMetadata(new List<string>()));
             ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
-    }
+            ReinvestmentRateProperty = DependencyProperty.Register("ReinvestmentRate", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
+            AverageReinvestmentRateProperty = DependencyProperty.Register("AverageReinvestmentRate", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
+        }
 
         public MainWindowViewModel()
         {
@@ -75,6 +79,8 @@ namespace FmpAnalyzer
             HistoryDepthIncrementalRoe = 5;
             GrowthGradIncrementalRoe = 2;
             RoeYear = "2019";
+            ReinvestmentRate = 50;
+            AverageReinvestmentRate = 50;
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
 
@@ -249,8 +255,23 @@ namespace FmpAnalyzer
             set { SetValue(RoeYearProperty, value); }
         }
 
+        /// <summary>
+        /// ReinvestmentRate
+        /// </summary>
+        public double ReinvestmentRate
+        {
+            get { return (double)GetValue(ReinvestmentRateProperty); }
+            set { SetValue(ReinvestmentRateProperty, value); }
+        }
 
-
+        /// <summary>
+        /// AverageReinvestmentRate
+        /// </summary>
+        public double AverageReinvestmentRate
+        {
+            get { return (double)GetValue(AverageReinvestmentRateProperty); }
+            set { SetValue(AverageReinvestmentRateProperty, value); }
+        }
 
         /// <summary>
         /// OnCommandGo

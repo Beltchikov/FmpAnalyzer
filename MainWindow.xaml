@@ -42,6 +42,9 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="15"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
@@ -106,67 +109,81 @@
                                  IsEnabled="{Binding 
                             ElementName=chkStableRoeGrowth, 
                             Path=IsChecked}"></TextBox>
+                        <Label Grid.Column="0" Grid.Row="5"
+                               Grid.ColumnSpan="3"
+                           Content="Reinvestment Rate >"></Label>
+                        <TextBox x:Name="txtReinvestmentRate" Grid.Row="5" 
+                                 Margin="0,2,0,5"
+                             Text="{Binding ReinvestmentRate}"
+                                 Grid.Column="4"></TextBox>
+                        <Label Grid.Column="0" Grid.Row="6"
+                               Grid.ColumnSpan="4"
+                           Content="Average Reinvestment Rate >"></Label>
+                        <TextBox x:Name="txtAverageReinvestmentRate" Grid.Row="6" 
+                                 Margin="0,2,0,5"
+                             Text="{Binding AverageReinvestmentRate}"
+                                 Grid.Column="4"></TextBox>
                         <CheckBox Content="Stable Reinvestment Growth" 
                                   x:Name="chkStableReinvestmentGrowth"
                                   IsChecked="{Binding StableReinvestmentGrowth}"
-                                  Grid.Row="4"
+                                  Grid.Row="7"
                                   Grid.ColumnSpan="4"
                                   FlowDirection="RightToLeft"
                                   HorizontalAlignment="Left"
                                   Margin="4,0,0,0"
                                   VerticalAlignment="Bottom"></CheckBox>
-                        <Label Grid.Column="0" Grid.Row="5"
+                        <Label Grid.Column="0" Grid.Row="8"
                                Grid.ColumnSpan="2"
                            Content="History Depth:"></Label>
                         <TextBox x:Name="txtHistoryDepthReinvestment" 
                                  Margin="0,2,0,5"
                              Text="{Binding HistoryDepthReinvestment}"
                                  Grid.Column="2"
-                                 Grid.Row="5"
+                                 Grid.Row="8"
                                  IsEnabled="{Binding 
                             ElementName=chkStableReinvestmentGrowth, 
                             Path=IsChecked}"></TextBox>
-                        <Label Grid.Column="0" Grid.Row="6"
+                        <Label Grid.Column="0" Grid.Row="9"
                                Grid.ColumnSpan="2"
                            Content="Growth Grad:"></Label>
                         <TextBox x:Name="txtGrowthGradReinvestment" 
                                  Margin="0,2,0,5"
                              Text="{Binding GrowthGradReinvestment}"
                                  Grid.Column="2"
-                                 Grid.Row="6"
+                                 Grid.Row="9"
                                  IsEnabled="{Binding 
                             ElementName=chkStableReinvestmentGrowth, 
                             Path=IsChecked}"></TextBox>
-                        <Label Grid.Column="0" Grid.Row="8"
+                        <Label Grid.Column="0" Grid.Row="11"
                                Grid.ColumnSpan="4"
                            Content="Average incremental ROE >"></Label>
-                        <TextBox x:Name="txtAverageIncrementalRoe" Grid.Row="8" 
+                        <TextBox x:Name="txtAverageIncrementalRoe" Grid.Row="11" 
                                  Margin="0,2,0,5"
                              Text="{Binding AverageIncrementalRoe}"
                                  Grid.Column="4"></TextBox>
                         <CheckBox Content="Stable Incremental ROE Growth" 
                                   x:Name="chkStableIncrementalRoeGrowth"
                                   IsChecked="{Binding StableIncrementalRoeGrowth}"
-                                  Grid.Row="9"
+                                  Grid.Row="12"
                                   Grid.ColumnSpan="4"
                                   FlowDirection="RightToLeft"
                                   HorizontalAlignment="Left"
                                   Margin="4,0,0,0"
                                   VerticalAlignment="Bottom"></CheckBox>
                         <Label Content="History Depth:" 
-                               Grid.Row="10" Grid.ColumnSpan="2"></Label>
+                               Grid.Row="13" Grid.ColumnSpan="2"></Label>
                         <TextBox Text="{Binding HistoryDepthIncrementalRoe}"
                                  x:Name="txtHistoryDepthIncrementalRoe" 
-                                 Grid.Row="10" Grid.Column="2"
+                                 Grid.Row="13" Grid.Column="2"
                                  Margin="0,2,0,5"
                                  IsEnabled="{Binding 
                             ElementName=chkStableIncrementalRoeGrowth, 
                             Path=IsChecked}"></TextBox>
                         <Label Content="Growth Grad:" 
-                               Grid.Row="11" Grid.ColumnSpan="2"></Label>
+                               Grid.Row="14" Grid.ColumnSpan="2"></Label>
                         <TextBox Text="{Binding GrowthGradIncrementalRoe}"
                                  x:Name="txtGrowthGradIncrementalRoe" 
-                                 Grid.Row="11" Grid.Column="2"
+                                 Grid.Row="14" Grid.Column="2"
                                  Margin="0,2,0,5"
                                  IsEnabled="{Binding 
                             ElementName=chkStableIncrementalRoeGrowth, 
