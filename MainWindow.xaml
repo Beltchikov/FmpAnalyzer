@@ -46,6 +46,13 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="15"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <!--10-->
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="15"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
