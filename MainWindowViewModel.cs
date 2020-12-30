@@ -23,7 +23,6 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty ProgressCurrentProperty;
         public static readonly DependencyProperty BackgroundResultsProperty;
         public static readonly DependencyProperty RoeYearProperty;
-        public static readonly DependencyProperty SymbolsProperty;
         public static readonly DependencyProperty ResultSetListProperty;
         public static readonly DependencyProperty ReinvestmentRateProperty;
 
@@ -37,7 +36,6 @@ namespace FmpAnalyzer
             ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             BackgroundResultsProperty = DependencyProperty.Register("BackgroundResults", typeof(Brush), typeof(MainWindowViewModel), new PropertyMetadata(default(Brush)));
             RoeYearProperty = DependencyProperty.Register("RoeYear", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(string.Empty));
-            SymbolsProperty = DependencyProperty.Register("Symbols", typeof(List<string>), typeof(MainWindowViewModel), new PropertyMetadata(new List<string>()));
             ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
             ReinvestmentRateProperty = DependencyProperty.Register("ReinvestmentRate", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
         }
@@ -51,7 +49,6 @@ namespace FmpAnalyzer
             ReinvestmentRate = 50;
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
-
             QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
         }
 
@@ -104,16 +101,6 @@ namespace FmpAnalyzer
         /// CompounderQueryParams
         /// </summary>
         public CompounderQueryParams CompounderQueryParams { get; set; }
-
-
-        /// <summary>
-        /// Symbols
-        /// </summary>
-        public List<string> Symbols
-        {
-            get { return (List<string>)GetValue(SymbolsProperty); }
-            set { SetValue(SymbolsProperty, value); }
-        }
 
         /// <summary>
         /// ResultSetList
@@ -204,7 +191,6 @@ namespace FmpAnalyzer
         private void LockControls()
         {
             ProgressCurrent = 0;
-            Symbols = new List<string>();
             BackgroundResults = Brushes.DarkGray;
         }
 
