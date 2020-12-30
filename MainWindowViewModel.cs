@@ -301,6 +301,7 @@ namespace FmpAnalyzer
             worker.ProgressChanged += Worker_ProgressChanged;
             worker.RunWorkerCompleted += (s, e) =>
             {
+                CurrentAction += $" {ResultSetList.Count()} companies found.";
                 UnlockControls();
             };
             worker.RunWorkerAsync();
