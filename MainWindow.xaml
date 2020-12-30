@@ -25,7 +25,7 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10"></ColumnDefinition>
-                        <ColumnDefinition Width="200"></ColumnDefinition>
+                        <ColumnDefinition Width="250"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="10"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
@@ -42,6 +42,7 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -49,12 +50,13 @@
                             <ColumnDefinition Width="45"></ColumnDefinition>
                             <ColumnDefinition Width="50"></ColumnDefinition>
                             <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0"
                            Content="ROE >"></Label>
                         <TextBox x:Name="txtRoeFilter" Margin="0,2,0,5"
-                             Text="{Binding RoeFilter}"
+                             Text="{Binding Roe}"
                                  Grid.Column="1"></TextBox>
                         <CheckBox Content="Stable ROE Growth" 
                                   x:Name="chkStableRoeGrowth"
@@ -116,6 +118,13 @@
                                  IsEnabled="{Binding 
                             ElementName=chkStableReinvestmentGrowth, 
                             Path=IsChecked}"></TextBox>
+                        <Label Grid.Column="0" Grid.Row="7"
+                               Grid.ColumnSpan="4"
+                           Content="Average incremental ROE >"></Label>
+                        <TextBox x:Name="txtAverageIncrementalRoe" Grid.Row="7" 
+                                 Margin="0,2,0,5"
+                             Text="{Binding AverageIncrementalRoe}"
+                                 Grid.Column="4"></TextBox>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="2"
@@ -127,23 +136,31 @@
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"/>
                             <RowDefinition Height="10"></RowDefinition>
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
                         <Button  
                             Cursor="Hand"
-                            Command="{Binding CommandGo}">Go</Button>
+                            Command="{Binding CommandGo}"
+                            Grid.Column="1">Go</Button>
                         <Label Content="{Binding CurrentAction}"
-                               Grid.Row="2"></Label>
+                               Grid.Row="2"
+                               Grid.Column="1"></Label>
                         <ProgressBar x:Name="prgTotal"
                                 Maximum="100" 
                                  Minimum="0" 
                                  Value="{Binding ProgressCurrent}"
-                                 Grid.Row="4"/>
-                        <TextBox Grid.Row="6" 
+                                 Grid.Row="4"
+                                     Grid.Column="1"/>
+                        <TextBox Grid.Row="6"
+                                 Grid.Column="1"
                              x:Name="txtResults"
                              Text="{Binding Results}"
-                                 Background="{Binding BackgroundResults}">
+                                 Background="{Binding BackgroundResults}" Grid.RowSpan="2">
                         </TextBox>
                     </Grid>
 

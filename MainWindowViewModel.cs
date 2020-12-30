@@ -18,7 +18,7 @@ namespace FmpAnalyzer
     {
         public static readonly DependencyProperty ConnectionStringProperty;
         public static readonly DependencyProperty ResultsProperty;
-        public static readonly DependencyProperty RoeFilterProperty;
+        public static readonly DependencyProperty RoeProperty;
         public static readonly DependencyProperty CurrentActionProperty;
         public static readonly DependencyProperty StableRoeGrowthProperty;
         public static readonly DependencyProperty HistoryDepthRoeProperty;
@@ -28,13 +28,14 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty HistoryDepthReinvestmentProperty;
         public static readonly DependencyProperty GrowthGradReinvestmentProperty;
         public static readonly DependencyProperty BackgroundResultsProperty;
+        public static readonly DependencyProperty AverageIncrementalRoeProperty;
         public RelayCommand CommandGo { get; set; }
 
         static MainWindowViewModel()
         {
             ConnectionStringProperty = DependencyProperty.Register("ConnectionString", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             ResultsProperty = DependencyProperty.Register("Results", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            RoeFilterProperty = DependencyProperty.Register("RoeFilter", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(Double)));
+            RoeProperty = DependencyProperty.Register("Roe", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(Double)));
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             StableRoeGrowthProperty = DependencyProperty.Register("StableRoeGrowth", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(default(Boolean)));
             HistoryDepthRoeProperty = DependencyProperty.Register("HistoryDepthRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
@@ -44,12 +45,15 @@ namespace FmpAnalyzer
             HistoryDepthReinvestmentProperty = DependencyProperty.Register("HistoryDepthReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             GrowthGradReinvestmentProperty = DependencyProperty.Register("GrowthGradReinvestment", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             BackgroundResultsProperty = DependencyProperty.Register("BackgroundResults", typeof(Brush), typeof(MainWindowViewModel), new PropertyMetadata(default(Brush)));
-        }
+            AverageIncrementalRoeProperty = DependencyProperty.Register("AverageIncrementalRoe", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
 
-        public MainWindowViewModel()
+
+    }
+
+    public MainWindowViewModel()
         {
             ConnectionString = Configuration.Instance["ConnectionString"];
-            RoeFilter = 15;
+            Roe = 15;
             CurrentAction = "Willkommen!";
             StableRoeGrowth = true;
             HistoryDepthRoe = 5;
@@ -57,6 +61,7 @@ namespace FmpAnalyzer
             StableReinvestmentGrowth = true;
             HistoryDepthReinvestment = 5;
             GrowthGradReinvestment = 3;
+            AverageIncrementalRoe= 15;
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
 
@@ -82,12 +87,12 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
-        /// RoeFilter
+        /// Roe
         /// </summary>
-        public double RoeFilter
+        public double Roe
         {
-            get { return (double)GetValue(RoeFilterProperty); }
-            set { SetValue(RoeFilterProperty, value); }
+            get { return (double)GetValue(RoeProperty); }
+            set { SetValue(RoeProperty, value); }
         }
 
         /// <summary>
@@ -182,6 +187,15 @@ namespace FmpAnalyzer
         public List<string> Symbols { get; set; }
 
         /// <summary>
+        /// AverageIncrementalRoe
+        /// </summary>
+        public int AverageIncrementalRoe
+        {
+            get { return (int)GetValue(AverageIncrementalRoeProperty); }
+            set { SetValue(AverageIncrementalRoeProperty, value); }
+        }
+
+        /// <summary>
         /// OnCommandGo
         /// </summary>
         /// <param name="p"></param>
@@ -192,7 +206,7 @@ namespace FmpAnalyzer
             CompounderQueryParams = new CompounderQueryParams
             {
                 Date = "2019-12-31",
-                Roe = RoeFilter,
+                Roe = Roe,
                 HistoryDepthRoe = StableRoeGrowth ? HistoryDepthRoe : 0,
                 GrowthGradRoe = StableRoeGrowth ? GrowthGradRoe : 0,
                 HistoryDepthReinvestment = StableReinvestmentGrowth ? HistoryDepthReinvestment : 0,
