@@ -27,10 +27,13 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <ListBox x:Name="listAssets"
-                ItemsSource="{Binding Mode=OneWay,Converter ={StaticResource HistogramConverter},
-            Path=ItemsSource, ElementName=ctrlHistogram}"
-                 Style="{StaticResource ListStyle}">
+        <ListBox x:Name="listAssets" Style="{StaticResource ListStyle}">
+            <ListBox.ItemsSource>
+                <MultiBinding Converter ="{StaticResource HistogramConverter}" Mode="OneWay">
+                    <Binding Path="ItemsSource" ElementName="ctrlHistogram"></Binding>
+                    <Binding Path="Height" ElementName="ctrlHistogram"></Binding>
+                </MultiBinding>
+            </ListBox.ItemsSource>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
