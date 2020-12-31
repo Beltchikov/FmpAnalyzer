@@ -9,6 +9,7 @@
              x:Name="ctrlHistogram">
     <UserControl.Resources>
         <local:HistogramConverter x:Key="HistogramConverter"></local:HistogramConverter>
+        <local:ColorConverter x:Key="ColorConverter"></local:ColorConverter>
         <Style TargetType="ListBox" x:Key="ListStyle" BasedOn="{StaticResource {x:Type ListBox}}">
             <Style.Triggers>
                 <DataTrigger 
@@ -38,7 +39,7 @@
                 <DataTemplate>
                         <Rectangle Height="{Binding}" Width="5"
                                Stroke="Black" VerticalAlignment="Top" 
-                               Fill="Yellow"/>
+                               Fill="{Binding Converter={StaticResource ColorConverter}}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
