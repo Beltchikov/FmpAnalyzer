@@ -20,6 +20,7 @@ namespace FmpAnalyzer.Queries
 
             resultSetList = MainQuery(parameters.Date, parameters.Roe, parameters.ReinvestmentRate);
             resultSetList = AddRoeHistory(resultSetList, parameters.Date, parameters.HistoryDepth);
+            resultSetList = AddReinvestmentHistory(resultSetList, parameters.Date, parameters.HistoryDepth);
             resultSetList = AddCompanyName(resultSetList);
 
             ReportProgress(100, 100, $"OK! Finished query.");
@@ -74,11 +75,11 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         private List<ResultSet> AddRoeHistory(List<ResultSet> inputResultSetList, string date, int historyDepth)
         {
-            for(int ii = 0; ii < inputResultSetList.Count(); ii++)
+            for (int ii = 0; ii < inputResultSetList.Count(); ii++)
             {
                 var historyRoe = QueryFactory.RoeHistoryQuery.Run(inputResultSetList[ii].Symbol, date, historyDepth);
-                
-                for(int i = 0; i < historyRoe.Count(); i++)
+
+                for (int i = 0; i < historyRoe.Count(); i++)
                 {
                     inputResultSetList[ii].RoeHistory.Add(historyRoe[i]);
                 }
@@ -88,71 +89,25 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
-        /// CompounderStableRowGrowth
+        /// AddReinvestmentHistory
         /// </summary>
         /// <param name="inputResultSetList"></param>
         /// <param name="date"></param>
         /// <param name="historyDepth"></param>
-        /// <param name="growthGrad"></param>
         /// <returns></returns>
-        private List<ResultSet> CompounderStableRowGrowth(List<ResultSet> inputResultSetList, string date, int historyDepth, int growthGrad)
+        private List<ResultSet> AddReinvestmentHistory(List<ResultSet> inputResultSetList, string date, int historyDepth)
         {
-            ReportProgress(100, 30, $"Filtering companies without stable ROE growth out...");
-            List<ResultSet> resultSetList = new List<ResultSet>();
-
-            foreach (var resultSet in inputResultSetList)
+            for (int ii = 0; ii < inputResultSetList.Count(); ii++)
             {
-                var historyRoe = QueryFactory.RoeHistoryQuery.Run(resultSet.Symbol, date, historyDepth);
-                if (historyRoe.Count() < historyDepth || !historyRoe.AllPositive())
-                {
-                    continue;
-                }
+                var historyReinvestment = QueryFactory.ReinvestmentHistoryQuery.Run(inputResultSetList[ii].Symbol, date, historyDepth);
 
-                // Decline is used for growth determination because of reverse order
-                if (historyRoe.Declines() < growthGrad)
+                for (int i = 0; i < historyReinvestment.Count(); i++)
                 {
-                    continue;
+                    inputResultSetList[ii].ReinvestmentHistory.Add(historyReinvestment[i]);
                 }
-
-                resultSetList.Add(resultSet);
             }
 
-            ReportProgress(100, 40, $"OK! {resultSetList.Count()} companies found.");
-            return resultSetList;
-        }
-
-        /// <summary>
-        /// CompounderStableReinvestmentGrowth
-        /// </summary>
-        /// <param name="inputResultSetList"></param>
-        /// <param name="date"></param>
-        /// <param name="historyDepth"></param>
-        /// <param name="growthGrad"></param>
-        /// <returns></returns>
-        private List<ResultSet> CompounderStableReinvestmentGrowth(List<ResultSet> inputResultSetList, string date, int historyDepth, int growthGrad)
-        {
-            ReportProgress(100, 50, $"Filtering companies without stable reinvestment growth out...");
-            List<ResultSet> resultSetList = new List<ResultSet>();
-
-            foreach (var resultSet in inputResultSetList)
-            {
-                var historyReinvestment = QueryFactory.ReinvestmentHistoryQuery.Run(resultSet.Symbol, date, historyDepth);
-                if (historyReinvestment.Count() < historyDepth || !historyReinvestment.AllPositive())
-                {
-                    continue;
-                }
-
-                // Decline is used for growth determination because of reverse order
-                if (historyReinvestment.Declines() < growthGrad)
-                {
-                    continue;
-                }
-
-                resultSetList.Add(resultSet);
-            }
-
-            ReportProgress(100, 60, $"OK! {resultSetList.Count()} companies found.");
-            return resultSetList;
+            return inputResultSetList;
         }
 
         /// <summary>

@@ -11,12 +11,14 @@ namespace FmpAnalyzer.Data
         public ResultSet()
         {
             RoeHistory = new List<double>();
+            ReinvestmentHistory = new List<double>();
         }
-        
+
         public string Symbol { get; set; }
         public string Name { get; set; }
         public double Roe { get; set; }
         public List<double> RoeHistory { get; set; }
         public double ReinvestmentRate { get; set; }
+        public List<double> ReinvestmentHistory { get; set; }
     }
 }
