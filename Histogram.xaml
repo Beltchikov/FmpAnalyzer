@@ -26,7 +26,8 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <ListBox x:Name="listAssets" Style="{StaticResource ListStyle}">
+    <ListBox x:Name="listAssets" Style="{StaticResource ListStyle}"
+             BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Hidden">
         <ListBox.ItemsSource>
             <MultiBinding Converter ="{StaticResource HistogramConverter}" Mode="OneWay">
                 <Binding Path="ItemsSource" ElementName="ctrlHistogram"></Binding>
