@@ -26,27 +26,27 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <Grid>
-        <ListBox x:Name="listAssets" Style="{StaticResource ListStyle}">
-            <ListBox.ItemsSource>
-                <MultiBinding Converter ="{StaticResource HistogramConverter}" Mode="OneWay">
-                    <Binding Path="ItemsSource" ElementName="ctrlHistogram"></Binding>
-                    <Binding Path="Height" ElementName="ctrlHistogram"></Binding>
-                </MultiBinding>
-            </ListBox.ItemsSource>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Rectangle Height="{Binding Mode=OneWay}" Width="5" ToolTip="{Binding Mode=OneWay}"
+    <ListBox x:Name="listAssets" Style="{StaticResource ListStyle}">
+        <ListBox.ItemsSource>
+            <MultiBinding Converter ="{StaticResource HistogramConverter}" Mode="OneWay">
+                <Binding Path="ItemsSource" ElementName="ctrlHistogram"></Binding>
+                <Binding Path="Height" ElementName="ctrlHistogram"></Binding>
+            </MultiBinding>
+        </ListBox.ItemsSource>
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <Canvas Height="{Binding ElementName=ctrlHistogram, Path=Height}">
+                    <Rectangle Canvas.Bottom="0"  
+                               Height="{Binding Mode=OneWay}" Width="5" ToolTip="{Binding Mode=OneWay}"
                                Stroke="Black" VerticalAlignment="Top" 
                                Fill="{Binding Mode=OneWay, Converter={StaticResource ColorConverter}}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <Label Content="{Binding ElementName=ctrlHistogram, Path=Height, Mode=OneWay}"></Label>
-    </Grid>
+                </Canvas>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
 </UserControl>
