@@ -102,19 +102,64 @@
                                       Grid.Row="6"
                                        Grid.Column="1">
                             <DataGrid
-                                ItemsSource="{Binding ResultSetList, Mode=OneWay}">
-                                <!--<DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="Publish Date">
+                                ItemsSource="{Binding ResultSetList, Mode=OneWay}"
+                                AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="Symbol">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Label Content="AAAAA"></Label>
-                                                    <Label Content="{Binding}"></Label>
+                                                    <Label Content="{Binding Path=Symbol}"></Label>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                </DataGrid.Columns>-->
+                                    <DataGridTemplateColumn Header="Company">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Label Content="{Binding Path=Name}"></Label>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="ROE">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Label Content="{Binding Path= Roe}"></Label>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="ROE History">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Label Content="{Binding Path=RoeHistory}"></Label>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Reinvestment&#x0a;Rate">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Label Content="{Binding  Path=ReinvestmentRate}"></Label>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Reinvestment&#x0a;History">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Label Content="{Binding Path=ReinvestmentHistory}"></Label>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
                     </Grid>
