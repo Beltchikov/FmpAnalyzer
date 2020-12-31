@@ -7,11 +7,26 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="ctrlHistogram">
-    <Canvas  Background="Aqua" >
+    <UserControl.Resources>
+        <Style TargetType="ListBox" x:Key="ListStyle" BasedOn="{StaticResource {x:Type ListBox}}">
+            <Style.Triggers>
+                <DataTrigger 
+            Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Items.Count}" 
+            Value="0">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBlock>No items to display</TextBlock>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
         <ListBox x:Name="listAssets"
                 ItemsSource="{Binding Path=ItemsSource, ElementName=ctrlHistogram}"
-                Canvas.Top="0" Canvas.Left="0" Width="auto" Height="auto"
-                 MinHeight="50" MinWidth="200">
+                 Style="{StaticResource ListStyle}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
@@ -19,17 +34,10 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Canvas Background="Purple">
-                            <Rectangle Height="{Binding}" Margin="0,0,0,0"
+                        <Rectangle Height="{Binding}" Width="5"
                                Stroke="Black" VerticalAlignment="Top" 
-                               Fill="Yellow"
-                               Width="10"/>
-
-                        </Canvas>
+                               Fill="Yellow"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
-
-    </Canvas>
 </UserControl>

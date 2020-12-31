@@ -137,10 +137,8 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <local:Histogram ItemsSource="{Binding Path=RoeHistory}"
-                                                                     Width="auto" Height="auto">
+                                                    <local:Histogram ItemsSource="{Binding Path=RoeHistory}">
                                                     </local:Histogram>
-                                                    <!--<Label Content="{Binding Path=RoeHistory}"></Label>-->
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
