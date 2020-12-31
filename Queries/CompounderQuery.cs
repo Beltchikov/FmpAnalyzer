@@ -18,7 +18,8 @@ namespace FmpAnalyzer.Queries
         {
             List<ResultSet> resultSetList = new List<ResultSet>();
 
-            resultSetList = CompounderMainQuery(parameters.Date, parameters.Roe, parameters.ReinvestmentRate);
+            resultSetList = MainQuery(parameters.Date, parameters.Roe, parameters.ReinvestmentRate);
+            resultSetList = AddRoeHistory(resultSetList, parameters.Date, parameters.HistoryDepth);
             resultSetList = AddCompanyName(resultSetList);
 
             ReportProgress(100, 100, $"OK! Finished query.");
@@ -26,7 +27,7 @@ namespace FmpAnalyzer.Queries
         }
 
 
-        private List<ResultSet> CompounderMainQuery(string date, double roe, double reinvestmentRate)
+        private List<ResultSet> MainQuery(string date, double roe, double reinvestmentRate)
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
 
@@ -62,6 +63,28 @@ namespace FmpAnalyzer.Queries
 
             ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");
             return roeFiltered;
+        }
+
+        /// <summary>
+        /// AddRoeHistory
+        /// </summary>
+        /// <param name="inputResultSetList"></param>
+        /// <param name="date"></param>
+        /// <param name="historyDepth"></param>
+        /// <returns></returns>
+        private List<ResultSet> AddRoeHistory(List<ResultSet> inputResultSetList, string date, int historyDepth)
+        {
+            for(int ii = 0; ii < inputResultSetList.Count(); ii++)
+            {
+                var historyRoe = QueryFactory.RoeHistoryQuery.Run(inputResultSetList[ii].Symbol, date, historyDepth);
+                
+                for(int i = 0; i < historyRoe.Count(); i++)
+                {
+                    inputResultSetList[ii].RoeHistory.Add(historyRoe[i]);
+                }
+            }
+
+            return inputResultSetList;
         }
 
         /// <summary>

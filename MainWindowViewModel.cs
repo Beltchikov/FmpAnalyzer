@@ -141,7 +141,8 @@ namespace FmpAnalyzer
             {
                 Date = RoeYear + Configuration.Instance["DateSuffix"],
                 Roe = Roe,
-                ReinvestmentRate = ReinvestmentRate
+                ReinvestmentRate = ReinvestmentRate,
+                HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
             };
 
             var worker = new BackgroundWorker() { WorkerReportsProgress = true };

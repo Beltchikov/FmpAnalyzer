@@ -8,12 +8,15 @@ namespace FmpAnalyzer.Data
 {
     public class ResultSet
     {
+        public ResultSet()
+        {
+            RoeHistory = new List<double>();
+        }
+        
         public string Symbol { get; set; }
         public string Name { get; set; }
         public double Roe { get; set; }
-        
-        //[Display( Name ="Reinvestment Rate")]
-        [DisplayName("Reinvestment Rate")]
+        public List<double> RoeHistory { get; set; }
         public double ReinvestmentRate { get; set; }
     }
 }
