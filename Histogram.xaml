@@ -8,6 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="ctrlHistogram">
     <UserControl.Resources>
+        <local:HistogramConverter x:Key="HistogramConverter"></local:HistogramConverter>
         <Style TargetType="ListBox" x:Key="ListStyle" BasedOn="{StaticResource {x:Type ListBox}}">
             <Style.Triggers>
                 <DataTrigger 
@@ -16,7 +17,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <TextBlock>No items to display</TextBlock>
+                                <TextBlock></TextBlock>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -25,7 +26,8 @@
         </Style>
     </UserControl.Resources>
         <ListBox x:Name="listAssets"
-                ItemsSource="{Binding Path=ItemsSource, ElementName=ctrlHistogram}"
+                ItemsSource="{Binding Converter={StaticResource HistogramConverter},
+            Path=ItemsSource, ElementName=ctrlHistogram}"
                  Style="{StaticResource ListStyle}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
