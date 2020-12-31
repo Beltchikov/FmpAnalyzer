@@ -33,6 +33,9 @@ namespace FmpAnalyzer
             InitializeComponent();
         }
 
+        /// <summary>
+        /// ItemsSource
+        /// </summary>
         public IEnumerable ItemsSource
         {
             get { return (IEnumerable)GetValue(ItemsSourceProperty); }
@@ -45,6 +48,14 @@ namespace FmpAnalyzer
     /// </summary>
     public class HistogramConverter : IMultiValueConverter
     {
+        /// <summary>
+        /// Convert
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (!values.Any())
@@ -73,15 +84,29 @@ namespace FmpAnalyzer
                 return inputValuesList;
             }
 
-            // Convert ant return
+            // Convert and return
             return ConvertHistory(inputValuesList, height);
         }
 
+        /// <summary>
+        /// ConvertBack
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetTypes"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// ConvertHistory
+        /// </summary>
+        /// <param name="inputList"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         private IEnumerable ConvertHistory(List<double> inputList, double height)
         {
             List<double> outputList = new List<double>();
@@ -93,10 +118,95 @@ namespace FmpAnalyzer
                 min = inputList.Min();
             }
             var range = max - min;
+            if(range == 0)
+            {
+                inputList.ForEach(v => outputList.Add(Math.Abs(v)));
+                return outputList;
+            }
             var koef = 0.8 * height / range;
-            inputList.ForEach(v => outputList.Add(v * koef));
+            inputList.ForEach(v => outputList.Add(Math.Abs(v) * koef));
 
             return outputList;
+        }
+    }
+
+    /// <summary>
+    /// NegativeValuesConverter
+    /// </summary>
+    public class NegativeValuesConverter : IMultiValueConverter
+    {
+        /// <summary>
+        /// Convert
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!values.Any())
+            {
+                return values;
+            }
+
+            // Get history array and height of control
+            List<double> inputValuesList = (List<double>)values[0];
+            double currentHistoryValue = (double)values[1];
+            double height = (double)values[2];
+            
+            // Are values there?
+            if (Double.IsNaN(currentHistoryValue) || Double.IsNaN(height) || !inputValuesList.Any())
+            {
+                return 0;
+            }
+
+            // Convert and return
+            return ConvertToPositivBarShift(inputValuesList, currentHistoryValue, height);
+        }
+
+        /// <summary>
+        /// ConvertBack
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetTypes"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// ConvertToPositivBarShift
+        /// </summary>
+        /// <param name="inputList"></param>
+        /// <param name="currentHistoryValue"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        double ConvertToPositivBarShift(List<double> inputList, double currentHistoryValue,  double height)
+        {
+            if(currentHistoryValue > 0)
+            {
+                return 0;
+            }
+
+            var max = inputList.Max();
+            var min = .0;
+            if (inputList.Where(v => v < 0).Any())
+            {
+                min = inputList.Min();
+            }
+            var range = max - min;
+            if(range == 0)
+            {
+                return currentHistoryValue;
+            }
+            var koef = 0.8 * height / range;
+
+            return Math.Abs(currentHistoryValue * koef);
+
         }
     }
 

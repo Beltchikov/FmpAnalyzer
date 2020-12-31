@@ -10,6 +10,7 @@
     <UserControl.Resources>
         <local:HistogramConverter x:Key="HistogramConverter"></local:HistogramConverter>
         <local:ColorConverter x:Key="ColorConverter"></local:ColorConverter>
+        <local:NegativeValuesConverter x:Key="NegativeValuesConverter"></local:NegativeValuesConverter>
         <Style TargetType="ListBox" x:Key="ListStyle" BasedOn="{StaticResource {x:Type ListBox}}">
             <Style.Triggers>
                 <DataTrigger 
@@ -42,10 +43,17 @@
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Canvas Height="{Binding ElementName=ctrlHistogram, Path=Height}">
-                    <Rectangle Canvas.Bottom="0"  
-                               Height="{Binding Mode=OneWay}" Width="5" ToolTip="{Binding Mode=OneWay}"
+                    <Rectangle Height="{Binding Mode=OneWay}" Width="5" ToolTip="{Binding Mode=OneWay}"
                                Stroke="Black" VerticalAlignment="Top" 
-                               Fill="{Binding Mode=OneWay, Converter={StaticResource ColorConverter}}"/>
+                               Fill="{Binding Mode=OneWay, Converter={StaticResource ColorConverter}}">
+                        <Canvas.Bottom>
+                            <MultiBinding Converter ="{StaticResource NegativeValuesConverter}" Mode="OneWay">
+                                <Binding Path="ItemsSource" ElementName="ctrlHistogram"></Binding>
+                                <Binding></Binding>
+                                <Binding Path="Height" ElementName="ctrlHistogram"></Binding>
+                            </MultiBinding>
+                        </Canvas.Bottom>
+                    </Rectangle>
                 </Canvas>
             </DataTemplate>
         </ListBox.ItemTemplate>
