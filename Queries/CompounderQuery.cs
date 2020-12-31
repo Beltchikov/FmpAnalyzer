@@ -43,10 +43,10 @@ namespace FmpAnalyzer.Queries
                                                Equity = balance.TotalStockholdersEquity,
                                                Roe = balance.TotalStockholdersEquity == 0
                                                   ? 0
-                                                  : income.NetIncome * 100 / balance.TotalStockholdersEquity,
+                                                  : Math.Round(income.NetIncome * 100 / balance.TotalStockholdersEquity, 0),
                                                ReinvestmentRate = income.NetIncome == 0
                                                   ? 0
-                                                  : cash.InvestmentsInPropertyPlantAndEquipment * -100 / income.NetIncome
+                                                  : Math.Round(cash.InvestmentsInPropertyPlantAndEquipment * -100 / income.NetIncome, 0)
                                            } into selectionFirst
                                            where selectionFirst.Roe >= roe
                                            && selectionFirst.ReinvestmentRate >= reinvestmentRate

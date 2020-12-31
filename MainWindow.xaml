@@ -103,15 +103,18 @@
                                        Grid.Column="1">
                             <DataGrid
                                 ItemsSource="{Binding ResultSetList, Mode=OneWay}">
-                                <DataGrid.ItemTemplate>
-                                    <DataTemplate>
-                                        <DockPanel LastChildFill="True">
-                                            <TextBlock Text="{Binding}"
-                                                       Margin="5,0,5,0"
-                                                       Width="100"/>
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </DataGrid.ItemTemplate>
+                                <!--<DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="Publish Date">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Label Content="AAAAA"></Label>
+                                                    <Label Content="{Binding}"></Label>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>-->
                             </DataGrid>
                         </ScrollViewer>
                     </Grid>
