@@ -102,9 +102,10 @@
                         <ScrollViewer VerticalScrollBarVisibility="Auto" 
                                       Grid.Row="6"
                                        Grid.Column="1">
-                            <DataGrid
+                            <DataGrid x:Name="gridResults"
                                 ItemsSource="{Binding ResultSetList, Mode=OneWay}"
-                                AutoGenerateColumns="False">
+                                AutoGenerateColumns="False"
+                                      RowHeight="30">
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn Header="Symbol" SortMemberPath="Symbol">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -137,7 +138,11 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <local:Histogram ItemsSource="{Binding Path=RoeHistory}">
+                                                    <!--<local:Histogram ItemsSource="{Binding Path=RoeHistory}"
+                                                                 Height="{Binding ElementName=gridResults, Path= RowHeight}">
+                                                    </local:Histogram>-->
+                                                    <local:Histogram ItemsSource="{Binding Path=RoeHistory}"
+                                                         Height="{Binding ElementName=gridResults, Path=RowHeight}">
                                                     </local:Histogram>
                                                 </StackPanel>
                                             </DataTemplate>

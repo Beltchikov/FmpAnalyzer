@@ -26,8 +26,9 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
+    <Grid>
         <ListBox x:Name="listAssets"
-                ItemsSource="{Binding Converter={StaticResource HistogramConverter},
+                ItemsSource="{Binding Mode=OneWay,Converter ={StaticResource HistogramConverter},
             Path=ItemsSource, ElementName=ctrlHistogram}"
                  Style="{StaticResource ListStyle}">
             <ListBox.ItemsPanel>
@@ -37,10 +38,12 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                <Rectangle Height="{Binding}" Width="5" ToolTip="{Binding}"
+                    <Rectangle Height="{Binding Mode=OneWay}" Width="5" ToolTip="{Binding Mode=OneWay}"
                                Stroke="Black" VerticalAlignment="Top" 
-                               Fill="{Binding Converter={StaticResource ColorConverter}}"/>
+                               Fill="{Binding Mode=OneWay, Converter={StaticResource ColorConverter}}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Label Content="{Binding ElementName=ctrlHistogram, Path=Height, Mode=OneWay}"></Label>
+    </Grid>
 </UserControl>
