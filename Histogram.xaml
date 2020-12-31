@@ -37,7 +37,7 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                        <Rectangle Height="{Binding}" Width="5"
+                <Rectangle Height="{Binding}" Width="5" ToolTip="{Binding}"
                                Stroke="Black" VerticalAlignment="Top" 
                                Fill="{Binding Converter={StaticResource ColorConverter}}"/>
                 </DataTemplate>
