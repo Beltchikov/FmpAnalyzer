@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FmpAnalyzer" 
-        xmlns:local1="clr-namespace:FmpAnalyzer.Converters"
+        xmlns:converters="clr-namespace:FmpAnalyzer.Converters"
         mc:Ignorable="d"
         Title="FMP Analyzer" Height="800" Width="1400">
     <Window.Resources>
         <local:MainWindowViewModel x:Key="ViewModel" />
-        <local1:RoeConverter x:Key="RoeConverter"/>
+        <converters:RoeConverter x:Key="RoeConverter"/>
+        <local:Histogram x:Key="Histogram"></local:Histogram>
     </Window.Resources>
     <Window.DataContext>
         <StaticResource ResourceKey="ViewModel" />
@@ -136,7 +137,10 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Label Content="{Binding Path=RoeHistory}"></Label>
+                                                    <local:Histogram ItemsSource="{Binding Path=RoeHistory}"
+                                                                     Width="auto" Height="auto">
+                                                    </local:Histogram>
+                                                    <!--<Label Content="{Binding Path=RoeHistory}"></Label>-->
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
