@@ -35,7 +35,7 @@ namespace FmpAnalyzer.Queries
 
                 if (!queryResult.Any())
                 {
-                    return resultList;
+                    continue;
                 }
 
                 resultList.Add(queryResult.FirstOrDefault());

@@ -16,6 +16,7 @@ namespace FmpAnalyzer.Queries
         private static WithBestRoeQuery _withBestRoeQuery;
         private static RoeHistoryQuery _roeHistoryQuery;
         private static ReinvestmentHistoryQuery _reinvestmentHistoryQuery;
+        private static IncrementalRoeQuery _incrementalRoeQuery;
         private static CompanyNameQuery _companyNameQuery;
 
         /// <summary>
@@ -86,6 +87,24 @@ namespace FmpAnalyzer.Queries
                         _reinvestmentHistoryQuery = new ReinvestmentHistoryQuery(DataContext.Instance);
                     }
                     return _reinvestmentHistoryQuery;
+                }
+            }
+        }
+
+        /// <summary>
+        /// IncrementalRoeQuery
+        /// </summary>
+        public static IncrementalRoeQuery IncrementalRoeQuery
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (_incrementalRoeQuery == null)
+                    {
+                        _incrementalRoeQuery = new IncrementalRoeQuery(DataContext.Instance);
+                    }
+                    return _incrementalRoeQuery;
                 }
             }
         }

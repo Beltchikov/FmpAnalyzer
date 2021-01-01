@@ -21,12 +21,12 @@ namespace FmpAnalyzer.Queries
             resultSetList = MainQuery(parameters.Date, parameters.Roe, parameters.ReinvestmentRate);
             resultSetList = AddRoeHistory(resultSetList, parameters.Date, parameters.HistoryDepth);
             resultSetList = AddReinvestmentHistory(resultSetList, parameters.Date, parameters.HistoryDepth);
+            resultSetList = AddIncrementalRoe(resultSetList, parameters.Date, parameters.HistoryDepth);
             resultSetList = AddCompanyName(resultSetList);
 
             ReportProgress(100, 100, $"OK! Finished query.");
             return resultSetList;
         }
-
 
         private List<ResultSet> MainQuery(string date, double roe, double reinvestmentRate)
         {
@@ -104,6 +104,28 @@ namespace FmpAnalyzer.Queries
                 for (int i = 0; i < historyReinvestment.Count(); i++)
                 {
                     inputResultSetList[ii].ReinvestmentHistory.Add(historyReinvestment[i]);
+                }
+            }
+
+            return inputResultSetList;
+        }
+
+        /// <summary>
+        /// AddIncrementalRoe
+        /// </summary>
+        /// <param name="inputResultSetList"></param>
+        /// <param name="date"></param>
+        /// <param name="historyDepth"></param>
+        /// <returns></returns>
+        private List<ResultSet> AddIncrementalRoe(List<ResultSet> inputResultSetList, string date, int historyDepth)
+        {
+            for (int ii = 0; ii < inputResultSetList.Count(); ii++)
+            {
+                var incrementalRoe = QueryFactory.IncrementalRoeQuery.Run(inputResultSetList[ii].Symbol, date, historyDepth);
+
+                for (int i = 0; i < incrementalRoe.Count(); i++)
+                {
+                    inputResultSetList[ii].IncrementalRoe.Add(incrementalRoe[i]);
                 }
             }
 
