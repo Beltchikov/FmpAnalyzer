@@ -200,7 +200,7 @@ namespace FmpAnalyzer
                     return Math.Abs(min * koef);
                 }
 
-                return 0;
+                return Math.Abs(currentHistoryValue - min) * koef;
             }
         }
     }
