@@ -8,9 +8,9 @@
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="ctrlHistogram">
     <UserControl.Resources>
-        <local:HistogramConverter x:Key="HistogramConverter"></local:HistogramConverter>
         <local:ColorConverter x:Key="ColorConverter"></local:ColorConverter>
         <local:NegativeValuesConverter x:Key="NegativeValuesConverter"></local:NegativeValuesConverter>
+        <local:RectangleHeightConverter x:Key="RectangleHeightConverter"></local:RectangleHeightConverter>
         <Style TargetType="ListBox" x:Key="ListStyle" BasedOn="{StaticResource {x:Type ListBox}}">
             <Style.Triggers>
                 <DataTrigger 
@@ -28,13 +28,8 @@
         </Style>
     </UserControl.Resources>
     <ListBox x:Name="listAssets" Style="{StaticResource ListStyle}"
-             BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Hidden">
-        <ListBox.ItemsSource>
-            <MultiBinding Converter ="{StaticResource HistogramConverter}" Mode="OneWay">
-                <Binding Path="ItemsSource" ElementName="ctrlHistogram"></Binding>
-                <Binding Path="Height" ElementName="ctrlHistogram"></Binding>
-            </MultiBinding>
-        </ListBox.ItemsSource>
+             BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Hidden"
+             ItemsSource="{Binding ElementName=ctrlHistogram, Path=ItemsSource }">
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
@@ -43,9 +38,16 @@
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Canvas Height="{Binding ElementName=ctrlHistogram, Path=Height}">
-                    <Rectangle Height="{Binding Mode=OneWay}" Width="5" ToolTip="{Binding Mode=OneWay}"
+                    <Rectangle Width="5" ToolTip="{Binding Mode=OneWay}"
                                Stroke="Black" VerticalAlignment="Top" 
                                Fill="{Binding Mode=OneWay, Converter={StaticResource ColorConverter}}">
+                        <Rectangle.Height>
+                            <MultiBinding Converter ="{StaticResource RectangleHeightConverter}" Mode="OneWay">
+                                <Binding Path="ItemsSource" ElementName="ctrlHistogram"></Binding>
+                                <Binding></Binding>
+                                <Binding Path="Height" ElementName="ctrlHistogram"></Binding>
+                            </MultiBinding>
+                        </Rectangle.Height>
                         <Canvas.Bottom>
                             <MultiBinding Converter ="{StaticResource NegativeValuesConverter}" Mode="OneWay">
                                 <Binding Path="ItemsSource" ElementName="ctrlHistogram"></Binding>

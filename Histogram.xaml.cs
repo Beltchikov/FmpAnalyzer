@@ -42,11 +42,11 @@ namespace FmpAnalyzer
             set { SetValue(ItemsSourceProperty, value); }
         }
     }
-
+    
     /// <summary>
-    /// HistogramConverter
+    /// RectangleHeightConverter
     /// </summary>
-    public class HistogramConverter : IMultiValueConverter
+    public class RectangleHeightConverter : IMultiValueConverter
     {
         /// <summary>
         /// Convert
@@ -64,28 +64,18 @@ namespace FmpAnalyzer
             }
 
             // Get history array and height of control
-            List<double> inputValuesList = new List<double>();
-            double height = 0;
-            foreach (var inputValue in values)
-            {
-                if (inputValue is List<double>)
-                {
-                    inputValuesList = (List<double>)inputValue;
-                }
-                if(inputValue is double)
-                {
-                    height = (double)inputValue;
-                }
-            }
+            List<double> inputValuesList = (List<double>)values[0];
+            double currentHistoryValue = (double)values[1];
+            double height = (double)values[2];
 
             // Are values there?
-            if(Double.IsNaN(height) || !inputValuesList.Any())
+            if (Double.IsNaN(currentHistoryValue) || Double.IsNaN(height) || !inputValuesList.Any())
             {
-                return inputValuesList;
+                return 0;
             }
 
             // Convert and return
-            return ConvertHistory(inputValuesList, height);
+            return ConvertToBarHeight(inputValuesList, currentHistoryValue, height);
         }
 
         /// <summary>
@@ -102,15 +92,14 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
-        /// ConvertHistory
+        /// ConvertToBarHeight
         /// </summary>
         /// <param name="inputList"></param>
+        /// <param name="currentHistoryValue"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        private IEnumerable ConvertHistory(List<double> inputList, double height)
+        double ConvertToBarHeight(List<double> inputList, double currentHistoryValue, double height)
         {
-            List<double> outputList = new List<double>();
-            
             var max = inputList.Max();
             var min = .0;
             if (inputList.Where(v => v < 0).Any())
@@ -118,15 +107,13 @@ namespace FmpAnalyzer
                 min = inputList.Min();
             }
             var range = max - min;
-            if(range == 0)
+            if (range == 0)
             {
-                inputList.ForEach(v => outputList.Add(Math.Abs(v)));
-                return outputList;
+                return currentHistoryValue;
             }
             var koef = 0.8 * height / range;
-            inputList.ForEach(v => outputList.Add(Math.Abs(v) * koef));
 
-            return outputList;
+            return Math.Abs(currentHistoryValue * koef);
         }
     }
 
@@ -154,7 +141,7 @@ namespace FmpAnalyzer
             List<double> inputValuesList = (List<double>)values[0];
             double currentHistoryValue = (double)values[1];
             double height = (double)values[2];
-            
+
             // Are values there?
             if (Double.IsNaN(currentHistoryValue) || Double.IsNaN(height) || !inputValuesList.Any())
             {
@@ -185,9 +172,9 @@ namespace FmpAnalyzer
         /// <param name="currentHistoryValue"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        double ConvertToPositivBarShift(List<double> inputList, double currentHistoryValue,  double height)
+        double ConvertToPositivBarShift(List<double> inputList, double currentHistoryValue, double height)
         {
-            if(currentHistoryValue > 0)
+            if (currentHistoryValue > 0)
             {
                 return 0;
             }
@@ -199,7 +186,7 @@ namespace FmpAnalyzer
                 min = inputList.Min();
             }
             var range = max - min;
-            if(range == 0)
+            if (range == 0)
             {
                 return currentHistoryValue;
             }
