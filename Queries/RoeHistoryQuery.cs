@@ -32,7 +32,6 @@ namespace FmpAnalyzer.Queries
                                    on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
                                    where income.Symbol == symbol
                                    && income.Date == currentDate
-                                   && income.NetIncome > 0
                                    select balance.TotalStockholdersEquity == 0 ? 0 : income.NetIncome * 100 / balance.TotalStockholdersEquity)
                                   .ToList();
 

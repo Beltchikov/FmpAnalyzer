@@ -24,9 +24,9 @@ namespace FmpAnalyzer.Queries
         {
             List<double> resultList = new List<double>();
 
-            var date2YearsAgo = (Convert.ToInt32(youngestDate[..4]) - 2).ToString() + youngestDate[4..];
-            var date4YearsAgo = (Convert.ToInt32(youngestDate[..4]) - 4).ToString() + youngestDate[4..];
-            var date6YearsAgo = (Convert.ToInt32(youngestDate[..4]) - 6).ToString() + youngestDate[4..];
+            var date1YearAgo = (Convert.ToInt32(youngestDate[..4]) - 1).ToString() + youngestDate[4..];
+            var date3YearsAgo = (Convert.ToInt32(youngestDate[..4]) - 3).ToString() + youngestDate[4..];
+            var date5YearsAgo = (Convert.ToInt32(youngestDate[..4]) - 5).ToString() + youngestDate[4..];
 
             var queryResultYoungest = RunQuery(symbol, youngestDate);
             if (queryResultYoungest == null)
@@ -34,13 +34,13 @@ namespace FmpAnalyzer.Queries
                 return resultList;
             }
 
-            var queryResult2YearsAgo = RunQuery(symbol, date2YearsAgo);
+            var queryResult2YearsAgo = RunQuery(symbol, date1YearAgo);
             resultList.Add(queryResult2YearsAgo == null ? 0 : CalculateIncrementalRow(queryResultYoungest, queryResult2YearsAgo));
             
-            var queryResult4YearsAgo = RunQuery(symbol, date4YearsAgo);
+            var queryResult4YearsAgo = RunQuery(symbol, date3YearsAgo);
             resultList.Add(queryResult4YearsAgo == null ? 0 : CalculateIncrementalRow(queryResultYoungest, queryResult4YearsAgo));
 
-            var queryResult6YearsAgo = RunQuery(symbol, date6YearsAgo);
+            var queryResult6YearsAgo = RunQuery(symbol, date5YearsAgo);
             resultList.Add(queryResult6YearsAgo == null ? 0 : CalculateIncrementalRow(queryResultYoungest, queryResult6YearsAgo));
 
             return resultList;
@@ -75,7 +75,6 @@ namespace FmpAnalyzer.Queries
                 on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
                 where income.Symbol == symbol
                 && income.Date == date
-                && income.NetIncome > 0
                 select new NetIncomeAndEquity
                 {
                     NetIncome = income.NetIncome,
