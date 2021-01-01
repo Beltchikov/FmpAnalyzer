@@ -77,6 +77,7 @@ namespace FmpAnalyzer.Queries
             for (int ii = 0; ii < inputResultSetList.Count(); ii++)
             {
                 var historyRoe = QueryFactory.RoeHistoryQuery.Run(inputResultSetList[ii].Symbol, date, historyDepth);
+                historyRoe.Reverse();
 
                 for (int i = 0; i < historyRoe.Count(); i++)
                 {
@@ -99,6 +100,7 @@ namespace FmpAnalyzer.Queries
             for (int ii = 0; ii < inputResultSetList.Count(); ii++)
             {
                 var historyReinvestment = QueryFactory.ReinvestmentHistoryQuery.Run(inputResultSetList[ii].Symbol, date, historyDepth);
+                historyReinvestment.Reverse();
 
                 for (int i = 0; i < historyReinvestment.Count(); i++)
                 {
@@ -121,6 +123,7 @@ namespace FmpAnalyzer.Queries
             for (int ii = 0; ii < inputResultSetList.Count(); ii++)
             {
                 var incrementalRoe = QueryFactory.IncrementalRoeQuery.Run(inputResultSetList[ii].Symbol, date, historyDepth);
+                incrementalRoe.Reverse();
 
                 for (int i = 0; i < incrementalRoe.Count(); i++)
                 {
