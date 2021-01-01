@@ -189,12 +189,19 @@ namespace FmpAnalyzer
             }
             var koef = 0.8 * height / range;
 
-            if (currentHistoryValue > 0)
+            if (inputList.All(v => v < 0))
             {
-                return Math.Abs(min * koef);
+                return Math.Abs(currentHistoryValue - min) * koef;
             }
+            else
+            {
+                if (currentHistoryValue > 0)
+                {
+                    return Math.Abs(min * koef);
+                }
 
-            return 0;
+                return 0;
+            }
         }
     }
 
