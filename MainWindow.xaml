@@ -138,9 +138,6 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <!--<local:Histogram ItemsSource="{Binding Path=RoeHistory}"
-                                                                 Height="{Binding ElementName=gridResults, Path= RowHeight}">
-                                                    </local:Histogram>-->
                                                     <local:Histogram ItemsSource="{Binding Path=RoeHistory}"
                                                          Height="{Binding ElementName=gridResults, Path=RowHeight}">
                                                     </local:Histogram>
@@ -161,7 +158,9 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Label Content="{Binding Path=ReinvestmentHistory}"></Label>
+                                                    <local:Histogram ItemsSource="{Binding Path=ReinvestmentHistory}"
+                                                         Height="{Binding ElementName=gridResults, Path=RowHeight}">
+                                                    </local:Histogram>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
