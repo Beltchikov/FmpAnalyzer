@@ -37,8 +37,9 @@
         </ListBox.ItemsPanel>
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <Canvas Height="{Binding ElementName=ctrlHistogram, Path=Height}">
-                    <Rectangle Width="5" ToolTip="{Binding Mode=OneWay}"
+                <Canvas Height="{Binding ElementName=ctrlHistogram, Path=Height}"
+                        ToolTip="{Binding Mode=OneWay}">
+                    <Rectangle Width="5" 
                                Stroke="Black" VerticalAlignment="Top" 
                                Fill="{Binding Mode=OneWay, Converter={StaticResource ColorConverter}}">
                         <Rectangle.Height>

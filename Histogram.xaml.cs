@@ -109,7 +109,7 @@ namespace FmpAnalyzer
             var range = max - min;
             if (range == 0)
             {
-                return currentHistoryValue;
+                return Math.Abs(currentHistoryValue);
             }
             var koef = 0.8 * height / range;
 
@@ -174,26 +174,27 @@ namespace FmpAnalyzer
         /// <returns></returns>
         double ConvertToPositivBarShift(List<double> inputList, double currentHistoryValue, double height)
         {
-            if (currentHistoryValue > 0)
+            if (!inputList.Where(v => v < 0).Any())
             {
                 return 0;
             }
 
+            // Find koef.
             var max = inputList.Max();
-            var min = .0;
-            if (inputList.Where(v => v < 0).Any())
-            {
-                min = inputList.Min();
-            }
+            var min = inputList.Min();
             var range = max - min;
             if (range == 0)
             {
-                return currentHistoryValue;
+                return 0;
             }
             var koef = 0.8 * height / range;
 
-            return Math.Abs(currentHistoryValue * koef);
+            if (currentHistoryValue > 0)
+            {
+                return Math.Abs(min * koef);
+            }
 
+            return 0;
         }
     }
 
