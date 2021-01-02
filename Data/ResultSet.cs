@@ -11,6 +11,7 @@ namespace FmpAnalyzer.Data
         public ResultSet()
         {
             RoeHistory = new List<double>();
+            RevenueHistory = new List<double>();
             ReinvestmentHistory = new List<double>();
             IncrementalRoe = new List<double>();
         }
@@ -19,6 +20,7 @@ namespace FmpAnalyzer.Data
         public string Name { get; set; }
         public double Roe { get; set; }
         public List<double> RoeHistory { get; set; }
+        public List<double> RevenueHistory { get; set; }
         public double ReinvestmentRate { get; set; }
         public List<double> ReinvestmentHistory { get; set; }
         public List<double> IncrementalRoe { get; set; }
