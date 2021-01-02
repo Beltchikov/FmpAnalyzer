@@ -1,4 +1,5 @@
 ﻿using FmpAnalyzer.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace FmpAnalyzer.Queries
         {
             List<ResultSet> resultSetList = new List<ResultSet>();
 
-            resultSetList = MainQuery(parameters.Date, parameters.Roe, parameters.ReinvestmentRate);
+            resultSetList = MainQuery(parameters.Date, parameters.Roe, parameters.ReinvestmentRate, parameters.Symbol);
             resultSetList = AddHistoryData(resultSetList, parameters.Date, parameters.HistoryDepth, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
             resultSetList = AddHistoryData(resultSetList, parameters.Date, parameters.HistoryDepth, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
             resultSetList = AddHistoryData(resultSetList, parameters.Date, parameters.HistoryDepth, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
@@ -44,7 +45,7 @@ namespace FmpAnalyzer.Queries
         /// <param name="roe"></param>
         /// <param name="reinvestmentRate"></param>
         /// <returns></returns>
-        private List<ResultSet> MainQuery(string date, double roe, double reinvestmentRate)
+        private List<ResultSet> MainQuery(string date, double roe, double reinvestmentRate, string symbol)
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
 
@@ -54,6 +55,7 @@ namespace FmpAnalyzer.Queries
                                            join cash in DataContext.CashFlowStatements
                                            on new { a = income.Symbol, b = income.Date } equals new { a = cash.Symbol, b = cash.Date }
                                            where income.Date == date
+                                           && String.IsNullOrWhiteSpace(symbol) ? 1==1 : income.Symbol == symbol
                                            select new
                                            {
                                                Symbol = income.Symbol,

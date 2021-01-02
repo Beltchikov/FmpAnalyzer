@@ -41,6 +41,7 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -67,6 +68,13 @@
                         <TextBox x:Name="txtReinvestmentRate" Grid.Row="1" 
                                  Margin="0,2,0,5"
                              Text="{Binding ReinvestmentRate}"
+                                 Grid.Column="3"></TextBox>
+                        <Label Grid.Column="0" Grid.Row="2"
+                               Grid.ColumnSpan="3"
+                           Content="Symbol"></Label>
+                        <TextBox x:Name="txtSymbol" Grid.Row="2" 
+                                 Margin="0,2,0,5"
+                             Text="{Binding SelectedSymbol}"
                                  Grid.Column="3"></TextBox>
                     </Grid>
 

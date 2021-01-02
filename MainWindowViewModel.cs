@@ -25,6 +25,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty RoeYearProperty;
         public static readonly DependencyProperty ResultSetListProperty;
         public static readonly DependencyProperty ReinvestmentRateProperty;
+        public static readonly DependencyProperty SelectedSymbolProperty;
 
         public RelayCommand CommandGo { get; set; }
 
@@ -38,7 +39,8 @@ namespace FmpAnalyzer
             RoeYearProperty = DependencyProperty.Register("RoeYear", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(string.Empty));
             ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
             ReinvestmentRateProperty = DependencyProperty.Register("ReinvestmentRate", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
-        }
+            SelectedSymbolProperty = DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
+    }
 
         public MainWindowViewModel()
         {
@@ -130,6 +132,19 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
+        /// SelectedSymbol
+        /// </summary>
+        public string SelectedSymbol
+        {
+            get { return (string)GetValue(SelectedSymbolProperty); }
+            set { SetValue(SelectedSymbolProperty, value); }
+        }
+
+
+
+
+
+        /// <summary>
         /// OnCommandGo
         /// </summary>
         /// <param name="p"></param>
@@ -142,7 +157,8 @@ namespace FmpAnalyzer
                 Date = RoeYear + Configuration.Instance["DateSuffix"],
                 Roe = Roe,
                 ReinvestmentRate = ReinvestmentRate,
-                HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
+                HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
+                Symbol = SelectedSymbol
             };
 
             var worker = new BackgroundWorker() { WorkerReportsProgress = true };

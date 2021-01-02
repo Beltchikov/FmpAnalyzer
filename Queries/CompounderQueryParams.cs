@@ -10,5 +10,6 @@ namespace FmpAnalyzer.Queries
         public double Roe { get; set; }
         public double ReinvestmentRate { get; set; }
         public int HistoryDepth { get; internal set; }
+        public string Symbol { get; internal set; }
     }
 }
