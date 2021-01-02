@@ -17,6 +17,8 @@ namespace FmpAnalyzer.Queries
         private static RoeHistoryQuery _roeHistoryQuery;
         private static RevenueHistoryQuery _revenueHistoryQuery;
         private static ReinvestmentHistoryQuery _reinvestmentHistoryQuery;
+        private static OperatingIncomeHistoryQuery _operatingIncomeHistoryQuery;
+        private static EpsHistoryQuery _epsHistoryQuery;
         private static IncrementalRoeQuery _incrementalRoeQuery;
         private static CompanyNameQuery _companyNameQuery;
 
@@ -106,6 +108,42 @@ namespace FmpAnalyzer.Queries
                         _reinvestmentHistoryQuery = new ReinvestmentHistoryQuery(DataContext.Instance);
                     }
                     return _reinvestmentHistoryQuery;
+                }
+            }
+        }
+
+        /// <summary>
+        /// OperatingIncomeHistoryQuery
+        /// </summary>
+        public static OperatingIncomeHistoryQuery OperatingIncomeHistoryQuery
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (_operatingIncomeHistoryQuery == null)
+                    {
+                        _operatingIncomeHistoryQuery = new OperatingIncomeHistoryQuery(DataContext.Instance);
+                    }
+                    return _operatingIncomeHistoryQuery;
+                }
+            }
+        }
+
+        /// <summary>
+        /// EpsHistoryQuery
+        /// </summary>
+        public static EpsHistoryQuery EpsHistoryQuery
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (_epsHistoryQuery == null)
+                    {
+                        _epsHistoryQuery = new EpsHistoryQuery(DataContext.Instance);
+                    }
+                    return _epsHistoryQuery;
                 }
             }
         }

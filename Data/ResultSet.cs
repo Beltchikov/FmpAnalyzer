@@ -14,6 +14,8 @@ namespace FmpAnalyzer.Data
             RevenueHistory = new List<double>();
             ReinvestmentHistory = new List<double>();
             IncrementalRoe = new List<double>();
+            OperatingIncome = new List<double>();
+            Eps = new List<double>();
         }
 
         public string Symbol { get; set; }
@@ -24,5 +26,9 @@ namespace FmpAnalyzer.Data
         public double ReinvestmentRate { get; set; }
         public List<double> ReinvestmentHistory { get; set; }
         public List<double> IncrementalRoe { get; set; }
+        public List<double> OperatingIncome { get; set; }
+        public List<double> Eps { get; set; }
+
+        
     }
 }
