@@ -9,7 +9,7 @@ namespace FmpAnalyzer.Queries
     /// <summary>
     /// RoeHistoryQuery
     /// </summary>
-    public class ReinvestmentHistoryQuery : QueryBase
+    public class ReinvestmentHistoryQuery : HistoryQuery
     {
         public ReinvestmentHistoryQuery(DataContext dataContext) : base(dataContext) { }
 
@@ -20,7 +20,7 @@ namespace FmpAnalyzer.Queries
         /// <param name="oldestDate"></param>
         /// <param name="depth"></param>
         /// <returns>If some data is missing, the list is returned shorter as expected.</returns>
-        public List<double> Run(string symbol, string oldestDate, int depth)
+        public override List<double> Run(string symbol, string oldestDate, int depth)
         {
             List<double> resultList = new List<double>();
 

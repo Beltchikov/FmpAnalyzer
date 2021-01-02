@@ -9,7 +9,7 @@ namespace FmpAnalyzer.Queries
     /// <summary>
     /// IncrementalRoeQuery
     /// </summary>
-    public class IncrementalRoeQuery : QueryBase
+    public class IncrementalRoeQuery : HistoryQuery
     {
         public IncrementalRoeQuery(DataContext dataContext) : base(dataContext) { }
 
@@ -20,7 +20,7 @@ namespace FmpAnalyzer.Queries
         /// <param name="youngestDate"></param>
         /// <param name="depth"></param>
         /// <returns>If some data is missing, the list is returned shorter as expected.</returns>
-        public List<double> Run(string symbol, string youngestDate, int depth)
+        public override List<double> Run(string symbol, string youngestDate, int depth)
         {
             List<double> resultList = new List<double>();
 
