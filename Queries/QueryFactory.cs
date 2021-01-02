@@ -20,7 +20,9 @@ namespace FmpAnalyzer.Queries
         private static OperatingIncomeHistoryQuery _operatingIncomeHistoryQuery;
         private static EpsHistoryQuery _epsHistoryQuery;
         private static IncrementalRoeQuery _incrementalRoeQuery;
+        private static CashConversionQuery _cashConversionQuery;
         private static CompanyNameQuery _companyNameQuery;
+        
 
         /// <summary>
         /// CompounderQuery
@@ -183,5 +185,24 @@ namespace FmpAnalyzer.Queries
                 }
             }
         }
+
+        /// <summary>
+        /// CashConversionQuery
+        /// </summary>
+        public static CashConversionQuery CashConversionQuery
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (_cashConversionQuery == null)
+                    {
+                        _cashConversionQuery = new CashConversionQuery(DataContext.Instance);
+                    }
+                    return _cashConversionQuery;
+                }
+            }
+        }
+
     }
 }

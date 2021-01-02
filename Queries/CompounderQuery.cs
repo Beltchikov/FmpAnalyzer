@@ -30,6 +30,7 @@ namespace FmpAnalyzer.Queries
             resultSetList = AddHistoryData(resultSetList, parameters.Date, parameters.HistoryDepth, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
             resultSetList = AddHistoryData(resultSetList, parameters.Date, parameters.HistoryDepth, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
             resultSetList = AddHistoryData(resultSetList, parameters.Date, parameters.HistoryDepth, QueryFactory.EpsHistoryQuery, a => a.Eps);
+            resultSetList = AddHistoryData(resultSetList, parameters.Date, parameters.HistoryDepth, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
             resultSetList = AddCompanyName(resultSetList);
 
             ReportProgress(100, 100, $"OK! Finished query.");
