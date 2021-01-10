@@ -27,7 +27,10 @@ namespace FmpAnalyzer.Queries
 
             for (int i = 0; i < inputResultSetList.Count(); i++)
             {
-                inputResultSetList[i].Name = dictSymbolName[inputResultSetList[i].Symbol];
+                if (dictSymbolName.ContainsKey(inputResultSetList[i].Symbol))
+                {
+                    inputResultSetList[i].Name = dictSymbolName[inputResultSetList[i].Symbol];
+                }
             }
 
             return inputResultSetList;
