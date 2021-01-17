@@ -1,4 +1,5 @@
 ﻿using FmpAnalyzer.Data;
+using FmpDataContext;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,7 +36,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_compounderQuery == null)
                     {
-                        _compounderQuery = new CompounderQuery(DataContext.Instance);
+                        _compounderQuery = new CompounderQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _compounderQuery;
                 }
@@ -53,7 +54,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_withBestRoeQuery == null)
                     {
-                        _withBestRoeQuery = new WithBestRoeQuery(DataContext.Instance);
+                        _withBestRoeQuery = new WithBestRoeQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _withBestRoeQuery;
                 }
@@ -71,7 +72,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_roeHistoryQuery == null)
                     {
-                        _roeHistoryQuery = new RoeHistoryQuery(DataContext.Instance);
+                        _roeHistoryQuery = new RoeHistoryQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _roeHistoryQuery;
                 }
@@ -89,7 +90,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_revenueHistoryQuery == null)
                     {
-                        _revenueHistoryQuery = new RevenueHistoryQuery(DataContext.Instance);
+                        _revenueHistoryQuery = new RevenueHistoryQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _revenueHistoryQuery;
                 }
@@ -107,7 +108,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_reinvestmentHistoryQuery == null)
                     {
-                        _reinvestmentHistoryQuery = new ReinvestmentHistoryQuery(DataContext.Instance);
+                        _reinvestmentHistoryQuery = new ReinvestmentHistoryQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _reinvestmentHistoryQuery;
                 }
@@ -125,7 +126,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_operatingIncomeHistoryQuery == null)
                     {
-                        _operatingIncomeHistoryQuery = new OperatingIncomeHistoryQuery(DataContext.Instance);
+                        _operatingIncomeHistoryQuery = new OperatingIncomeHistoryQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _operatingIncomeHistoryQuery;
                 }
@@ -143,7 +144,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_epsHistoryQuery == null)
                     {
-                        _epsHistoryQuery = new EpsHistoryQuery(DataContext.Instance);
+                        _epsHistoryQuery = new EpsHistoryQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _epsHistoryQuery;
                 }
@@ -161,7 +162,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_incrementalRoeQuery == null)
                     {
-                        _incrementalRoeQuery = new IncrementalRoeQuery(DataContext.Instance);
+                        _incrementalRoeQuery = new IncrementalRoeQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _incrementalRoeQuery;
                 }
@@ -179,7 +180,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_companyNameQuery == null)
                     {
-                        _companyNameQuery = new CompanyNameQuery(DataContext.Instance);
+                        _companyNameQuery = new CompanyNameQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _companyNameQuery;
                 }
@@ -197,7 +198,7 @@ namespace FmpAnalyzer.Queries
                 {
                     if (_cashConversionQuery == null)
                     {
-                        _cashConversionQuery = new CashConversionQuery(DataContext.Instance);
+                        _cashConversionQuery = new CashConversionQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _cashConversionQuery;
                 }
