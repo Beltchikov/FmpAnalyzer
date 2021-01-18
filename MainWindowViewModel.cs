@@ -52,10 +52,10 @@ namespace FmpAnalyzer
         public MainWindowViewModel()
         {
             ConnectionString = Configuration.Instance["ConnectionString"];
-            //Roe = 15;
+            Roe = 15;
             CurrentAction = "Willkommen!";
             //RoeYear = "2019";
-            //ReinvestmentRate = 50;
+            ReinvestmentRate = 50;
             YearFrom = 2019;
             YearTo = 2020;
             GenerateCountMessage();
