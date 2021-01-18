@@ -238,20 +238,18 @@ namespace FmpAnalyzer
                 Symbol = SelectedSymbol
             };
 
-            var worker = new BackgroundWorker() { WorkerReportsProgress = true };
-            worker.DoWork += (s, e) =>
+            BackgroundWork((s, e) =>
             {
                 var symbols = QueryFactory.CompounderQuery.Run(CompounderQueryParams);
                 (s as BackgroundWorker).ReportProgress(100, symbols);
-            };
-            worker.ProgressChanged += Worker_ProgressChanged;
-            worker.RunWorkerCompleted += (s, e) =>
+            }, (s, e) =>
+            {
+                ResultSetList = (List<ResultSet>)e.UserState;
+            }, (s, e) =>
             {
                 CurrentAction += $" {ResultSetList.Count()} companies found.";
                 UnlockControls();
-            };
-            worker.RunWorkerAsync();
-
+            });
         }
 
         /// <summary>
@@ -294,17 +292,6 @@ namespace FmpAnalyzer
             }
 
             instance.GenerateCountMessage();
-        }
-
-        /// <summary>
-        /// Worker_ProgressChanged
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            ResultSetList = (List<ResultSet>)e.UserState;
-
         }
 
         /// <summary>
