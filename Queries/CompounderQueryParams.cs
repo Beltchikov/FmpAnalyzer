@@ -6,7 +6,9 @@ namespace FmpAnalyzer.Queries
 {
     public class CompounderQueryParams
     {
-        public string Date { get; set; }
+        public int YearFrom { get; internal set; }
+        public int YearTo { get; internal set; }
+        public List<string> Dates { get; set; }
         public double Roe { get; set; }
         public double ReinvestmentRate { get; set; }
         public int HistoryDepth { get; internal set; }

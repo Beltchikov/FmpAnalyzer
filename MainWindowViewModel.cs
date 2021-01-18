@@ -229,7 +229,9 @@ namespace FmpAnalyzer
 
             CompounderQueryParams = new CompounderQueryParams
             {
-                //Date = RoeYear + Configuration.Instance["DateSuffix"],
+                YearFrom = YearFrom,
+                YearTo = YearTo,
+                Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
                 Roe = Roe,
                 ReinvestmentRate = ReinvestmentRate,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
