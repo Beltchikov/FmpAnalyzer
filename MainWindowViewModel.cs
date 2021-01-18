@@ -22,7 +22,6 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty CurrentActionProperty;
         public static readonly DependencyProperty ProgressCurrentProperty;
         public static readonly DependencyProperty BackgroundResultsProperty;
-        public static readonly DependencyProperty RoeYearProperty;
         public static readonly DependencyProperty ResultSetListProperty;
         public static readonly DependencyProperty ReinvestmentRateProperty;
         public static readonly DependencyProperty SelectedSymbolProperty;
@@ -39,7 +38,6 @@ namespace FmpAnalyzer
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             BackgroundResultsProperty = DependencyProperty.Register("BackgroundResults", typeof(Brush), typeof(MainWindowViewModel), new PropertyMetadata(default(Brush)));
-            RoeYearProperty = DependencyProperty.Register("RoeYear", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(string.Empty));
             ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
             ReinvestmentRateProperty = DependencyProperty.Register("ReinvestmentRate", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             SelectedSymbolProperty = DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
@@ -54,7 +52,6 @@ namespace FmpAnalyzer
             ConnectionString = Configuration.Instance["ConnectionString"];
             Roe = 15;
             CurrentAction = "Willkommen!";
-            //RoeYear = "2019";
             ReinvestmentRate = 50;
             YearFrom = 2019;
             YearTo = 2020;
@@ -122,16 +119,7 @@ namespace FmpAnalyzer
             get { return (List<ResultSet>)GetValue(ResultSetListProperty); }
             set { SetValue(ResultSetListProperty, value); }
         }
-
-        /// <summary>
-        /// RoeYear
-        /// </summary>
-        public string RoeYear
-        {
-            get { return (string)GetValue(RoeYearProperty); }
-            set { SetValue(RoeYearProperty, value); }
-        }
-
+        
         /// <summary>
         /// ReinvestmentRate
         /// </summary>
