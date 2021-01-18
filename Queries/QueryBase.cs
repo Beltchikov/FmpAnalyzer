@@ -19,10 +19,10 @@ namespace FmpAnalyzer.Queries
         /// <summary>
         /// QueryBase
         /// </summary>
-        /// <param name="companies"></param>
-        protected QueryBase(DataContext companies)
+        /// <param name="dataContext"></param>
+        protected QueryBase(DataContext dataContext)
         {
-            DataContext = companies;
+            DataContext = dataContext;
         }
 
         /// <summary>

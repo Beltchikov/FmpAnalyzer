@@ -57,11 +57,52 @@ namespace FmpAnalyzer
             //RoeYear = "2019";
             //ReinvestmentRate = 50;
             YearFrom = 2019;
-            YearTo = 2000;
-            CountMessage = "TODO";
+            YearTo = 2020;
+            GenerateCountMessage();
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
             QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
+        }
+
+        /// <summary>
+        /// GenerateCountMessage
+        /// </summary>
+        /// <returns></returns>
+        private void GenerateCountMessage()
+        {
+            LockControls();
+            var dates = Configuration.Instance["Dates"].Split(",").Select(d=>d.Trim()).ToList();
+            int yearFrom = YearFrom;
+            int yearTo = YearTo;
+
+            int count = 0;
+            BackgroundWork((s, e) =>
+            {
+                var count = QueryFactory.CountByYearsQuery.Run(yearFrom, yearTo, dates);
+                (s as BackgroundWorker).ReportProgress(100, count);
+            }, (s, e) =>
+            {
+                count = (int)e.UserState;
+            }, (s, e) =>
+            {
+                CountMessage = $"{count} companies in database for the period {yearFrom} - {yearTo}.";
+                UnlockControls();
+            });
+        }
+
+        /// <summary>
+        /// BackgroundWork
+        /// </summary>
+        /// <param name="doWorkEventHandler"></param>
+        /// <param name="progressChangedEventHandler"></param>
+        /// <param name="runWorkerCompletedEventHandler"></param>
+        private void BackgroundWork(DoWorkEventHandler doWorkEventHandler, ProgressChangedEventHandler progressChangedEventHandler, RunWorkerCompletedEventHandler runWorkerCompletedEventHandler)
+        {
+            var worker = new BackgroundWorker() { WorkerReportsProgress = true };
+            worker.DoWork += doWorkEventHandler;
+            worker.ProgressChanged += progressChangedEventHandler;
+            worker.RunWorkerCompleted += runWorkerCompletedEventHandler;
+            worker.RunWorkerAsync();
         }
 
         /// <summary>

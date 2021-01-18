@@ -23,6 +23,7 @@ namespace FmpAnalyzer.Queries
         private static IncrementalRoeQuery _incrementalRoeQuery;
         private static CashConversionQuery _cashConversionQuery;
         private static CompanyNameQuery _companyNameQuery;
+        private static CountByYearsQuery _countByYearsQuery;
         
 
         /// <summary>
@@ -201,6 +202,24 @@ namespace FmpAnalyzer.Queries
                         _cashConversionQuery = new CashConversionQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _cashConversionQuery;
+                }
+            }
+        }
+
+        /// <summary>
+        /// CountByYearsQuery
+        /// </summary>
+        public static CountByYearsQuery CountByYearsQuery
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (_countByYearsQuery == null)
+                    {
+                        _countByYearsQuery = new CountByYearsQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
+                    }
+                    return _countByYearsQuery;
                 }
             }
         }
