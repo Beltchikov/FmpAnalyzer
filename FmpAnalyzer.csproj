@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <Reference Include="FmpDataContext">
-      <HintPath>..\FmpDataContext\bin\Debug\net5.0\FmpDataContext.dll</HintPath>
+      <HintPath>..\FmpDataContext\bin\Release\net5.0\FmpDataContext.dll</HintPath>
     </Reference>
   </ItemGroup>
 
