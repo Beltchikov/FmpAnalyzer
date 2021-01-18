@@ -26,6 +26,9 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty ResultSetListProperty;
         public static readonly DependencyProperty ReinvestmentRateProperty;
         public static readonly DependencyProperty SelectedSymbolProperty;
+        public static readonly DependencyProperty YearFromProperty;
+        public static readonly DependencyProperty YearToProperty;
+        public static readonly DependencyProperty CountMessageProperty;
 
         public RelayCommand CommandGo { get; set; }
 
@@ -40,15 +43,22 @@ namespace FmpAnalyzer
             ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
             ReinvestmentRateProperty = DependencyProperty.Register("ReinvestmentRate", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             SelectedSymbolProperty = DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-    }
+            YearFromProperty = DependencyProperty.Register("YearFrom", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            YearToProperty = DependencyProperty.Register("YearTo", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            CountMessageProperty = DependencyProperty.Register("CountMessage", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
+
+        }
 
         public MainWindowViewModel()
         {
             ConnectionString = Configuration.Instance["ConnectionString"];
-            Roe = 15;
+            //Roe = 15;
             CurrentAction = "Willkommen!";
-            RoeYear = "2019";
-            ReinvestmentRate = 50;
+            //RoeYear = "2019";
+            //ReinvestmentRate = 50;
+            YearFrom = 2019;
+            YearTo = 2000;
+            CountMessage = "TODO";
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
             QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
@@ -140,8 +150,32 @@ namespace FmpAnalyzer
             set { SetValue(SelectedSymbolProperty, value); }
         }
 
+        /// <summary>
+        /// YearFrom
+        /// </summary>
+        public int YearFrom
+        {
+            get { return (int)GetValue(YearFromProperty); }
+            set { SetValue(YearFromProperty, value); }
+        }
 
+        /// <summary>
+        /// YearTo
+        /// </summary>
+        public int YearTo
+        {
+            get { return (int)GetValue(YearToProperty); }
+            set { SetValue(YearToProperty, value); }
+        }
 
+        /// <summary>
+        /// CountMessage
+        /// </summary>
+        public string CountMessage
+        {
+            get { return (string)GetValue(CountMessageProperty); }
+            set { SetValue(CountMessageProperty, value); }
+        }
 
 
         /// <summary>
@@ -154,7 +188,7 @@ namespace FmpAnalyzer
 
             CompounderQueryParams = new CompounderQueryParams
             {
-                Date = RoeYear + Configuration.Instance["DateSuffix"],
+                //Date = RoeYear + Configuration.Instance["DateSuffix"],
                 Roe = Roe,
                 ReinvestmentRate = ReinvestmentRate,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
