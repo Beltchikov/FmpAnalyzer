@@ -43,8 +43,8 @@ namespace FmpAnalyzer
             ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
             ReinvestmentRateProperty = DependencyProperty.Register("ReinvestmentRate", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             SelectedSymbolProperty = DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            YearFromProperty = DependencyProperty.Register("YearFrom", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
-            YearToProperty = DependencyProperty.Register("YearTo", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            YearFromProperty = DependencyProperty.Register("YearFrom", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0, YearFromChanged));
+            YearToProperty = DependencyProperty.Register("YearTo", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0, YearToChanged));
             CountMessageProperty = DependencyProperty.Register("CountMessage", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
 
         }
@@ -62,47 +62,6 @@ namespace FmpAnalyzer
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
             QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
-        }
-
-        /// <summary>
-        /// GenerateCountMessage
-        /// </summary>
-        /// <returns></returns>
-        private void GenerateCountMessage()
-        {
-            LockControls();
-            var dates = Configuration.Instance["Dates"].Split(",").Select(d=>d.Trim()).ToList();
-            int yearFrom = YearFrom;
-            int yearTo = YearTo;
-
-            int count = 0;
-            BackgroundWork((s, e) =>
-            {
-                var count = QueryFactory.CountByYearsQuery.Run(yearFrom, yearTo, dates);
-                (s as BackgroundWorker).ReportProgress(100, count);
-            }, (s, e) =>
-            {
-                count = (int)e.UserState;
-            }, (s, e) =>
-            {
-                CountMessage = $"{count} companies in database for the period {yearFrom} - {yearTo}.";
-                UnlockControls();
-            });
-        }
-
-        /// <summary>
-        /// BackgroundWork
-        /// </summary>
-        /// <param name="doWorkEventHandler"></param>
-        /// <param name="progressChangedEventHandler"></param>
-        /// <param name="runWorkerCompletedEventHandler"></param>
-        private void BackgroundWork(DoWorkEventHandler doWorkEventHandler, ProgressChangedEventHandler progressChangedEventHandler, RunWorkerCompletedEventHandler runWorkerCompletedEventHandler)
-        {
-            var worker = new BackgroundWorker() { WorkerReportsProgress = true };
-            worker.DoWork += doWorkEventHandler;
-            worker.ProgressChanged += progressChangedEventHandler;
-            worker.RunWorkerCompleted += runWorkerCompletedEventHandler;
-            worker.RunWorkerAsync();
         }
 
         /// <summary>
@@ -218,6 +177,47 @@ namespace FmpAnalyzer
             set { SetValue(CountMessageProperty, value); }
         }
 
+        /// <summary>
+        /// GenerateCountMessage
+        /// </summary>
+        /// <returns></returns>
+        private void GenerateCountMessage()
+        {
+            LockControls();
+            var dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList();
+            int yearFrom = YearFrom;
+            int yearTo = YearTo;
+
+            int count = 0;
+            BackgroundWork((s, e) =>
+            {
+                var count = QueryFactory.CountByYearsQuery.Run(yearFrom, yearTo, dates);
+                (s as BackgroundWorker).ReportProgress(100, count);
+            }, (s, e) =>
+            {
+                count = (int)e.UserState;
+            }, (s, e) =>
+            {
+                CountMessage = $"{count} companies in database for the period {yearFrom} - {yearTo}.";
+                UnlockControls();
+            });
+        }
+
+        /// <summary>
+        /// BackgroundWork
+        /// </summary>
+        /// <param name="doWorkEventHandler"></param>
+        /// <param name="progressChangedEventHandler"></param>
+        /// <param name="runWorkerCompletedEventHandler"></param>
+        private void BackgroundWork(DoWorkEventHandler doWorkEventHandler, ProgressChangedEventHandler progressChangedEventHandler, RunWorkerCompletedEventHandler runWorkerCompletedEventHandler)
+        {
+            var worker = new BackgroundWorker() { WorkerReportsProgress = true };
+            worker.DoWork += doWorkEventHandler;
+            worker.ProgressChanged += progressChangedEventHandler;
+            worker.RunWorkerCompleted += runWorkerCompletedEventHandler;
+            worker.RunWorkerAsync();
+        }
+
 
         /// <summary>
         /// OnCommandGo
@@ -250,6 +250,48 @@ namespace FmpAnalyzer
             };
             worker.RunWorkerAsync();
 
+        }
+
+        /// <summary>
+        /// YearFromChanged
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        private static void YearFromChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            MainWindowViewModel instance = d as MainWindowViewModel;
+            if (instance == null)
+            {
+                return;
+            }
+
+            if (instance.YearFrom.ToString().Length != 4)
+            {
+                return;
+            }
+
+            instance.GenerateCountMessage();
+        }
+
+        /// <summary>
+        /// YearToChanged
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        private static void YearToChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            MainWindowViewModel instance = d as MainWindowViewModel;
+            if (instance == null)
+            {
+                return;
+            }
+
+            if (instance.YearTo.ToString().Length != 4)
+            {
+                return;
+            }
+
+            instance.GenerateCountMessage();
         }
 
         /// <summary>
