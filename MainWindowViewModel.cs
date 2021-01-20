@@ -33,6 +33,10 @@ namespace FmpAnalyzer
 
         public RelayCommand CommandGo { get; set; }
         public RelayCommand CommandCount { get; set; }
+        public RelayCommand CommandFirst { get; set; }
+        public RelayCommand CommandPrevious{ get; set; }
+        public RelayCommand CommandNext{ get; set; }
+        public RelayCommand CommandLast { get; set; }
 
         static MainWindowViewModel()
         {
@@ -63,8 +67,15 @@ namespace FmpAnalyzer
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
             CommandCount = new RelayCommand(p => { OnCommandCount(p); });
+            CommandFirst= new RelayCommand(p => { OnCommandFirst(p); });
+            CommandPrevious= new RelayCommand(p => { OnCommandPrevious(p); });
+            CommandNext= new RelayCommand(p => { OnCommandCommandNext(p); });
+            CommandLast= new RelayCommand(p => { OnCommandLast(p); });
+            
             QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
         }
+
+        #region Properties
 
         /// <summary>
         /// ConnectionString
@@ -188,47 +199,9 @@ namespace FmpAnalyzer
             set { SetValue(ShowButtonEnabledProperty, value); }
         }
 
-        /// <summary>
-        /// GenerateCountMessage
-        /// </summary>
-        /// <returns></returns>
-        private void GenerateCountMessage()
-        {
-            LockControls();
-            var dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList();
-            int yearFrom = YearFrom;
-            int yearTo = YearTo;
+        #endregion
 
-            int count = 0;
-            BackgroundWork((s, e) =>
-            {
-                var count = QueryFactory.CountByYearsQuery.Run(yearFrom, yearTo, dates);
-                (s as BackgroundWorker).ReportProgress(100, count);
-            }, (s, e) =>
-            {
-                count = (int)e.UserState;
-            }, (s, e) =>
-            {
-                CountMessage = $"{count} companies in database for the period {yearFrom} - {yearTo}.";
-                UnlockControls();
-            });
-        }
-
-        /// <summary>
-        /// BackgroundWork
-        /// </summary>
-        /// <param name="doWorkEventHandler"></param>
-        /// <param name="progressChangedEventHandler"></param>
-        /// <param name="runWorkerCompletedEventHandler"></param>
-        private void BackgroundWork(DoWorkEventHandler doWorkEventHandler, ProgressChangedEventHandler progressChangedEventHandler, RunWorkerCompletedEventHandler runWorkerCompletedEventHandler)
-        {
-            var worker = new BackgroundWorker() { WorkerReportsProgress = true };
-            worker.DoWork += doWorkEventHandler;
-            worker.ProgressChanged += progressChangedEventHandler;
-            worker.RunWorkerCompleted += runWorkerCompletedEventHandler;
-            worker.RunWorkerAsync();
-        }
-
+        #region Commands
 
         /// <summary>
         /// OnCommandGo
@@ -295,6 +268,87 @@ namespace FmpAnalyzer
             {
                 UnlockControls();
             });
+        }
+
+        /// <summary>
+        /// OnCommandLast
+        /// </summary>
+        /// <param name="p"></param>
+        private void OnCommandLast(object p)
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// OnCommandCommandNext
+        /// </summary>
+        /// <param name="p"></param>
+        private void OnCommandCommandNext(object p)
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// OnCommandPrevious
+        /// </summary>
+        /// <param name="p"></param>
+        private void OnCommandPrevious(object p)
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// OnCommandFirst
+        /// </summary>
+        /// <param name="p"></param>
+        private void OnCommandFirst(object p)
+        {
+            // TODO
+        }
+
+        #endregion
+
+        #region Private
+
+        /// <summary>
+        /// GenerateCountMessage
+        /// </summary>
+        /// <returns></returns>
+        private void GenerateCountMessage()
+        {
+            LockControls();
+            var dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList();
+            int yearFrom = YearFrom;
+            int yearTo = YearTo;
+
+            int count = 0;
+            BackgroundWork((s, e) =>
+            {
+                var count = QueryFactory.CountByYearsQuery.Run(yearFrom, yearTo, dates);
+                (s as BackgroundWorker).ReportProgress(100, count);
+            }, (s, e) =>
+            {
+                count = (int)e.UserState;
+            }, (s, e) =>
+            {
+                CountMessage = $"{count} companies in database for the period {yearFrom} - {yearTo}.";
+                UnlockControls();
+            });
+        }
+
+        /// <summary>
+        /// BackgroundWork
+        /// </summary>
+        /// <param name="doWorkEventHandler"></param>
+        /// <param name="progressChangedEventHandler"></param>
+        /// <param name="runWorkerCompletedEventHandler"></param>
+        private void BackgroundWork(DoWorkEventHandler doWorkEventHandler, ProgressChangedEventHandler progressChangedEventHandler, RunWorkerCompletedEventHandler runWorkerCompletedEventHandler)
+        {
+            var worker = new BackgroundWorker() { WorkerReportsProgress = true };
+            worker.DoWork += doWorkEventHandler;
+            worker.ProgressChanged += progressChangedEventHandler;
+            worker.RunWorkerCompleted += runWorkerCompletedEventHandler;
+            worker.RunWorkerAsync();
         }
 
         /// <summary>
@@ -369,5 +423,7 @@ namespace FmpAnalyzer
         {
             BackgroundResults = Brushes.White;
         }
+
+        #endregion
     }
 }
