@@ -17,6 +17,13 @@ namespace FmpAnalyzer
     /// </summary>
     public class MainWindowViewModel : DependencyObject
     {
+        public RelayCommand CommandGo { get; set; }
+        public RelayCommand CommandCount { get; set; }
+        public RelayCommand CommandFirst { get; set; }
+        public RelayCommand CommandPrevious { get; set; }
+        public RelayCommand CommandNext { get; set; }
+        public RelayCommand CommandLast { get; set; }
+
         public static readonly DependencyProperty ConnectionStringProperty;
         public static readonly DependencyProperty RoeProperty;
         public static readonly DependencyProperty CurrentActionProperty;
@@ -30,13 +37,10 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty CountMessageProperty;
         public static readonly DependencyProperty CountFilteredMessageProperty;
         public static readonly DependencyProperty ShowButtonEnabledProperty;
-
-        public RelayCommand CommandGo { get; set; }
-        public RelayCommand CommandCount { get; set; }
-        public RelayCommand CommandFirst { get; set; }
-        public RelayCommand CommandPrevious{ get; set; }
-        public RelayCommand CommandNext{ get; set; }
-        public RelayCommand CommandLast { get; set; }
+        public static readonly DependencyProperty FirstButtonEnabledProperty;
+        public static readonly DependencyProperty PreviousButtonEnabledProperty;
+        public static readonly DependencyProperty NextButtonEnabledProperty;
+        public static readonly DependencyProperty LastButtonEnabledProperty;
 
         static MainWindowViewModel()
         {
@@ -53,6 +57,11 @@ namespace FmpAnalyzer
             CountMessageProperty = DependencyProperty.Register("CountMessage", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             CountFilteredMessageProperty = DependencyProperty.Register("CountFilteredMessage", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             ShowButtonEnabledProperty = DependencyProperty.Register("ShowButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
+            FirstButtonEnabledProperty = DependencyProperty.Register("FirstButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
+            PreviousButtonEnabledProperty = DependencyProperty.Register("PreviousButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
+            NextButtonEnabledProperty = DependencyProperty.Register("NextButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
+            LastButtonEnabledProperty = DependencyProperty.Register("LastButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
+
         }
 
         public MainWindowViewModel()
@@ -67,11 +76,11 @@ namespace FmpAnalyzer
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
             CommandCount = new RelayCommand(p => { OnCommandCount(p); });
-            CommandFirst= new RelayCommand(p => { OnCommandFirst(p); });
-            CommandPrevious= new RelayCommand(p => { OnCommandPrevious(p); });
-            CommandNext= new RelayCommand(p => { OnCommandCommandNext(p); });
-            CommandLast= new RelayCommand(p => { OnCommandLast(p); });
-            
+            CommandFirst = new RelayCommand(p => { OnCommandFirst(p); });
+            CommandPrevious = new RelayCommand(p => { OnCommandPrevious(p); });
+            CommandNext = new RelayCommand(p => { OnCommandCommandNext(p); });
+            CommandLast = new RelayCommand(p => { OnCommandLast(p); });
+
             QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
         }
 
@@ -197,6 +206,42 @@ namespace FmpAnalyzer
         {
             get { return (bool)GetValue(ShowButtonEnabledProperty); }
             set { SetValue(ShowButtonEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// FirstButtonEnabled
+        /// </summary>
+        public bool FirstButtonEnabled
+        {
+            get { return (bool)GetValue(FirstButtonEnabledProperty); }
+            set { SetValue(FirstButtonEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// PreviousButtonEnabled
+        /// </summary>
+        public bool PreviousButtonEnabled
+        {
+            get { return (bool)GetValue(PreviousButtonEnabledProperty); }
+            set { SetValue(PreviousButtonEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// NextButtonEnabled
+        /// </summary>
+        public bool NextButtonEnabled
+        {
+            get { return (bool)GetValue(NextButtonEnabledProperty); }
+            set { SetValue(NextButtonEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// LastButtonEnabled
+        /// </summary>
+        public bool LastButtonEnabled
+        {
+            get { return (bool)GetValue(LastButtonEnabledProperty); }
+            set { SetValue(LastButtonEnabledProperty, value); }
         }
 
         #endregion
