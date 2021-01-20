@@ -119,6 +119,7 @@
                         <Button  
                             Cursor="Hand" Grid.Row="3"
                             Command="{Binding CommandGo}"
+                            IsEnabled="{Binding ShowButtonEnabled}"
                             Grid.Column="1">Show</Button>
                         <Label Content="{Binding CurrentAction}"
                                Grid.Row="5"
