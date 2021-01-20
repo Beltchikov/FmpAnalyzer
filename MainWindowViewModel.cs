@@ -71,7 +71,7 @@ namespace FmpAnalyzer
         public MainWindowViewModel()
         {
             ConnectionString = Configuration.Instance["ConnectionString"];
-            Roe = 15;
+            Roe = 40;
             CurrentAction = "Willkommen!";
             ReinvestmentRate = 50;
             YearFrom = 2019;
@@ -274,9 +274,7 @@ namespace FmpAnalyzer
         {
             LockControls();
 
-            // Order übergeben
-
-            var compounderQueryParams = new CompounderQueryParams<double>
+            var compounderQueryParams = new CompounderQueryParams<object>
             {
                 YearFrom = YearFrom,
                 YearTo = YearTo,
@@ -285,7 +283,8 @@ namespace FmpAnalyzer
                 ReinvestmentRate = ReinvestmentRate,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
                 Symbol = SelectedSymbol,
-                OrderFunction = r => r.Roe
+                OrderFunction = ((SortBy)p).Function,
+                Descending = ((SortBy)p).Descending
             };
 
             BackgroundWork((s, e) =>

@@ -8,5 +8,7 @@ namespace FmpAnalyzer.Queries
     public class CompounderQueryParams<TKey> : CompounderCountQueryParams
     {
        public Func<ResultSet, TKey> OrderFunction;
+
+        public bool Descending { get; set; }
     }
 }

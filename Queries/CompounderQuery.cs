@@ -29,7 +29,7 @@ namespace FmpAnalyzer.Queries
             try
             {
                 var p = parameters;
-                resultSetList = MainQuery<T>(p.YearFrom, p.YearTo, p.Dates, p.Roe, p.ReinvestmentRate, p.Symbol, p.OrderFunction);
+                resultSetList = MainQuery<T>(p.YearFrom, p.YearTo, p.Dates, p.Roe, p.ReinvestmentRate, p.Symbol, p.OrderFunction, p.Descending);
                 resultSetList = AddHistoryData(resultSetList, p.Dates, p.YearFrom, p.HistoryDepth, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
                 resultSetList = AddHistoryData(resultSetList, p.Dates, p.YearFrom, p.HistoryDepth, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
                 resultSetList = AddHistoryData(resultSetList, p.Dates, p.YearFrom, p.HistoryDepth, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
@@ -69,10 +69,13 @@ namespace FmpAnalyzer.Queries
         /// <param name="reinvestmentRate"></param>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        private List<ResultSet> MainQuery<TKey>(int yearFrom, int yearTo, List<string> datesTemplates, double roe, double reinvestmentRate, string symbol, Func<ResultSet, TKey> orderFunction)
+        private List<ResultSet> MainQuery<TKey>(int yearFrom, int yearTo, List<string> datesTemplates, double roe, double reinvestmentRate, string symbol, Func<ResultSet, TKey> orderFunction, bool desc)
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
-            List<ResultSet> roeFiltered = QueryAsEnumerable(yearFrom, yearTo, datesTemplates, roe, reinvestmentRate, symbol).OrderByDescending(orderFunction).ToList(); 
+            var queryAsEnumerable = QueryAsEnumerable(yearFrom, yearTo, datesTemplates, roe, reinvestmentRate, symbol).OrderByDescending(orderFunction).ToList();
+            List<ResultSet> roeFiltered = desc
+                ? queryAsEnumerable.OrderByDescending(orderFunction).ToList()
+                : queryAsEnumerable.OrderBy(orderFunction).ToList();
             ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");
 
             return roeFiltered;
