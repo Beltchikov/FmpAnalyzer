@@ -28,6 +28,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty YearFromProperty;
         public static readonly DependencyProperty YearToProperty;
         public static readonly DependencyProperty CountMessageProperty;
+        public static readonly DependencyProperty CountFilteredMessageProperty;
 
         public RelayCommand CommandGo { get; set; }
         public RelayCommand CommandCount { get; set; }
@@ -45,8 +46,8 @@ namespace FmpAnalyzer
             YearFromProperty = DependencyProperty.Register("YearFrom", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0, YearFromChanged));
             YearToProperty = DependencyProperty.Register("YearTo", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0, YearToChanged));
             CountMessageProperty = DependencyProperty.Register("CountMessage", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-
-        }
+            CountFilteredMessageProperty = DependencyProperty.Register("CountFilteredMessage", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
+    }
 
         public MainWindowViewModel()
         {
@@ -168,6 +169,15 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
+        /// CountFilteredMessage
+        /// </summary>
+        public string CountFilteredMessage
+        {
+            get { return (string)GetValue(CountFilteredMessageProperty); }
+            set { SetValue(CountFilteredMessageProperty, value); }
+        }
+
+        /// <summary>
         /// GenerateCountMessage
         /// </summary>
         /// <returns></returns>
@@ -242,33 +252,36 @@ namespace FmpAnalyzer
             });
         }
 
+        /// <summary>
+        /// OnCommandCount
+        /// </summary>
+        /// <param name="p"></param>
         private void OnCommandCount(object p)
         {
-            //LockControls();
+            LockControls();
 
-            //CompounderQueryParams = new CompounderQueryParams
-            //{
-            //    YearFrom = YearFrom,
-            //    YearTo = YearTo,
-            //    Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
-            //    Roe = Roe,
-            //    ReinvestmentRate = ReinvestmentRate,
-            //    HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
-            //    Symbol = SelectedSymbol
-            //};
+            CompounderQueryParams = new CompounderQueryParams
+            {
+                YearFrom = YearFrom,
+                YearTo = YearTo,
+                Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
+                Roe = Roe,
+                ReinvestmentRate = ReinvestmentRate,
+                HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
+                Symbol = SelectedSymbol
+            };
 
-            //BackgroundWork((s, e) =>
-            //{
-            //    var symbols = QueryFactory.CompounderCountQuery.Run(CompounderQueryParams);
-            //    (s as BackgroundWorker).ReportProgress(100, symbols);
-            //}, (s, e) =>
-            //{
-            //    ResultSetList = (List<ResultSet>)e.UserState;
-            //}, (s, e) =>
-            //{
-            //    CurrentAction += $" {ResultSetList.Count()} companies found.";
-            //    UnlockControls();
-            //});
+            BackgroundWork((s, e) =>
+            {
+                var count = QueryFactory.CompounderQuery.Count(CompounderQueryParams);
+                (s as BackgroundWorker).ReportProgress(100, count);
+            }, (s, e) =>
+            {
+                CountFilteredMessage = $"{e.UserState} companies filtered";
+            }, (s, e) =>
+            {
+                UnlockControls();
+            });
         }
 
         /// <summary>

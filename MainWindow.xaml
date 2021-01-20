@@ -113,6 +113,9 @@
                             Cursor="Hand" Grid.Row="1"
                             Command="{Binding CommandCount}"
                             Grid.Column="1">Count</Button>
+                        <Label Content="{Binding CountFilteredMessage}"
+                               Grid.Row="2"
+                               Grid.Column="1"></Label>
                         <Button  
                             Cursor="Hand" Grid.Row="3"
                             Command="{Binding CommandGo}"
