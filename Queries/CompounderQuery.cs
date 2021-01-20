@@ -25,15 +25,23 @@ namespace FmpAnalyzer.Queries
         {
             List<ResultSet> resultSetList = new List<ResultSet>();
 
-            resultSetList = MainQuery(parameters.YearFrom, parameters.YearTo, parameters.Dates, parameters.Roe, parameters.ReinvestmentRate, parameters.Symbol);
-            resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
-            resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
-            resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
-            resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
-            resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
-            resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.EpsHistoryQuery, a => a.Eps);
-            resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
-            resultSetList = AddCompanyName(resultSetList);
+            try
+            {
+                resultSetList = MainQuery(parameters.YearFrom, parameters.YearTo, parameters.Dates, parameters.Roe, parameters.ReinvestmentRate, parameters.Symbol);
+                resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
+                resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
+                resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
+                resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
+                resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
+                resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.EpsHistoryQuery, a => a.Eps);
+                resultSetList = AddHistoryData(resultSetList, parameters.Dates, parameters.YearFrom, parameters.HistoryDepth, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
+                resultSetList = AddCompanyName(resultSetList);
+            }
+            catch (Exception exception)
+            {
+
+                throw;
+            }
 
             ReportProgress(100, 100, $"OK! Finished query.");
             return resultSetList;
