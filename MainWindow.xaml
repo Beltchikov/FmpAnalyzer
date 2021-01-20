@@ -78,13 +78,20 @@
                                  Margin="0,2,0,5"
                              Text="{Binding ReinvestmentRate}"
                                  Grid.Column="3"></TextBox>
-                        <Label Grid.Column="0" Grid.Row="3"
+                        <!--<Label Grid.Column="0" Grid.Row="3"
                                Grid.ColumnSpan="3"
                            Content="Symbol"></Label>
                         <TextBox x:Name="txtSymbol" Grid.Row="3" 
                                  Margin="0,2,0,5"
                              Text="{Binding SelectedSymbol}"
-                                 Grid.Column="3"></TextBox>
+                                 Grid.Column="3"></TextBox>-->
+                        <Label Grid.Column="0" Grid.Row="4"
+                               Grid.ColumnSpan="3"
+                           Content="Sort by:"></Label>
+                        <ComboBox Grid.Row="4" Grid.Column="2"  Grid.ColumnSpan="3" 
+                                  ItemsSource="{Binding SortByList}" 
+                                  DisplayMemberPath="Text" 
+                                  SelectedItem="{Binding SortBySelected}"></ComboBox>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="2"

@@ -41,6 +41,8 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty PreviousButtonEnabledProperty;
         public static readonly DependencyProperty NextButtonEnabledProperty;
         public static readonly DependencyProperty LastButtonEnabledProperty;
+        public static readonly DependencyProperty SortByListProperty;
+        public static readonly DependencyProperty SortBySelectedProperty;
 
         static MainWindowViewModel()
         {
@@ -61,6 +63,8 @@ namespace FmpAnalyzer
             PreviousButtonEnabledProperty = DependencyProperty.Register("PreviousButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
             NextButtonEnabledProperty = DependencyProperty.Register("NextButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
             LastButtonEnabledProperty = DependencyProperty.Register("LastButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
+            SortByListProperty = DependencyProperty.Register("SortByList", typeof(List<SortBy>), typeof(MainWindowViewModel), new PropertyMetadata(new List<SortBy>()));
+            SortBySelectedProperty = DependencyProperty.Register("SortBySelected", typeof(SortBy), typeof(MainWindowViewModel), new PropertyMetadata(default(SortBy)));
 
         }
 
@@ -73,6 +77,7 @@ namespace FmpAnalyzer
             YearFrom = 2019;
             YearTo = 2020;
             GenerateCountMessage();
+            InitComboboxes();
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
             CommandCount = new RelayCommand(p => { OnCommandCount(p); });
@@ -239,6 +244,24 @@ namespace FmpAnalyzer
             set { SetValue(LastButtonEnabledProperty, value); }
         }
 
+        /// <summary>
+        /// SortByList
+        /// </summary>
+        public List<SortBy> SortByList
+        {
+            get { return (List<SortBy>)GetValue(SortByListProperty); }
+            set { SetValue(SortByListProperty, value); }
+        }
+
+        /// <summary>
+        /// SortBySelected
+        /// </summary>
+        public SortBy SortBySelected
+        {
+            get { return (SortBy)GetValue(SortBySelectedProperty); }
+            set { SetValue(SortBySelectedProperty, value); }
+        }
+
         #endregion
 
         #region Commands
@@ -252,7 +275,7 @@ namespace FmpAnalyzer
             LockControls();
 
             // Order übergeben
-                        
+
             var compounderQueryParams = new CompounderQueryParams<double>
             {
                 YearFrom = YearFrom,
@@ -377,6 +400,31 @@ namespace FmpAnalyzer
                 CountMessage = $"{count} companies in database for the period {yearFrom} - {yearTo}.";
                 UnlockControls();
             });
+        }
+
+        /// <summary>
+        /// InitComboboxes
+        /// </summary>
+        private void InitComboboxes()
+        {
+            SortByList = new List<SortBy>
+            {
+                new SortBy
+                {
+                    Text = "ROE Desc",
+                    Descending = true,
+                    Function = (r) => r.Roe
+                },
+                new SortBy
+                {
+                    Text = "ROE Asc",
+                    Descending = false,
+                    Function = (r) => r.Roe
+                }
+
+            };
+
+            SortBySelected = SortByList[0];
         }
 
         /// <summary>
