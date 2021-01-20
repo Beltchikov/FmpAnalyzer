@@ -30,6 +30,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty CountMessageProperty;
 
         public RelayCommand CommandGo { get; set; }
+        public RelayCommand CommandCount { get; set; }
 
         static MainWindowViewModel()
         {
@@ -58,6 +59,7 @@ namespace FmpAnalyzer
             GenerateCountMessage();
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
+            CommandCount = new RelayCommand(p => { OnCommandCount(p); });
             QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
         }
 
@@ -238,6 +240,35 @@ namespace FmpAnalyzer
                 CurrentAction += $" {ResultSetList.Count()} companies found.";
                 UnlockControls();
             });
+        }
+
+        private void OnCommandCount(object p)
+        {
+            //LockControls();
+
+            //CompounderQueryParams = new CompounderQueryParams
+            //{
+            //    YearFrom = YearFrom,
+            //    YearTo = YearTo,
+            //    Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
+            //    Roe = Roe,
+            //    ReinvestmentRate = ReinvestmentRate,
+            //    HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
+            //    Symbol = SelectedSymbol
+            //};
+
+            //BackgroundWork((s, e) =>
+            //{
+            //    var symbols = QueryFactory.CompounderCountQuery.Run(CompounderQueryParams);
+            //    (s as BackgroundWorker).ReportProgress(100, symbols);
+            //}, (s, e) =>
+            //{
+            //    ResultSetList = (List<ResultSet>)e.UserState;
+            //}, (s, e) =>
+            //{
+            //    CurrentAction += $" {ResultSetList.Count()} companies found.";
+            //    UnlockControls();
+            //});
         }
 
         /// <summary>

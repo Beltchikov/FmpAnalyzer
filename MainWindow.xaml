@@ -92,6 +92,8 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
@@ -109,19 +111,23 @@
                                Grid.Column="1"></Label>
                         <Button  
                             Cursor="Hand" Grid.Row="1"
+                            Command="{Binding CommandCount}"
+                            Grid.Column="1">Count</Button>
+                        <Button  
+                            Cursor="Hand" Grid.Row="3"
                             Command="{Binding CommandGo}"
-                            Grid.Column="1">Go</Button>
+                            Grid.Column="1">Show</Button>
                         <Label Content="{Binding CurrentAction}"
-                               Grid.Row="3"
+                               Grid.Row="5"
                                Grid.Column="1"></Label>
                         <ProgressBar x:Name="prgTotal"
                                 Maximum="100" 
                                  Minimum="0" 
                                  Value="{Binding ProgressCurrent}"
-                                 Grid.Row="5"
+                                 Grid.Row="7"
                                      Grid.Column="1"/>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                                      Grid.Row="7"
+                                      Grid.Row="9"
                                        Grid.Column="1">
                             <DataGrid x:Name="gridResults"
                                 ItemsSource="{Binding ResultSetList, Mode=OneWay}"
