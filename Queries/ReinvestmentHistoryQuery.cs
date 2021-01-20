@@ -31,7 +31,7 @@ namespace FmpAnalyzer.Queries
                 var queryResult = (from cash in DataContext.CashFlowStatements
                                    where cash.Symbol == symbol
                                    && cash.Date == currentDate
-                                   select cash.NetIncome == 0 ? 0 : cash.InvestmentsInPropertyPlantAndEquipment * -100 / cash.NetIncome)
+                                   select cash.NetIncome == 0 ? 0 : cash.CapitalExpenditure * -100 / cash.NetIncome)
                                   .ToList();
 
                 if (!queryResult.Any())

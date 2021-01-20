@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FmpAnalyzer.Queries
 {
@@ -39,8 +40,8 @@ namespace FmpAnalyzer.Queries
             }
             catch (Exception exception)
             {
+                MessageBox.Show(exception.ToString());
 
-                throw;
             }
 
             ReportProgress(100, 100, $"OK! Finished query.");
@@ -79,7 +80,7 @@ namespace FmpAnalyzer.Queries
                                                   : Math.Round(income.NetIncome * 100 / balance.TotalStockholdersEquity, 0),
                                                ReinvestmentRate = income.NetIncome == 0
                                                   ? 0
-                                                  : Math.Round(cash.InvestmentsInPropertyPlantAndEquipment * -100 / income.NetIncome, 0)
+                                                  : Math.Round(cash.CapitalExpenditure * -100 / income.NetIncome, 0)
                                            } into selectionFirst
                                            where selectionFirst.Roe >= roe
                                            && selectionFirst.ReinvestmentRate >= reinvestmentRate
