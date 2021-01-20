@@ -132,11 +132,6 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
-        /// CompounderQueryParams
-        /// </summary>
-        public CompounderQueryParams CompounderQueryParams { get; set; }
-
-        /// <summary>
         /// ResultSetList
         /// </summary>
         public List<ResultSet> ResultSetList
@@ -256,7 +251,9 @@ namespace FmpAnalyzer
         {
             LockControls();
 
-            CompounderQueryParams = new CompounderQueryParams
+            // Order übergeben
+                        
+            var compounderQueryParams = new CompounderQueryParams<double>
             {
                 YearFrom = YearFrom,
                 YearTo = YearTo,
@@ -264,12 +261,13 @@ namespace FmpAnalyzer
                 Roe = Roe,
                 ReinvestmentRate = ReinvestmentRate,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
-                Symbol = SelectedSymbol
+                Symbol = SelectedSymbol,
+                OrderFunction = r => r.Roe
             };
 
             BackgroundWork((s, e) =>
             {
-                var symbols = QueryFactory.CompounderQuery.Run(CompounderQueryParams);
+                var symbols = QueryFactory.CompounderQuery.Run(compounderQueryParams);
                 (s as BackgroundWorker).ReportProgress(100, symbols);
             }, (s, e) =>
             {
@@ -289,7 +287,7 @@ namespace FmpAnalyzer
         {
             LockControls();
 
-            CompounderQueryParams = new CompounderQueryParams
+            var compounderCountQueryParams = new CompounderCountQueryParams
             {
                 YearFrom = YearFrom,
                 YearTo = YearTo,
@@ -302,7 +300,7 @@ namespace FmpAnalyzer
 
             BackgroundWork((s, e) =>
             {
-                var count = QueryFactory.CompounderQuery.Count(CompounderQueryParams);
+                var count = QueryFactory.CompounderQuery.Count(compounderCountQueryParams);
                 (s as BackgroundWorker).ReportProgress(100, count);
             }, (s, e) =>
             {
