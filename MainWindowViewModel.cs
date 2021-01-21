@@ -333,6 +333,7 @@ namespace FmpAnalyzer
             {
                 CurrentAction += $" {CountTotal} companies found.";
                 UnlockControls();
+                UpdatePageButtons();
             });
         }
 
@@ -554,6 +555,42 @@ namespace FmpAnalyzer
         {
             BackgroundResults = Brushes.White;
         }
+
+        /// <summary>
+        /// UpdatePageButtons
+        /// </summary>
+        private void UpdatePageButtons()
+        {
+            if (CountTotal < PageSizeSelected)
+            {
+                FirstButtonEnabled = false;
+                PreviousButtonEnabled = false;
+                NextButtonEnabled = false;
+                LastButtonEnabled = false;
+            }
+            else if ((CurrentPage + 1) * PageSizeSelected >= CountTotal)
+            {
+                FirstButtonEnabled = true;
+                PreviousButtonEnabled = true;
+                NextButtonEnabled = false;
+                LastButtonEnabled = false;
+            }
+            else if (CurrentPage == 0)
+            {
+                FirstButtonEnabled = false;
+                PreviousButtonEnabled = false;
+                NextButtonEnabled = true;
+                LastButtonEnabled = true;
+            }
+            else
+            {
+                FirstButtonEnabled = true;
+                PreviousButtonEnabled = true;
+                NextButtonEnabled = true;
+                LastButtonEnabled = true;
+            }
+        }
+
 
         #endregion
     }
