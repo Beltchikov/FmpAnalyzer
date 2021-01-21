@@ -43,6 +43,7 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -70,14 +71,14 @@
                            Content="ROE >"></Label>
                         <TextBox x:Name="txtRoe" Margin="0,2,0,5" Grid.Row="1"
                              Text="{Binding Roe, Converter={StaticResource RoeConverter}}"
-                                 Grid.Column="3"></TextBox>
+                                 Grid.Column="4"></TextBox>
                         <Label Grid.Column="0" Grid.Row="2"
                                Grid.ColumnSpan="3"
                            Content="Reinvestment Rate >"></Label>
                         <TextBox x:Name="txtReinvestmentRate" Grid.Row="2" 
                                  Margin="0,2,0,5"
                              Text="{Binding ReinvestmentRate}"
-                                 Grid.Column="3"></TextBox>
+                                 Grid.Column="4"></TextBox>
                         <!--<Label Grid.Column="0" Grid.Row="3"
                                Grid.ColumnSpan="3"
                            Content="Symbol"></Label>
@@ -92,6 +93,12 @@
                                   ItemsSource="{Binding SortByList}" 
                                   DisplayMemberPath="Text" 
                                   SelectedItem="{Binding SortBySelected}"></ComboBox>
+                        <Label Grid.Column="0" Grid.Row="5"
+                               Grid.ColumnSpan="3"
+                           Content="Page size:"></Label>
+                        <ComboBox x:Name="cmbPageSize" Grid.Row="5" Grid.Column="2"  Grid.ColumnSpan="3" 
+                                  ItemsSource="{Binding PageSizeList}" 
+                                  SelectedItem="{Binding PageSizeSelected}"></ComboBox>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="2"

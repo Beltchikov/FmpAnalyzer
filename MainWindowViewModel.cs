@@ -43,6 +43,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty LastButtonEnabledProperty;
         public static readonly DependencyProperty SortByListProperty;
         public static readonly DependencyProperty SortBySelectedProperty;
+        public static readonly DependencyProperty PageSizeListProperty;
 
         static MainWindowViewModel()
         {
@@ -65,7 +66,7 @@ namespace FmpAnalyzer
             LastButtonEnabledProperty = DependencyProperty.Register("LastButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
             SortByListProperty = DependencyProperty.Register("SortByList", typeof(List<SortBy>), typeof(MainWindowViewModel), new PropertyMetadata(new List<SortBy>()));
             SortBySelectedProperty = DependencyProperty.Register("SortBySelected", typeof(SortBy), typeof(MainWindowViewModel), new PropertyMetadata(default(SortBy)));
-
+            PageSizeListProperty = DependencyProperty.Register("PageSizeList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
         }
 
         public MainWindowViewModel()
@@ -262,6 +263,16 @@ namespace FmpAnalyzer
             set { SetValue(SortBySelectedProperty, value); }
         }
 
+
+        /// <summary>
+        /// PageSizeList
+        /// </summary>
+        public List<int> PageSizeList
+        {
+            get { return (List<int>)GetValue(PageSizeListProperty); }
+            set { SetValue(PageSizeListProperty, value); }
+        }
+
         #endregion
 
         #region Commands
@@ -406,6 +417,7 @@ namespace FmpAnalyzer
         /// </summary>
         private void InitComboboxes()
         {
+            // SortByList
             SortByList = new List<SortBy>
             {
                 new SortBy
@@ -424,6 +436,9 @@ namespace FmpAnalyzer
             };
 
             SortBySelected = SortByList[0];
+
+            // PageSizeList
+            PageSizeList = new List<int> {10, 20};
         }
 
         /// <summary>
