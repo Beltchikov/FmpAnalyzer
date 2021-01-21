@@ -149,6 +149,11 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
+        /// CountTotal
+        /// </summary>
+        public int CountTotal { get; private set; }
+
+        /// <summary>
         /// ReinvestmentRate
         /// </summary>
         public double ReinvestmentRate
@@ -284,6 +289,11 @@ namespace FmpAnalyzer
             set { SetValue(PageSizeSelectedProperty, value); }
         }
 
+        /// <summary>
+        /// CurrentPage
+        /// </summary>
+        public int CurrentPage { get; private set; }
+
         #endregion
 
         #region Commands
@@ -306,7 +316,9 @@ namespace FmpAnalyzer
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
                 Symbol = SelectedSymbol,
                 OrderFunction = SortBySelected.Function,
-                Descending = SortBySelected.Descending
+                Descending = SortBySelected.Descending,
+                PageSize = PageSizeSelected,
+                CurrentPage = CurrentPage
             };
 
             BackgroundWork((s, e) =>
@@ -316,9 +328,10 @@ namespace FmpAnalyzer
             }, (s, e) =>
             {
                 ResultSetList = ((ResultSetList)e.UserState).ResultSets;
+                CountTotal = ((ResultSetList)e.UserState).CountTotal;
             }, (s, e) =>
             {
-                CurrentAction += $" {ResultSetList.Count()} companies found.";
+                CurrentAction += $" {CountTotal} companies found.";
                 UnlockControls();
             });
         }

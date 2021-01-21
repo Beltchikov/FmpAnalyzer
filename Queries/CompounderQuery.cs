@@ -68,12 +68,15 @@ namespace FmpAnalyzer.Queries
         private ResultSetList MainQuery<TKey>(CompounderQueryParams<TKey> parameters)
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.Roe}");
+            
             var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
-            List<ResultSet> roeFiltered = parameters.Descending
-                ? queryAsEnumerable.OrderByDescending(parameters.OrderFunction).ToList()
-                : queryAsEnumerable.OrderBy(parameters.OrderFunction).ToList();
+            var p = parameters;
+            List<ResultSet> roeFiltered = p.Descending
+                ? queryAsEnumerable.OrderByDescending(p.OrderFunction).Skip(p.CurrentPage).Take(p.PageSize).ToList()
+                : queryAsEnumerable.OrderBy(p.OrderFunction).Skip(p.CurrentPage).Take(p.PageSize).ToList();
             ResultSetList resultSetList  = new ResultSetList(roeFiltered);
             resultSetList.CountTotal = queryAsEnumerable.Count();
+            
             ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");
 
             return resultSetList;
