@@ -44,6 +44,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty SortByListProperty;
         public static readonly DependencyProperty SortBySelectedProperty;
         public static readonly DependencyProperty PageSizeListProperty;
+        public static readonly DependencyProperty PageSizeSelectedProperty;
 
         static MainWindowViewModel()
         {
@@ -67,6 +68,7 @@ namespace FmpAnalyzer
             SortByListProperty = DependencyProperty.Register("SortByList", typeof(List<SortBy>), typeof(MainWindowViewModel), new PropertyMetadata(new List<SortBy>()));
             SortBySelectedProperty = DependencyProperty.Register("SortBySelected", typeof(SortBy), typeof(MainWindowViewModel), new PropertyMetadata(default(SortBy)));
             PageSizeListProperty = DependencyProperty.Register("PageSizeList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
+            PageSizeSelectedProperty = DependencyProperty.Register("PageSizeSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
         }
 
         public MainWindowViewModel()
@@ -273,6 +275,15 @@ namespace FmpAnalyzer
             set { SetValue(PageSizeListProperty, value); }
         }
 
+        /// <summary>
+        /// PageSizeSelected
+        /// </summary>
+        public int PageSizeSelected
+        {
+            get { return (int)GetValue(PageSizeSelectedProperty); }
+            set { SetValue(PageSizeSelectedProperty, value); }
+        }
+
         #endregion
 
         #region Commands
@@ -438,7 +449,8 @@ namespace FmpAnalyzer
             SortBySelected = SortByList[0];
 
             // PageSizeList
-            PageSizeList = new List<int> {10, 20};
+            PageSizeList = new List<int> { 10, 20 };
+            PageSizeSelected = PageSizeList[1];
         }
 
         /// <summary>
