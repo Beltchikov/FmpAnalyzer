@@ -72,8 +72,8 @@ namespace FmpAnalyzer.Queries
             var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
             var p = parameters;
             List<ResultSet> roeFiltered = p.Descending
-                ? queryAsEnumerable.OrderByDescending(p.OrderFunction).Skip(p.CurrentPage).Take(p.PageSize).ToList()
-                : queryAsEnumerable.OrderBy(p.OrderFunction).Skip(p.CurrentPage).Take(p.PageSize).ToList();
+                ? queryAsEnumerable.OrderByDescending(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList()
+                : queryAsEnumerable.OrderBy(p.OrderFunction).Skip(p.CurrentPage* p.PageSize).Take(p.PageSize).ToList();
             ResultSetList resultSetList  = new ResultSetList(roeFiltered);
             resultSetList.CountTotal = queryAsEnumerable.Count();
             

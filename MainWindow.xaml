@@ -118,17 +118,12 @@
                         <Label Content="{Binding CountMessage}"
                                Grid.Row="0"
                                Grid.Column="1"></Label>
-                        <Button  
-                            Cursor="Hand" Grid.Row="1"
-                            Command="{Binding CommandCount}"
-                            Grid.Column="1">Count</Button>
                         <Label Content="{Binding CountFilteredMessage}"
                                Grid.Row="2"
                                Grid.Column="1"></Label>
                         <Button  
                             Cursor="Hand" Grid.Row="3"
                             Command="{Binding CommandGo}"
-                            IsEnabled="{Binding ShowButtonEnabled}"
                             Grid.Column="1">Show</Button>
                         <Label Content="{Binding CurrentAction}"
                                Grid.Row="5"

@@ -36,7 +36,6 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty YearToProperty;
         public static readonly DependencyProperty CountMessageProperty;
         public static readonly DependencyProperty CountFilteredMessageProperty;
-        public static readonly DependencyProperty ShowButtonEnabledProperty;
         public static readonly DependencyProperty FirstButtonEnabledProperty;
         public static readonly DependencyProperty PreviousButtonEnabledProperty;
         public static readonly DependencyProperty NextButtonEnabledProperty;
@@ -60,7 +59,6 @@ namespace FmpAnalyzer
             YearToProperty = DependencyProperty.Register("YearTo", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0, YearToChanged));
             CountMessageProperty = DependencyProperty.Register("CountMessage", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             CountFilteredMessageProperty = DependencyProperty.Register("CountFilteredMessage", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            ShowButtonEnabledProperty = DependencyProperty.Register("ShowButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
             FirstButtonEnabledProperty = DependencyProperty.Register("FirstButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
             PreviousButtonEnabledProperty = DependencyProperty.Register("PreviousButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
             NextButtonEnabledProperty = DependencyProperty.Register("NextButtonEnabled", typeof(bool), typeof(MainWindowViewModel), new PropertyMetadata(false));
@@ -205,15 +203,6 @@ namespace FmpAnalyzer
         {
             get { return (string)GetValue(CountFilteredMessageProperty); }
             set { SetValue(CountFilteredMessageProperty, value); }
-        }
-
-        /// <summary>
-        /// ShowButtonEnabled
-        /// </summary>
-        public bool ShowButtonEnabled
-        {
-            get { return (bool)GetValue(ShowButtonEnabledProperty); }
-            set { SetValue(ShowButtonEnabledProperty, value); }
         }
 
         /// <summary>
@@ -385,7 +374,6 @@ namespace FmpAnalyzer
             }, (s, e) =>
             {
                 var cnt = (int)(e.UserState);
-                ShowButtonEnabled = cnt <= Convert.ToInt32(Configuration.Instance["MaxCountToShow"]);
                 CountFilteredMessage = $"{e.UserState} companies filtered";
             }, (s, e) =>
             {
