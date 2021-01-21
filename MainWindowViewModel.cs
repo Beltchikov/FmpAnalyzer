@@ -74,7 +74,7 @@ namespace FmpAnalyzer
         public MainWindowViewModel()
         {
             ConnectionString = Configuration.Instance["ConnectionString"];
-            Roe = 40;
+            Roe = 15;
             CurrentAction = "Willkommen!";
             ReinvestmentRate = 50;
             YearFrom = 2019;
@@ -294,6 +294,28 @@ namespace FmpAnalyzer
         /// </summary>
         public int CurrentPage { get; private set; }
 
+        /// <summary>
+        /// ShowingCompanyFrom
+        /// </summary>
+        public int ShowingCompanyFrom
+        {
+            get
+            {
+                return CurrentPage * PageSizeSelected + 1;
+            }
+        }
+
+        /// <summary>
+        /// ShowingCompanyTo
+        /// </summary>
+        public int ShowingCompanyTo
+        {
+            get
+            {
+                return Math.Min((CurrentPage + 1) * PageSizeSelected, CountTotal);
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -331,7 +353,7 @@ namespace FmpAnalyzer
                 CountTotal = ((ResultSetList)e.UserState).CountTotal;
             }, (s, e) =>
             {
-                CurrentAction += $" {CountTotal} companies found.";
+                CurrentAction += $" {CountTotal} companies found. Showing companies {ShowingCompanyFrom} - {ShowingCompanyTo}";
                 UnlockControls();
                 UpdatePageButtons();
             });

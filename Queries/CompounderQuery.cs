@@ -77,7 +77,7 @@ namespace FmpAnalyzer.Queries
             ResultSetList resultSetList  = new ResultSetList(roeFiltered);
             resultSetList.CountTotal = queryAsEnumerable.Count();
             
-            ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");
+            ReportProgress(100, 20, $"OK! {resultSetList.CountTotal} companies found.");
 
             return resultSetList;
         }
