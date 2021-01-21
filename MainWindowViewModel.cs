@@ -315,7 +315,7 @@ namespace FmpAnalyzer
                 (s as BackgroundWorker).ReportProgress(100, symbols);
             }, (s, e) =>
             {
-                ResultSetList = (List<ResultSet>)e.UserState;
+                ResultSetList = ((ResultSetList)e.UserState).ResultSets;
             }, (s, e) =>
             {
                 CurrentAction += $" {ResultSetList.Count()} companies found.";

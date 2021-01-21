@@ -22,9 +22,9 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public List<ResultSet> Run<T>(CompounderQueryParams<T> parameters)
+        public ResultSetList Run<T>(CompounderQueryParams<T> parameters)
         {
-            List<ResultSet> resultSetList = new List<ResultSet>();
+            ResultSetList resultSetList = null;
 
             try
             {
@@ -65,16 +65,18 @@ namespace FmpAnalyzer.Queries
         /// <typeparam name="TKey"></typeparam>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        private List<ResultSet> MainQuery<TKey>(CompounderQueryParams<TKey> parameters)
+        private ResultSetList MainQuery<TKey>(CompounderQueryParams<TKey> parameters)
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.Roe}");
             var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
             List<ResultSet> roeFiltered = parameters.Descending
                 ? queryAsEnumerable.OrderByDescending(parameters.OrderFunction).ToList()
                 : queryAsEnumerable.OrderBy(parameters.OrderFunction).ToList();
+            ResultSetList resultSetList  = new ResultSetList(roeFiltered);
+            resultSetList.CountTotal = queryAsEnumerable.Count();
             ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");
 
-            return roeFiltered;
+            return resultSetList;
         }
 
         /// <summary>
@@ -126,16 +128,16 @@ namespace FmpAnalyzer.Queries
         /// <param name="query"></param>
         /// <param name="funcAttributeToSet"></param>
         /// <returns></returns>
-        private List<ResultSet> AddHistoryData(List<ResultSet> inputResultSetList, HistoryQueryParams parameters,
+        private ResultSetList AddHistoryData(ResultSetList inputResultSetList, HistoryQueryParams parameters,
             HistoryQuery query, Func<ResultSet, List<double>> funcAttributeToSet)
         {
-            for (int i = 0; i < inputResultSetList.Count(); i++)
+            for (int i = 0; i < inputResultSetList.ResultSets.Count(); i++)
             {
                 foreach (string dateParam in parameters.Dates)
                 {
                     string date = parameters.YearFrom.ToString() + dateParam[4..];
 
-                    var queryResults = query.Run(inputResultSetList[i].Symbol, date, parameters.HistoryDepth);
+                    var queryResults = query.Run(inputResultSetList.ResultSets[i].Symbol, date, parameters.HistoryDepth);
                     if (!queryResults.Any())
                     {
                         continue;
@@ -144,7 +146,7 @@ namespace FmpAnalyzer.Queries
                     queryResults.Reverse();
                     for (int ii = 0; ii < queryResults.Count(); ii++)
                     {
-                        inputResultSetList.Select(funcAttributeToSet).ToList()[i].Add(queryResults[ii]);
+                        inputResultSetList.ResultSets.Select(funcAttributeToSet).ToList()[i].Add(queryResults[ii]);
                     }
                     break;
                 }
@@ -158,10 +160,10 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <param name="inputResultSetList"></param>
         /// <returns></returns>
-        private List<ResultSet> AddCompanyName(List<ResultSet> inputResultSetList)
+        private ResultSetList AddCompanyName(ResultSetList inputResultSetList)
         {
             ReportProgress(100, 70, $"Searching for the companies names ...");
-            List<ResultSet> resultSetList = QueryFactory.CompanyNameQuery.Run(inputResultSetList);
+            ResultSetList resultSetList = QueryFactory.CompanyNameQuery.Run(inputResultSetList);
             ReportProgress(100, 80, $"Search for the companies names ended ...");
             return resultSetList;
         }

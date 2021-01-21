@@ -19,18 +19,18 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <param name="inputResultSetList"></param>
         /// <returns></returns>
-        public List<ResultSet> Run(List<ResultSet> inputResultSetList)
+        public ResultSetList Run(ResultSetList inputResultSetList)
         {
-            var symbols = inputResultSetList.Select(i => i.Symbol).ToList();
+            var symbols = inputResultSetList.ResultSets.Select(i => i.Symbol).ToList();
             var listSymbolNameQuery = DataContext.Stocks.Where(s => symbols.Contains(s.Symbol))
                 .Select(a => new KeyValuePair<string, string>(a.Symbol, a.Name)).ToList();
             var dictSymbolName = new Dictionary<string, string>(listSymbolNameQuery);
 
-            for (int i = 0; i < inputResultSetList.Count(); i++)
+            for (int i = 0; i < inputResultSetList.ResultSets.Count(); i++)
             {
-                if (dictSymbolName.ContainsKey(inputResultSetList[i].Symbol))
+                if (dictSymbolName.ContainsKey(inputResultSetList.ResultSets[i].Symbol))
                 {
-                    inputResultSetList[i].Name = dictSymbolName[inputResultSetList[i].Symbol];
+                    inputResultSetList.ResultSets[i].Name = dictSymbolName[inputResultSetList.ResultSets[i].Symbol];
                 }
             }
 
