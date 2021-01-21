@@ -377,7 +377,8 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandLast(object p)
         {
-            // TODO
+            CurrentPage = CountTotal / PageSizeSelected;
+            OnCommandGo(p);
         }
 
         /// <summary>
@@ -386,7 +387,8 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandCommandNext(object p)
         {
-            // TODO
+            CurrentPage += 1;
+            OnCommandGo(p);
         }
 
         /// <summary>
@@ -395,7 +397,8 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandPrevious(object p)
         {
-            // TODO
+            CurrentPage -= 1;
+            OnCommandGo(p);
         }
 
         /// <summary>
@@ -404,7 +407,8 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandFirst(object p)
         {
-            // TODO
+            CurrentPage = 0;
+            OnCommandGo(p);
         }
 
         #endregion
