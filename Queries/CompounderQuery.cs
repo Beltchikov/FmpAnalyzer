@@ -29,14 +29,14 @@ namespace FmpAnalyzer.Queries
             try
             {
                 var p = parameters;
-                resultSetList = MainQuery<T>(p.YearFrom, p.YearTo, p.Dates, p.Roe, p.ReinvestmentRate, p.Symbol, p.OrderFunction, p.Descending);
-                resultSetList = AddHistoryData(resultSetList, p.Dates, p.YearFrom, p.HistoryDepth, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
-                resultSetList = AddHistoryData(resultSetList, p.Dates, p.YearFrom, p.HistoryDepth, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
-                resultSetList = AddHistoryData(resultSetList, p.Dates, p.YearFrom, p.HistoryDepth, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
-                resultSetList = AddHistoryData(resultSetList, p.Dates, p.YearFrom, p.HistoryDepth, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
-                resultSetList = AddHistoryData(resultSetList, p.Dates, p.YearFrom, p.HistoryDepth, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
-                resultSetList = AddHistoryData(resultSetList, p.Dates, p.YearFrom, p.HistoryDepth, QueryFactory.EpsHistoryQuery, a => a.Eps);
-                resultSetList = AddHistoryData(resultSetList, p.Dates, p.YearFrom, p.HistoryDepth, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
+                resultSetList = MainQuery<T>(parameters);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.EpsHistoryQuery, a => a.Eps);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
                 resultSetList = AddCompanyName(resultSetList);
             }
             catch (Exception exception)
@@ -56,26 +56,22 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         public int Count(CompounderCountQueryParams parameters)
         {
-            return QueryAsEnumerable(parameters.YearFrom, parameters.YearTo, parameters.Dates, parameters.Roe, parameters.ReinvestmentRate, parameters.Symbol).Count();
+            return QueryAsEnumerable(parameters).Count();
         }
 
         /// <summary>
         /// MainQuery
         /// </summary>
-        /// <param name="yearFrom"></param>
-        /// <param name="yearTo"></param>
-        /// <param name="datesTemplates"></param>
-        /// <param name="roe"></param>
-        /// <param name="reinvestmentRate"></param>
-        /// <param name="symbol"></param>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="parameters"></param>
         /// <returns></returns>
-        private List<ResultSet> MainQuery<TKey>(int yearFrom, int yearTo, List<string> datesTemplates, double roe, double reinvestmentRate, string symbol, Func<ResultSet, TKey> orderFunction, bool desc)
+        private List<ResultSet> MainQuery<TKey>(CompounderQueryParams<TKey> parameters)
         {
-            ReportProgress(100, 10, $"Retrieving companies with ROE > {roe}");
-            var queryAsEnumerable = QueryAsEnumerable(yearFrom, yearTo, datesTemplates, roe, reinvestmentRate, symbol).OrderByDescending(orderFunction).ToList();
-            List<ResultSet> roeFiltered = desc
-                ? queryAsEnumerable.OrderByDescending(orderFunction).ToList()
-                : queryAsEnumerable.OrderBy(orderFunction).ToList();
+            ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.Roe}");
+            var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
+            List<ResultSet> roeFiltered = parameters.Descending
+                ? queryAsEnumerable.OrderByDescending(parameters.OrderFunction).ToList()
+                : queryAsEnumerable.OrderBy(parameters.OrderFunction).ToList();
             ReportProgress(100, 20, $"OK! {roeFiltered.Count()} companies found.");
 
             return roeFiltered;
@@ -84,16 +80,11 @@ namespace FmpAnalyzer.Queries
         /// <summary>
         /// QueryAsEnumerable
         /// </summary>
-        /// <param name="yearFrom"></param>
-        /// <param name="yearTo"></param>
-        /// <param name="datesTemplates"></param>
-        /// <param name="roe"></param>
-        /// <param name="reinvestmentRate"></param>
-        /// <param name="symbol"></param>
+        /// <param name="parameters"></param>
         /// <returns></returns>
-        private IEnumerable<ResultSet> QueryAsEnumerable(int yearFrom, int yearTo, List<string> datesTemplates, double roe, double reinvestmentRate, string symbol)
+        private IEnumerable<ResultSet> QueryAsEnumerable(CompounderCountQueryParams parameters)
         {
-            var dates = FmpHelper.BuildDatesList(yearFrom, yearTo, datesTemplates);
+            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
 
             return from income in DataContext.IncomeStatements
                    join balance in DataContext.BalanceSheets
@@ -101,7 +92,7 @@ namespace FmpAnalyzer.Queries
                    join cash in DataContext.CashFlowStatements
                    on new { a = income.Symbol, b = income.Date } equals new { a = cash.Symbol, b = cash.Date }
                    where dates.Contains(income.Date)
-                   && String.IsNullOrWhiteSpace(symbol) ? 1 == 1 : income.Symbol == symbol
+                   && String.IsNullOrWhiteSpace(parameters.Symbol) ? 1 == 1 : income.Symbol == parameters.Symbol
                    select new
                    {
                        Symbol = income.Symbol,
@@ -113,8 +104,8 @@ namespace FmpAnalyzer.Queries
                           ? 0
                           : Math.Round(cash.CapitalExpenditure * -100 / income.NetIncome, 0)
                    } into selectionFirst
-                   where selectionFirst.Roe >= roe
-                   && selectionFirst.ReinvestmentRate >= reinvestmentRate
+                   where selectionFirst.Roe >= parameters.Roe
+                   && selectionFirst.ReinvestmentRate >= parameters.ReinvestmentRate
                    select new
                    {
                        Symbol = selectionFirst.Symbol,
@@ -131,22 +122,20 @@ namespace FmpAnalyzer.Queries
         /// AddHistoryData
         /// </summary>
         /// <param name="inputResultSetList"></param>
-        /// <param name="dates"></param>
-        /// <param name="year"></param>
-        /// <param name="historyDepth"></param>
+        /// <param name="parameters"></param>
         /// <param name="query"></param>
         /// <param name="funcAttributeToSet"></param>
         /// <returns></returns>
-        private List<ResultSet> AddHistoryData(List<ResultSet> inputResultSetList, List<string> dates, int year, int historyDepth,
+        private List<ResultSet> AddHistoryData(List<ResultSet> inputResultSetList, HistoryQueryParams parameters,
             HistoryQuery query, Func<ResultSet, List<double>> funcAttributeToSet)
         {
             for (int i = 0; i < inputResultSetList.Count(); i++)
             {
-                foreach (string dateParam in dates)
+                foreach (string dateParam in parameters.Dates)
                 {
-                    string date = year.ToString() + dateParam[4..];
+                    string date = parameters.YearFrom.ToString() + dateParam[4..];
 
-                    var queryResults = query.Run(inputResultSetList[i].Symbol, date, historyDepth);
+                    var queryResults = query.Run(inputResultSetList[i].Symbol, date, parameters.HistoryDepth);
                     if (!queryResults.Any())
                     {
                         continue;
