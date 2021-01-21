@@ -305,8 +305,8 @@ namespace FmpAnalyzer
                 ReinvestmentRate = ReinvestmentRate,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
                 Symbol = SelectedSymbol,
-                OrderFunction = ((SortBy)p).Function,
-                Descending = ((SortBy)p).Descending
+                OrderFunction = SortBySelected.Function,
+                Descending = SortBySelected.Descending
             };
 
             BackgroundWork((s, e) =>
@@ -529,6 +529,7 @@ namespace FmpAnalyzer
         /// </summary>
         private void LockControls()
         {
+            ResultSetList = new List<ResultSet>();
             ProgressCurrent = 0;
             BackgroundResults = Brushes.DarkGray;
         }
