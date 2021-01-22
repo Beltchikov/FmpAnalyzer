@@ -141,7 +141,7 @@
                         <ScrollViewer VerticalScrollBarVisibility="Auto" 
                                       Grid.Row="6"
                                        Grid.Column="1">
-                            <DataGrid x:Name="gridResults"
+                            <DataGrid x:Name="gridCompounder"
                                 ItemsSource="{Binding ResultSetList, Mode=OneWay}"
                                 AutoGenerateColumns="False"
                                       RowHeight="30"
@@ -179,7 +179,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <local:Histogram ItemsSource="{Binding Path=RoeHistory}"
-                                                         Height="{Binding ElementName=gridResults, Path=RowHeight}">
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
                                                     </local:Histogram>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -199,7 +199,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <local:Histogram ItemsSource="{Binding Path=ReinvestmentHistory}"
-                                                         Height="{Binding ElementName=gridResults, Path=RowHeight}">
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
                                                     </local:Histogram>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -210,7 +210,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <local:Histogram ItemsSource="{Binding Path=IncrementalRoe}"
-                                                         Height="{Binding ElementName=gridResults, Path=RowHeight}">
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
                                                     </local:Histogram>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -221,7 +221,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <local:Histogram ItemsSource="{Binding Path=RevenueHistory}"
-                                                         Height="{Binding ElementName=gridResults, Path=RowHeight}">
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
                                                     </local:Histogram>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -232,7 +232,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <local:Histogram ItemsSource="{Binding Path=OperatingIncome}"
-                                                         Height="{Binding ElementName=gridResults, Path=RowHeight}">
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
                                                     </local:Histogram>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -243,7 +243,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <local:Histogram ItemsSource="{Binding Path=Eps}"
-                                                         Height="{Binding ElementName=gridResults, Path=RowHeight}">
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
                                                     </local:Histogram>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -254,7 +254,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <local:Histogram ItemsSource="{Binding Path=CashConversionHistory}"
-                                                         Height="{Binding ElementName=gridResults, Path=RowHeight}">
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
                                                     </local:Histogram>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -265,7 +265,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <local:Histogram ItemsSource="{Binding Path=DebtEquityIncome}"
-                                                         Height="{Binding ElementName=gridResults, Path=RowHeight}">
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
                                                     </local:Histogram>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -330,6 +330,138 @@
                            Content="Symbol"></Label>
                     <TextBox x:Name="txtSymbol" Margin="0,2,0,5" Grid.Row="1" Grid.Column="2"
                              Text="{Binding Symbol}"></TextBox>
+                    <DataGrid x:Name="gridSymbol" Grid.Column="3" Grid.Row="3"
+                                ItemsSource="{Binding SymbolResultSetList, Mode=OneWay}"
+                                AutoGenerateColumns="False"
+                                      RowHeight="30"
+                                      Background="{Binding BackgroundResults}">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Symbol" SortMemberPath="Symbol">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Symbol}"></Label>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Company"  SortMemberPath="Name">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Name}"></Label>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="ROE" SortMemberPath="Roe">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path= Roe}"></Label>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="ROE History">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <local:Histogram ItemsSource="{Binding Path=RoeHistory}"
+                                                         Height="{Binding ElementName=gridSymbol, Path=RowHeight}">
+                                            </local:Histogram>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Reinvestment&#x0a;Rate" SortMemberPath="ReinvestmentRate">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding  Path=ReinvestmentRate}"></Label>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Reinvestment&#x0a;History">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <local:Histogram ItemsSource="{Binding Path=ReinvestmentHistory}"
+                                                         Height="{Binding ElementName=gridSymbol, Path=RowHeight}">
+                                            </local:Histogram>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Incremental&#x0a;ROE">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <local:Histogram ItemsSource="{Binding Path=IncrementalRoe}"
+                                                         Height="{Binding ElementName=gridSymbol, Path=RowHeight}">
+                                            </local:Histogram>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Revenue">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <local:Histogram ItemsSource="{Binding Path=RevenueHistory}"
+                                                         Height="{Binding ElementName=gridSymbol, Path=RowHeight}">
+                                            </local:Histogram>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Operating&#x0a;Income">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <local:Histogram ItemsSource="{Binding Path=OperatingIncome}"
+                                                         Height="{Binding ElementName=gridSymbol, Path=RowHeight}">
+                                            </local:Histogram>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="EPS">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <local:Histogram ItemsSource="{Binding Path=Eps}"
+                                                         Height="{Binding ElementName=gridSymbol, Path=RowHeight}">
+                                            </local:Histogram>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Cash Conversion&#x0a;History">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <local:Histogram ItemsSource="{Binding Path=CashConversionHistory}"
+                                                         Height="{Binding ElementName=gridSymbol, Path=RowHeight}">
+                                            </local:Histogram>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Debt, Equity&#x0a;Income">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <local:Histogram ItemsSource="{Binding Path=DebtEquityIncome}"
+                                                         Height="{Binding ElementName=gridSymbol, Path=RowHeight}">
+                                            </local:Histogram>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="..."></TabItem>

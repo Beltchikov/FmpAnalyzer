@@ -47,6 +47,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty RoeGrowthKoefListProperty;
         public static readonly DependencyProperty RoeGrowthKoefSelectedProperty;
         public static readonly DependencyProperty SymbolProperty;
+        public static readonly DependencyProperty SymbolResultSetListProperty;
 
         static MainWindowViewModel()
         {
@@ -73,6 +74,7 @@ namespace FmpAnalyzer
             RoeGrowthKoefListProperty = DependencyProperty.Register("RoeGrowthKoefList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
             RoeGrowthKoefSelectedProperty = DependencyProperty.Register("RoeGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             SymbolProperty = DependencyProperty.Register("Symbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
+            SymbolResultSetListProperty = DependencyProperty.Register("SymbolResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
 
         }
 
@@ -151,6 +153,15 @@ namespace FmpAnalyzer
         {
             get { return (List<ResultSet>)GetValue(ResultSetListProperty); }
             set { SetValue(ResultSetListProperty, value); }
+        }
+
+        /// <summary>
+        /// SymbolResultSetList
+        /// </summary>
+        public List<ResultSet> SymbolResultSetList
+        {
+            get { return (List<ResultSet>)GetValue(SymbolResultSetListProperty); }
+            set { SetValue(SymbolResultSetListProperty, value); }
         }
 
         /// <summary>
