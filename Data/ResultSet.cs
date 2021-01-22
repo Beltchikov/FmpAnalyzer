@@ -23,6 +23,8 @@ namespace FmpAnalyzer.Data
         public string Symbol { get; set; }
         public string Name { get; set; }
         public double Roe { get; set; }
+        public double Equity { get; set; }
+        public double Debt { get; set; }
         public List<double> RoeHistory { get; set; }
         public List<double> RevenueHistory { get; set; }
         public double ReinvestmentRate { get; set; }

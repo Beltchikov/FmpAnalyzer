@@ -100,10 +100,11 @@ namespace FmpAnalyzer.Queries
                    join cash in DataContext.CashFlowStatements
                    on new { a = income.Symbol, b = income.Date } equals new { a = cash.Symbol, b = cash.Date }
                    where dates.Contains(income.Date)
-                   select new
+                   select new ResultSet
                    {
                        Symbol = income.Symbol,
                        Equity = balance.TotalStockholdersEquity,
+                       Debt = balance.TotalLiabilities,
                        Roe = balance.TotalStockholdersEquity == 0
                           ? 0
                           : Math.Round(income.NetIncome * 100 / balance.TotalStockholdersEquity, 0),
@@ -113,14 +114,23 @@ namespace FmpAnalyzer.Queries
                    } into selectionFirst
                    where selectionFirst.Roe >= parameters.Roe
                    && selectionFirst.ReinvestmentRate >= parameters.ReinvestmentRate
-                   select new
+                   select new ResultSet
                    {
                        Symbol = selectionFirst.Symbol,
+                       Equity = selectionFirst.Equity,
+                       Debt = selectionFirst.Debt,
                        Roe = selectionFirst.Roe,
                        ReinvestmentRate = selectionFirst.ReinvestmentRate
                    } into selectionSecond
                    orderby selectionSecond.Roe descending
-                   select new ResultSet { Symbol = selectionSecond.Symbol, Roe = selectionSecond.Roe, ReinvestmentRate = selectionSecond.ReinvestmentRate };
+                   select new ResultSet 
+                   { 
+                       Symbol = selectionSecond.Symbol,
+                       Equity = selectionSecond.Equity,
+                       Debt = selectionSecond.Debt,
+                       Roe = selectionSecond.Roe, 
+                       ReinvestmentRate = selectionSecond.ReinvestmentRate 
+                   };
         }
 
 
