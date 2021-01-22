@@ -25,6 +25,7 @@ namespace FmpAnalyzer.Data
         public double Roe { get; set; }
         public double Equity { get; set; }
         public double Debt { get; set; }
+        public double NetIncome { get; set; }
         public List<double> RoeHistory { get; set; }
         public List<double> RevenueHistory { get; set; }
         public double ReinvestmentRate { get; set; }

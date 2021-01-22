@@ -30,7 +30,7 @@ namespace FmpAnalyzer.Queries
             {
                 var p = parameters;
                 resultSetList = MainQuery<T>(parameters);
-                
+
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
@@ -38,6 +38,7 @@ namespace FmpAnalyzer.Queries
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.EpsHistoryQuery, a => a.Eps);
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
                 resultSetList = AddCompanyName(resultSetList);
+                resultSetList = AddDebtEquityIncome(resultSetList);
             }
             catch (Exception exception)
             {
@@ -68,7 +69,7 @@ namespace FmpAnalyzer.Queries
         private ResultSetList MainQuery<TKey>(CompounderQueryParams<TKey> parameters)
         {
             ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.Roe}");
-            
+
             var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
             queryAsEnumerable = AdjustToRoeGrowthKoef(queryAsEnumerable, parameters);
@@ -76,10 +77,10 @@ namespace FmpAnalyzer.Queries
             var p = parameters;
             List<ResultSet> roeFiltered = p.Descending
                 ? queryAsEnumerable.OrderByDescending(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList()
-                : queryAsEnumerable.OrderBy(p.OrderFunction).Skip(p.CurrentPage* p.PageSize).Take(p.PageSize).ToList();
-            ResultSetList resultSetList  = new ResultSetList(roeFiltered);
+                : queryAsEnumerable.OrderBy(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList();
+            ResultSetList resultSetList = new ResultSetList(roeFiltered);
             resultSetList.CountTotal = queryAsEnumerable.Count();
-            
+
             ReportProgress(100, 20, $"OK! {resultSetList.CountTotal} companies found.");
 
             return resultSetList;
@@ -105,6 +106,7 @@ namespace FmpAnalyzer.Queries
                        Symbol = income.Symbol,
                        Equity = balance.TotalStockholdersEquity,
                        Debt = balance.TotalLiabilities,
+                       NetIncome = income.NetIncome,
                        Roe = balance.TotalStockholdersEquity == 0
                           ? 0
                           : Math.Round(income.NetIncome * 100 / balance.TotalStockholdersEquity, 0),
@@ -119,17 +121,19 @@ namespace FmpAnalyzer.Queries
                        Symbol = selectionFirst.Symbol,
                        Equity = selectionFirst.Equity,
                        Debt = selectionFirst.Debt,
+                       NetIncome = selectionFirst.NetIncome,
                        Roe = selectionFirst.Roe,
                        ReinvestmentRate = selectionFirst.ReinvestmentRate
                    } into selectionSecond
                    orderby selectionSecond.Roe descending
-                   select new ResultSet 
-                   { 
+                   select new ResultSet
+                   {
                        Symbol = selectionSecond.Symbol,
                        Equity = selectionSecond.Equity,
                        Debt = selectionSecond.Debt,
-                       Roe = selectionSecond.Roe, 
-                       ReinvestmentRate = selectionSecond.ReinvestmentRate 
+                       NetIncome = selectionSecond.NetIncome,
+                       Roe = selectionSecond.Roe,
+                       ReinvestmentRate = selectionSecond.ReinvestmentRate
                    };
         }
 
@@ -214,16 +218,16 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         private List<ResultSet> AdjustToRoeGrowthKoef<TKey>(List<ResultSet> inputResultSetList, CompounderQueryParams<TKey> parameters)
         {
-            if(parameters.RoeGrowthKoef == 0)
+            if (parameters.RoeGrowthKoef == 0)
             {
                 return inputResultSetList;
             }
-            
+
             List<ResultSet> resultSetList = new List<ResultSet>();
 
-            foreach(ResultSet resultSet in inputResultSetList)
+            foreach (ResultSet resultSet in inputResultSetList)
             {
-                if(resultSet.RoeHistory.Grows() >= parameters.RoeGrowthKoef)
+                if (resultSet.RoeHistory.Grows() >= parameters.RoeGrowthKoef)
                 {
                     resultSetList.Add(resultSet);
                 }
@@ -243,6 +247,23 @@ namespace FmpAnalyzer.Queries
             ResultSetList resultSetList = QueryFactory.CompanyNameQuery.Run(inputResultSetList);
             ReportProgress(100, 80, $"Search for the companies names ended ...");
             return resultSetList;
+        }
+
+        /// <summary>
+        /// AddDebtEquityIncome
+        /// </summary>
+        /// <param name="inputResultSetList"></param>
+        /// <returns></returns>
+        private ResultSetList AddDebtEquityIncome(ResultSetList inputResultSetList)
+        {
+            for (int i = 0; i < inputResultSetList.ResultSets.Count(); i++)
+            {
+                ResultSet resultSet = inputResultSetList.ResultSets[i];
+                resultSet.DebtEquityIncome.Add(resultSet.Debt);
+                resultSet.DebtEquityIncome.Add(resultSet.Equity);
+                resultSet.DebtEquityIncome.Add(resultSet.NetIncome);
+            }
+            return inputResultSetList;
         }
     }
 }
