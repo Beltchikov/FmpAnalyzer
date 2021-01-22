@@ -46,6 +46,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty PageSizeSelectedProperty;
         public static readonly DependencyProperty RoeGrowthKoefListProperty;
         public static readonly DependencyProperty RoeGrowthKoefSelectedProperty;
+        public static readonly DependencyProperty SymbolProperty;
 
         static MainWindowViewModel()
         {
@@ -71,6 +72,8 @@ namespace FmpAnalyzer
             PageSizeSelectedProperty = DependencyProperty.Register("PageSizeSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             RoeGrowthKoefListProperty = DependencyProperty.Register("RoeGrowthKoefList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
             RoeGrowthKoefSelectedProperty = DependencyProperty.Register("RoeGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            SymbolProperty = DependencyProperty.Register("Symbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
+
         }
 
         public MainWindowViewModel()
@@ -327,6 +330,15 @@ namespace FmpAnalyzer
             set { SetValue(RoeGrowthKoefSelectedProperty, value); }
         }
 
+        /// <summary>
+        /// Symbol
+        /// </summary>
+        public string Symbol
+        {
+            get { return (string)GetValue(SymbolProperty); }
+            set { SetValue(SymbolProperty, value); }
+        }
+
         #endregion
 
         #region Commands
@@ -514,7 +526,7 @@ namespace FmpAnalyzer
             PageSizeSelected = PageSizeList[1];
 
             // RoeGrowthKoefList
-            RoeGrowthKoefList = new List<int> { 0, 2,3, 4 };
+            RoeGrowthKoefList = new List<int> { 0, 2, 3, 4 };
             RoeGrowthKoefSelected = RoeGrowthKoefList[0];
         }
 
