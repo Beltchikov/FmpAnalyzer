@@ -30,7 +30,7 @@ namespace FmpAnalyzer.Queries
             {
                 var p = parameters;
                 resultSetList = MainQuery<T>(parameters);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
+                
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
@@ -70,6 +70,9 @@ namespace FmpAnalyzer.Queries
             ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.Roe}");
             
             var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
+            queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
+            queryAsEnumerable = AdjustToRoeGrowthKoef(queryAsEnumerable, parameters);
+
             var p = parameters;
             List<ResultSet> roeFiltered = p.Descending
                 ? queryAsEnumerable.OrderByDescending(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList()
@@ -155,6 +158,68 @@ namespace FmpAnalyzer.Queries
             }
 
             return inputResultSetList;
+        }
+
+        /// <summary>
+        /// AddHistoryData
+        /// </summary>
+        /// <param name="inputResultSetList"></param>
+        /// <param name="parameters"></param>
+        /// <param name="query"></param>
+        /// <param name="funcAttributeToSet"></param>
+        /// <returns></returns>
+        private List<ResultSet> AddHistoryData(List<ResultSet> inputResultSetList, HistoryQueryParams parameters,
+            HistoryQuery query, Func<ResultSet, List<double>> funcAttributeToSet)
+        {
+            for (int i = 0; i < inputResultSetList.Count(); i++)
+            {
+                foreach (string dateParam in parameters.Dates)
+                {
+                    string date = parameters.YearFrom.ToString() + dateParam[4..];
+
+                    var queryResults = query.Run(inputResultSetList[i].Symbol, date, parameters.HistoryDepth);
+                    if (!queryResults.Any())
+                    {
+                        continue;
+                    }
+
+                    queryResults.Reverse();
+                    for (int ii = 0; ii < queryResults.Count(); ii++)
+                    {
+                        inputResultSetList.Select(funcAttributeToSet).ToList()[i].Add(queryResults[ii]);
+                    }
+                    break;
+                }
+            }
+
+            return inputResultSetList;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="inputResultSetList"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        private List<ResultSet> AdjustToRoeGrowthKoef<TKey>(List<ResultSet> inputResultSetList, CompounderQueryParams<TKey> parameters)
+        {
+            if(parameters.RoeGrowthKoef == 0)
+            {
+                return inputResultSetList;
+            }
+            
+            List<ResultSet> resultSetList = new List<ResultSet>();
+
+            foreach(ResultSet resultSet in inputResultSetList)
+            {
+                if(resultSet.RoeHistory.Grows() >= parameters.RoeGrowthKoef)
+                {
+                    resultSetList.Add(resultSet);
+                }
+            }
+
+            return resultSetList;
         }
 
         /// <summary>
