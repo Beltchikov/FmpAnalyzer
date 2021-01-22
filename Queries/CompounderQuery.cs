@@ -71,36 +71,37 @@ namespace FmpAnalyzer.Queries
         {
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
 
-            List<ResultSet> resultSetList = 
+            List<ResultSet> resultSetList =
                    (from income in DataContext.IncomeStatements
-                   join balance in DataContext.BalanceSheets
-                   on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
-                   join cash in DataContext.CashFlowStatements
-                   on new { a = income.Symbol, b = income.Date } equals new { a = cash.Symbol, b = cash.Date }
-                   where dates.Contains(income.Date) 
-                   && income.Symbol == symbol
-                   select new ResultSet
-                   {
-                       Symbol = income.Symbol,
-                       Equity = balance.TotalStockholdersEquity,
-                       Debt = balance.TotalLiabilities,
-                       NetIncome = income.NetIncome,
-                       Roe = balance.TotalStockholdersEquity == 0
-                          ? 0
-                          : Math.Round(income.NetIncome * 100 / balance.TotalStockholdersEquity, 0),
-                       ReinvestmentRate = income.NetIncome == 0
-                          ? 0
-                          : Math.Round(cash.CapitalExpenditure * -100 / income.NetIncome, 0)
-                   } ).ToList();
+                    join balance in DataContext.BalanceSheets
+                    on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
+                    join cash in DataContext.CashFlowStatements
+                    on new { a = income.Symbol, b = income.Date } equals new { a = cash.Symbol, b = cash.Date }
+                    where dates.Contains(income.Date)
+                    && income.Symbol == symbol
+                    select new ResultSet
+                    {
+                        Symbol = income.Symbol,
+                        Equity = balance.TotalStockholdersEquity,
+                        Debt = balance.TotalLiabilities,
+                        NetIncome = income.NetIncome,
+                        Roe = balance.TotalStockholdersEquity == 0
+                           ? 0
+                           : Math.Round(income.NetIncome * 100 / balance.TotalStockholdersEquity, 0),
+                        ReinvestmentRate = income.NetIncome == 0
+                           ? 0
+                           : Math.Round(cash.CapitalExpenditure * -100 / income.NetIncome, 0)
+                    }).ToList();
 
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.EpsHistoryQuery, a => a.Eps);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
-                //resultSetList = AddCompanyName(resultSetList);
-                //resultSetList = AddDebtEquityIncome(resultSetList);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.EpsHistoryQuery, a => a.Eps);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
+            resultSetList = AddCompanyName(resultSetList);
+            resultSetList = AddDebtEquityIncome(resultSetList);
 
             return resultSetList;
         }
@@ -295,6 +296,19 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
+        /// AddCompanyName
+        /// </summary>
+        /// <param name="inputResultSetList"></param>
+        /// <returns></returns>
+        private List<ResultSet> AddCompanyName(List<ResultSet> inputResultSetList)
+        {
+            ReportProgress(100, 70, $"Searching for the companies names ...");
+            List<ResultSet> resultSetList = QueryFactory.CompanyNameQuery.Run(inputResultSetList);
+            ReportProgress(100, 80, $"Search for the companies names ended ...");
+            return resultSetList;
+        }
+
+        /// <summary>
         /// AddDebtEquityIncome
         /// </summary>
         /// <param name="inputResultSetList"></param>
@@ -304,6 +318,23 @@ namespace FmpAnalyzer.Queries
             for (int i = 0; i < inputResultSetList.ResultSets.Count(); i++)
             {
                 ResultSet resultSet = inputResultSetList.ResultSets[i];
+                resultSet.DebtEquityIncome.Add(resultSet.Debt);
+                resultSet.DebtEquityIncome.Add(resultSet.Equity);
+                resultSet.DebtEquityIncome.Add(resultSet.NetIncome);
+            }
+            return inputResultSetList;
+        }
+
+        /// <summary>
+        /// AddDebtEquityIncome
+        /// </summary>
+        /// <param name="inputResultSetList"></param>
+        /// <returns></returns>
+        private List<ResultSet> AddDebtEquityIncome(List<ResultSet> inputResultSetList)
+        {
+            for (int i = 0; i < inputResultSetList.Count(); i++)
+            {
+                ResultSet resultSet = inputResultSetList[i];
                 resultSet.DebtEquityIncome.Add(resultSet.Debt);
                 resultSet.DebtEquityIncome.Add(resultSet.Equity);
                 resultSet.DebtEquityIncome.Add(resultSet.NetIncome);
