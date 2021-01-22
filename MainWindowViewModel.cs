@@ -470,8 +470,19 @@ namespace FmpAnalyzer
                     Text = "ROE Asc",
                     Descending = false,
                     Function = (r) => r.Roe
+                },
+                new SortBy
+                {
+                    Text = "RR Asc",
+                    Descending = false,
+                    Function = (r) => r.ReinvestmentRate
+                },
+                new SortBy
+                {
+                    Text = "RR Desc",
+                    Descending = true,
+                    Function = (r) => r.ReinvestmentRate
                 }
-
             };
 
             SortBySelected = SortByList[0];
