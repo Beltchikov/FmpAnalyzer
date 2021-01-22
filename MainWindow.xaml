@@ -44,6 +44,7 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -92,6 +93,12 @@
                         <ComboBox x:Name="cmbPageSize" Grid.Row="5" Grid.Column="2"  Grid.ColumnSpan="3" 
                                   ItemsSource="{Binding PageSizeList}" 
                                   SelectedItem="{Binding PageSizeSelected}"></ComboBox>
+                        <Label Grid.Column="0" Grid.Row="6"
+                               Grid.ColumnSpan="3"
+                           Content="ROE Growth:"></Label>
+                        <ComboBox x:Name="cmbRoeGrowthKoef" Grid.Row="6" Grid.Column="2"  Grid.ColumnSpan="3" 
+                                  ItemsSource="{Binding RoeGrowthKoefList}" 
+                                  SelectedItem="{Binding RoeGrowthKoefSelected}"></ComboBox>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="2"

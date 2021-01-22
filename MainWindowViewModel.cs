@@ -44,6 +44,8 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty SortBySelectedProperty;
         public static readonly DependencyProperty PageSizeListProperty;
         public static readonly DependencyProperty PageSizeSelectedProperty;
+        public static readonly DependencyProperty RoeGrowthKoefListProperty;
+        public static readonly DependencyProperty RoeGrowthKoefSelectedProperty;
 
         static MainWindowViewModel()
         {
@@ -67,6 +69,8 @@ namespace FmpAnalyzer
             SortBySelectedProperty = DependencyProperty.Register("SortBySelected", typeof(SortBy), typeof(MainWindowViewModel), new PropertyMetadata(default(SortBy)));
             PageSizeListProperty = DependencyProperty.Register("PageSizeList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
             PageSizeSelectedProperty = DependencyProperty.Register("PageSizeSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            RoeGrowthKoefListProperty = DependencyProperty.Register("RoeGrowthKoefList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
+            RoeGrowthKoefSelectedProperty = DependencyProperty.Register("RoeGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
         }
 
         public MainWindowViewModel()
@@ -305,6 +309,24 @@ namespace FmpAnalyzer
             }
         }
 
+        /// <summary>
+        /// RoeGrowthKoefList
+        /// </summary>
+        public List<int> RoeGrowthKoefList
+        {
+            get { return (List<int>)GetValue(RoeGrowthKoefListProperty); }
+            set { SetValue(RoeGrowthKoefListProperty, value); }
+        }
+
+        /// <summary>
+        /// RoeGrowthKoefSelected
+        /// </summary>
+        public int RoeGrowthKoefSelected
+        {
+            get { return (int)GetValue(RoeGrowthKoefSelectedProperty); }
+            set { SetValue(RoeGrowthKoefSelectedProperty, value); }
+        }
+
         #endregion
 
         #region Commands
@@ -490,6 +512,10 @@ namespace FmpAnalyzer
             // PageSizeList
             PageSizeList = new List<int> { 10, 20 };
             PageSizeSelected = PageSizeList[1];
+
+            // RoeGrowthKoefList
+            RoeGrowthKoefList = new List<int> { 0, 2,3, 4 };
+            RoeGrowthKoefSelected = RoeGrowthKoefList[0];
         }
 
         /// <summary>
