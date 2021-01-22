@@ -347,7 +347,7 @@ namespace FmpAnalyzer
                 Roe = Roe,
                 ReinvestmentRate = ReinvestmentRate,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
-                Symbol = SelectedSymbol,
+                RoeGrowthKoef = RoeGrowthKoefSelected,
                 OrderFunction = SortBySelected.Function,
                 Descending = SortBySelected.Descending,
                 PageSize = PageSizeSelected,
@@ -386,7 +386,7 @@ namespace FmpAnalyzer
                 Roe = Roe,
                 ReinvestmentRate = ReinvestmentRate,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
-                Symbol = SelectedSymbol
+                RoeGrowthKoef = RoeGrowthKoefSelected
             };
 
             BackgroundWork((s, e) =>

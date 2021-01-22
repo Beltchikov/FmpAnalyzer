@@ -97,7 +97,6 @@ namespace FmpAnalyzer.Queries
                    join cash in DataContext.CashFlowStatements
                    on new { a = income.Symbol, b = income.Date } equals new { a = cash.Symbol, b = cash.Date }
                    where dates.Contains(income.Date)
-                   && String.IsNullOrWhiteSpace(parameters.Symbol) ? 1 == 1 : income.Symbol == parameters.Symbol
                    select new
                    {
                        Symbol = income.Symbol,

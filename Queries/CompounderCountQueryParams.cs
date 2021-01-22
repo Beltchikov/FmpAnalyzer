@@ -10,6 +10,6 @@ namespace FmpAnalyzer.Queries
         public int YearTo { get; internal set; }
         public double Roe { get; set; }
         public double ReinvestmentRate { get; set; }
-        public string Symbol { get; internal set; }
+        public int RoeGrowthKoef { get; internal set; }
     }
 }
