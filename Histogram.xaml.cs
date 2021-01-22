@@ -111,7 +111,7 @@ namespace FmpAnalyzer
             {
                 return Math.Abs(currentHistoryValue);
             }
-            var koef = 0.8 * height / range;
+            var koef = height / range;
 
             return Math.Abs(currentHistoryValue * koef);
         }
