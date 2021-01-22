@@ -17,6 +17,7 @@ namespace FmpAnalyzer.Data
             OperatingIncome = new List<double>();
             Eps = new List<double>();
             CashConversionHistory = new List<double>();
+            DebtEquityIncome = new List<double>();
         }
 
         public string Symbol { get; set; }
@@ -30,6 +31,7 @@ namespace FmpAnalyzer.Data
         public List<double> OperatingIncome { get; set; }
         public List<double> Eps { get; set; }
         public List<double> CashConversionHistory { get; set; }
+        public List<double> DebtEquityIncome { get; set; }
 
         
     }
