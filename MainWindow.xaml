@@ -330,6 +330,9 @@
                            Content="Symbol"></Label>
                     <TextBox x:Name="txtSymbol" Margin="0,2,0,5" Grid.Row="1" Grid.Column="2"
                              Text="{Binding Symbol}"></TextBox>
+                    <Button  Grid.Column="3" Grid.Row="1"
+                            Cursor="Hand"
+                            Command="{Binding CommandFind}">Find</Button>
                     <DataGrid x:Name="gridSymbol" Grid.Column="3" Grid.Row="3"
                                 ItemsSource="{Binding SymbolResultSetList, Mode=OneWay}"
                                 AutoGenerateColumns="False"

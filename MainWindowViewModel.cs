@@ -23,6 +23,7 @@ namespace FmpAnalyzer
         public RelayCommand CommandPrevious { get; set; }
         public RelayCommand CommandNext { get; set; }
         public RelayCommand CommandLast { get; set; }
+        public RelayCommand CommandFind { get; set; }
 
         public static readonly DependencyProperty ConnectionStringProperty;
         public static readonly DependencyProperty RoeProperty;
@@ -95,6 +96,7 @@ namespace FmpAnalyzer
             CommandPrevious = new RelayCommand(p => { OnCommandPrevious(p); });
             CommandNext = new RelayCommand(p => { OnCommandCommandNext(p); });
             CommandLast = new RelayCommand(p => { OnCommandLast(p); });
+            CommandFind = new RelayCommand(p => { OnCommandFind(p); });
 
             QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
         }
@@ -464,6 +466,15 @@ namespace FmpAnalyzer
         {
             CurrentPage = 0;
             OnCommandGo(p);
+        }
+
+        /// <summary>
+        /// OnCommandFind
+        /// </summary>
+        /// <param name="p"></param>
+        private void OnCommandFind(object p)
+        {
+            // TODO
         }
 
         #endregion
