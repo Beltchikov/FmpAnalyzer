@@ -474,7 +474,15 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandFind(object p)
         {
-            // TODO
+            var compounderQueryParams = new CompounderQueryParams<object>
+            {
+                YearFrom = YearFrom,
+                YearTo = YearTo,
+                Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
+                HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
+            };
+
+            SymbolResultSetList = QueryFactory.CompounderQuery.Run(compounderQueryParams, Symbol);
         }
 
         #endregion

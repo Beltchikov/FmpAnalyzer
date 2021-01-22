@@ -61,6 +61,51 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
+        /// Run
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parameters"></param>
+        /// <param name="symbol"></param>
+        /// <returns></returns>
+        public List<ResultSet> Run<T>(CompounderQueryParams<T> parameters, string symbol)
+        {
+            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
+
+            List<ResultSet> resultSetList = 
+                   (from income in DataContext.IncomeStatements
+                   join balance in DataContext.BalanceSheets
+                   on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
+                   join cash in DataContext.CashFlowStatements
+                   on new { a = income.Symbol, b = income.Date } equals new { a = cash.Symbol, b = cash.Date }
+                   where dates.Contains(income.Date) 
+                   && income.Symbol == symbol
+                   select new ResultSet
+                   {
+                       Symbol = income.Symbol,
+                       Equity = balance.TotalStockholdersEquity,
+                       Debt = balance.TotalLiabilities,
+                       NetIncome = income.NetIncome,
+                       Roe = balance.TotalStockholdersEquity == 0
+                          ? 0
+                          : Math.Round(income.NetIncome * 100 / balance.TotalStockholdersEquity, 0),
+                       ReinvestmentRate = income.NetIncome == 0
+                          ? 0
+                          : Math.Round(cash.CapitalExpenditure * -100 / income.NetIncome, 0)
+                   } ).ToList();
+
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.EpsHistoryQuery, a => a.Eps);
+                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
+                //resultSetList = AddCompanyName(resultSetList);
+                //resultSetList = AddDebtEquityIncome(resultSetList);
+
+            return resultSetList;
+        }
+
+        /// <summary>
         /// MainQuery
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
