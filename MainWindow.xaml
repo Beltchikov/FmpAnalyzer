@@ -9,7 +9,7 @@
         Title="FMP Analyzer" Height="800" Width="1400">
     <Window.Resources>
         <local:MainWindowViewModel x:Key="ViewModel" />
-        <converters:RoeConverter x:Key="RoeConverter"/>
+        <converters:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
         <local:Histogram x:Key="Histogram"></local:Histogram>
     </Window.Resources>
     <Window.DataContext>
@@ -70,12 +70,12 @@
                         <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
                            Content="ROE from"></Label>
                         <TextBox x:Name="txtRoeFrom" Margin="0,2,0,5" Grid.Row="1"
-                             Text="{Binding RoeFrom, Converter={StaticResource RoeConverter}}"
+                             Text="{Binding RoeFrom, Converter={StaticResource DoubleToStringConverter}}"
                                  Grid.Column="2"></TextBox>
                         <Label Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="1"
                            Content="to:" HorizontalContentAlignment="Center"></Label>
                         <TextBox x:Name="txtRoeTo" Margin="0,2,0,5" Grid.Row="1"
-                             Text="{Binding RoeTo, Converter={StaticResource RoeConverter}}"
+                             Text="{Binding RoeTo, Converter={StaticResource DoubleToStringConverter}}"
                                  Grid.Column="4"></TextBox>
                         <Label Grid.Column="0" Grid.Row="2"
                                Grid.ColumnSpan="2"
@@ -89,7 +89,7 @@
                                VerticalAlignment="Bottom"></Label>
                         <TextBox x:Name="txtReinvestmentRateTo" Grid.Row="2" 
                                  Margin="0,2,0,5"
-                             Text="{Binding ReinvestmentRateTo}"
+                             Text="{Binding ReinvestmentRateTo, Converter={StaticResource DoubleToStringConverter}}"
                                  Grid.Column="4"></TextBox>
                         <Label Grid.Column="0" Grid.Row="4"
                                Grid.ColumnSpan="3"

@@ -8,10 +8,20 @@ using System.Windows.Data;
 namespace FmpAnalyzer.Converters
 {
     [ValueConversion(typeof(double), typeof(string))]
-    public class RoeConverter : IValueConverter
+    public class DoubleToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if(!(value is double))
+            {
+                return string.Empty;
+            }
+            
+            if((double)value == default(double))
+            {
+                return string.Empty;
+            }
+            
             return value.ToString();
         }
 
