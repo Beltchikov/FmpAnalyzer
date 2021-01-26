@@ -26,12 +26,12 @@ namespace FmpAnalyzer
         public RelayCommand CommandFind { get; set; }
 
         public static readonly DependencyProperty ConnectionStringProperty;
-        public static readonly DependencyProperty RoeProperty;
+        public static readonly DependencyProperty RoeFromProperty;
         public static readonly DependencyProperty CurrentActionProperty;
         public static readonly DependencyProperty ProgressCurrentProperty;
         public static readonly DependencyProperty BackgroundResultsProperty;
         public static readonly DependencyProperty ResultSetListProperty;
-        public static readonly DependencyProperty ReinvestmentRateProperty;
+        public static readonly DependencyProperty ReinvestmentRateFromProperty;
         public static readonly DependencyProperty SelectedSymbolProperty;
         public static readonly DependencyProperty YearFromProperty;
         public static readonly DependencyProperty YearToProperty;
@@ -53,12 +53,12 @@ namespace FmpAnalyzer
         static MainWindowViewModel()
         {
             ConnectionStringProperty = DependencyProperty.Register("ConnectionString", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            RoeProperty = DependencyProperty.Register("Roe", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(Double)));
+            RoeFromProperty = DependencyProperty.Register("RoeFrom", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(Double)));
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             BackgroundResultsProperty = DependencyProperty.Register("BackgroundResults", typeof(Brush), typeof(MainWindowViewModel), new PropertyMetadata(default(Brush)));
             ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
-            ReinvestmentRateProperty = DependencyProperty.Register("ReinvestmentRate", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
+            ReinvestmentRateFromProperty = DependencyProperty.Register("ReinvestmentRateFrom", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             SelectedSymbolProperty = DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             YearFromProperty = DependencyProperty.Register("YearFrom", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0, YearFromChanged));
             YearToProperty = DependencyProperty.Register("YearTo", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0, YearToChanged));
@@ -82,9 +82,9 @@ namespace FmpAnalyzer
         public MainWindowViewModel()
         {
             ConnectionString = Configuration.Instance["ConnectionString"];
-            Roe = 15;
+            RoeFrom = 15;
             CurrentAction = "Willkommen!";
-            ReinvestmentRate = 50;
+            ReinvestmentRateFrom = 50;
             YearFrom = 2019;
             YearTo = 2020;
             GenerateCountMessage();
@@ -113,12 +113,12 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
-        /// Roe
+        /// RoeFrom
         /// </summary>
-        public double Roe
+        public double RoeFrom
         {
-            get { return (double)GetValue(RoeProperty); }
-            set { SetValue(RoeProperty, value); }
+            get { return (double)GetValue(RoeFromProperty); }
+            set { SetValue(RoeFromProperty, value); }
         }
 
         /// <summary>
@@ -172,12 +172,12 @@ namespace FmpAnalyzer
         public int CountTotal { get; private set; }
 
         /// <summary>
-        /// ReinvestmentRate
+        /// ReinvestmentRateFrom
         /// </summary>
-        public double ReinvestmentRate
+        public double ReinvestmentRateFrom
         {
-            get { return (double)GetValue(ReinvestmentRateProperty); }
-            set { SetValue(ReinvestmentRateProperty, value); }
+            get { return (double)GetValue(ReinvestmentRateFromProperty); }
+            set { SetValue(ReinvestmentRateFromProperty, value); }
         }
 
         /// <summary>
@@ -369,8 +369,8 @@ namespace FmpAnalyzer
                 YearFrom = YearFrom,
                 YearTo = YearTo,
                 Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
-                Roe = Roe,
-                ReinvestmentRate = ReinvestmentRate,
+                Roe = RoeFrom,
+                ReinvestmentRate = ReinvestmentRateFrom,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
                 RoeGrowthKoef = RoeGrowthKoefSelected,
                 OrderFunction = SortBySelected.Function,
@@ -408,8 +408,8 @@ namespace FmpAnalyzer
                 YearFrom = YearFrom,
                 YearTo = YearTo,
                 Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
-                Roe = Roe,
-                ReinvestmentRate = ReinvestmentRate,
+                Roe = RoeFrom,
+                ReinvestmentRate = ReinvestmentRateFrom,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
                 RoeGrowthKoef = RoeGrowthKoefSelected
             };
