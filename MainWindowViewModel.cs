@@ -94,9 +94,6 @@ namespace FmpAnalyzer
             GenerateCountMessage();
             InitComboboxes();
 
-            RoeTo = 1000;
-            ReinvestmentRateTo = 5000;
-
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
             CommandCount = new RelayCommand(p => { OnCommandCount(p); });
             CommandFirst = new RelayCommand(p => { OnCommandFirst(p); });
@@ -394,8 +391,8 @@ namespace FmpAnalyzer
                 YearFrom = YearFrom,
                 YearTo = YearTo,
                 Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
-                Roe = RoeFrom,
-                ReinvestmentRate = ReinvestmentRateFrom,
+                RoeFrom = RoeFrom,
+                ReinvestmentRateFrom = ReinvestmentRateFrom,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
                 RoeGrowthKoef = RoeGrowthKoefSelected,
                 OrderFunction = SortBySelected.Function,
@@ -433,8 +430,8 @@ namespace FmpAnalyzer
                 YearFrom = YearFrom,
                 YearTo = YearTo,
                 Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
-                Roe = RoeFrom,
-                ReinvestmentRate = ReinvestmentRateFrom,
+                RoeFrom = RoeFrom,
+                ReinvestmentRateFrom = ReinvestmentRateFrom,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
                 RoeGrowthKoef = RoeGrowthKoefSelected
             };

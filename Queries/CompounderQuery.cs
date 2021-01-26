@@ -114,7 +114,7 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         private ResultSetList MainQuery<TKey>(CompounderQueryParams<TKey> parameters)
         {
-            ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.Roe}");
+            ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.RoeFrom}");
 
             var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
@@ -160,8 +160,8 @@ namespace FmpAnalyzer.Queries
                           ? 0
                           : Math.Round(cash.CapitalExpenditure * -100 / income.NetIncome, 0)
                    } into selectionFirst
-                   where selectionFirst.Roe >= parameters.Roe
-                   && selectionFirst.ReinvestmentRate >= parameters.ReinvestmentRate
+                   where selectionFirst.Roe >= parameters.RoeFrom
+                   && selectionFirst.ReinvestmentRate >= parameters.ReinvestmentRateFrom
                    select new ResultSet
                    {
                        Symbol = selectionFirst.Symbol,

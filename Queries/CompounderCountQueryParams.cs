@@ -8,8 +8,8 @@ namespace FmpAnalyzer.Queries
     public class CompounderCountQueryParams : HistoryQueryParams
     {
         public int YearTo { get; internal set; }
-        public double Roe { get; set; }
-        public double ReinvestmentRate { get; set; }
+        public double RoeFrom { get; set; }
+        public double ReinvestmentRateFrom { get; set; }
         public int RoeGrowthKoef { get; internal set; }
     }
 }
