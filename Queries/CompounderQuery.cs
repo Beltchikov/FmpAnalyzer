@@ -3,10 +3,12 @@ using FmpDataContext;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Data.Common;
 
 namespace FmpAnalyzer.Queries
 {
@@ -141,49 +143,119 @@ namespace FmpAnalyzer.Queries
         {
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
 
-            return from income in DataContext.IncomeStatements
-                   join balance in DataContext.BalanceSheets
-                   on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
-                   join cash in DataContext.CashFlowStatements
-                   on new { a = income.Symbol, b = income.Date } equals new { a = cash.Symbol, b = cash.Date }
-                   where dates.Contains(income.Date)
-                   select new ResultSet
-                   {
-                       Symbol = income.Symbol,
-                       Equity = balance.TotalStockholdersEquity,
-                       Debt = balance.TotalLiabilities,
-                       NetIncome = income.NetIncome,
-                       Roe = balance.TotalStockholdersEquity == 0
-                          ? 0
-                          : Math.Round(income.NetIncome * 100 / balance.TotalStockholdersEquity, 0),
-                       ReinvestmentRate = income.NetIncome == 0
-                          ? 0
-                          : Math.Round(cash.CapitalExpenditure * -100 / income.NetIncome, 0)
-                   } into selectionFirst
-                   where selectionFirst.Roe >= parameters.RoeFrom
-                   && selectionFirst.ReinvestmentRate >= parameters.ReinvestmentRateFrom
-                   select new ResultSet
-                   {
-                       Symbol = selectionFirst.Symbol,
-                       Equity = selectionFirst.Equity,
-                       Debt = selectionFirst.Debt,
-                       NetIncome = selectionFirst.NetIncome,
-                       Roe = selectionFirst.Roe,
-                       ReinvestmentRate = selectionFirst.ReinvestmentRate
-                   } into selectionSecond
-                   orderby selectionSecond.Roe descending
-                   select new ResultSet
-                   {
-                       Symbol = selectionSecond.Symbol,
-                       Equity = selectionSecond.Equity,
-                       Debt = selectionSecond.Debt,
-                       NetIncome = selectionSecond.NetIncome,
-                       Roe = selectionSecond.Roe,
-                       ReinvestmentRate = selectionSecond.ReinvestmentRate
-                   };
+            string sql = $@"select Symbol, Equity, Debt, NetIncome, Roe, ReinvestmentRate
+                from ViewCompounder 
+                where 1 = 1
+                and Date in (@Dates)
+                and Roe >= @RoeFrom
+                and ReinvestmentRate >= @ReinvestmentRateFrom";
+
+            string datesAsParam = CreateCommaSeparatedParams("@Dates", dates.Count);
+            sql = sql.Replace("@Dates", datesAsParam);
+
+            DataTable dataTable = null;
+
+            var connection = DataContext.Database.GetDbConnection();
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = sql;
+            command.CommandType = CommandType.Text;
+
+            AddDoubleParameter(command, "@RoeFrom", DbType.Double, parameters.RoeFrom);
+            AddDoubleParameter(command, "@ReinvestmentRateFrom", DbType.Double, parameters.ReinvestmentRateFrom);
+            AddStringListParameter(command, "@Dates", DbType.String, dates);
+
+            using (var reader = command.ExecuteReader())
+            {
+                dataTable = new DataTable();
+                dataTable.Load(reader);
+
+            }
+            connection.Close();
+
+            return DataTableToResultSetList(dataTable);
         }
 
+        private string CreateCommaSeparatedParams(string paramBase, int count)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.Append(paramBase + i.ToString());
+                if (i < count - 1)
+                {
+                    sb.Append(",");
+                }
+            }
 
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// AddStringListParameter
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="name"></param>
+        /// <param name="dbType"></param>
+        /// <param name="dates"></param>
+        private void AddStringListParameter(DbCommand command, string name, DbType dbType, List<string> dates)
+        {
+            //var datesAsSql = "'" + dates.Aggregate((r, n) => r + "','" + n) + "'";
+
+
+            for (int i = 0; i < dates.Count; i++)
+            {
+                string date = dates[i];
+                var param = command.CreateParameter();
+                param.ParameterName = name + i.ToString();
+                param.DbType = dbType;
+                param.Value = date;
+                command.Parameters.Add(param);
+            }
+
+        }
+
+        /// <summary>
+        /// AddDoubleParameter
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="name"></param>
+        /// <param name="dbType"></param>
+        /// <param name="value"></param>
+        private void AddDoubleParameter(DbCommand command, string name, DbType dbType, double value)
+        {
+            var param = command.CreateParameter();
+            param.ParameterName = name;
+            param.DbType = dbType;
+            param.Value = value;
+            command.Parameters.Add(param);
+        }
+
+        /// <summary>
+        /// DataTableToResultSetList
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <returns></returns>
+        private IEnumerable<ResultSet> DataTableToResultSetList(DataTable dataTable)
+        {
+            List<ResultSet> listOfResultSets = new List<ResultSet>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                ResultSet resultSet = new ResultSet();
+
+                resultSet.Symbol = (string)row["Symbol"];
+                resultSet.Equity = row["Equity"] == DBNull.Value ? null : (double)row["Equity"];
+                resultSet.Debt = row["Debt"] == DBNull.Value ? null : (double)row["Debt"];
+                resultSet.NetIncome = row["NetIncome"] == DBNull.Value ? null : (double)row["NetIncome"];
+                resultSet.Roe = row["Roe"] == DBNull.Value ? null : Math.Round((double)row["Roe"], 0);
+                resultSet.ReinvestmentRate = row["ReinvestmentRate"] == DBNull.Value ? null : Math.Round((double)row["ReinvestmentRate"], 0);
+
+                listOfResultSets.Add(resultSet);
+            }
+
+            return listOfResultSets;
+        }
 
         /// <summary>
         /// AddHistoryData
@@ -318,9 +390,9 @@ namespace FmpAnalyzer.Queries
             for (int i = 0; i < inputResultSetList.ResultSets.Count(); i++)
             {
                 ResultSet resultSet = inputResultSetList.ResultSets[i];
-                resultSet.DebtEquityIncome.Add(resultSet.Debt);
-                resultSet.DebtEquityIncome.Add(resultSet.Equity);
-                resultSet.DebtEquityIncome.Add(resultSet.NetIncome);
+                resultSet.DebtEquityIncome.Add(resultSet.Debt.Value);
+                resultSet.DebtEquityIncome.Add(resultSet.Equity.Value);
+                resultSet.DebtEquityIncome.Add(resultSet.NetIncome.Value);
             }
             return inputResultSetList;
         }
@@ -335,9 +407,9 @@ namespace FmpAnalyzer.Queries
             for (int i = 0; i < inputResultSetList.Count(); i++)
             {
                 ResultSet resultSet = inputResultSetList[i];
-                resultSet.DebtEquityIncome.Add(resultSet.Debt);
-                resultSet.DebtEquityIncome.Add(resultSet.Equity);
-                resultSet.DebtEquityIncome.Add(resultSet.NetIncome);
+                resultSet.DebtEquityIncome.Add(resultSet.Debt.Value);
+                resultSet.DebtEquityIncome.Add(resultSet.Equity.Value);
+                resultSet.DebtEquityIncome.Add(resultSet.NetIncome.Value);
             }
             return inputResultSetList;
         }

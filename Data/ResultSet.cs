@@ -22,13 +22,13 @@ namespace FmpAnalyzer.Data
 
         public string Symbol { get; set; }
         public string Name { get; set; }
-        public double Roe { get; set; }
-        public double Equity { get; set; }
-        public double Debt { get; set; }
-        public double NetIncome { get; set; }
+        public double? Roe { get; set; }
+        public double? Equity { get; set; }
+        public double? Debt { get; set; }
+        public double? NetIncome { get; set; }
         public List<double> RoeHistory { get; set; }
         public List<double> RevenueHistory { get; set; }
-        public double ReinvestmentRate { get; set; }
+        public double? ReinvestmentRate { get; set; }
         public List<double> ReinvestmentHistory { get; set; }
         public List<double> IncrementalRoe { get; set; }
         public List<double> OperatingIncome { get; set; }
