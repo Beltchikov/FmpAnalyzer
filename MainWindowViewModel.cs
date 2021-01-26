@@ -49,6 +49,8 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty RoeGrowthKoefSelectedProperty;
         public static readonly DependencyProperty SymbolProperty;
         public static readonly DependencyProperty SymbolResultSetListProperty;
+        public static readonly DependencyProperty RoeToProperty;
+        public static readonly DependencyProperty ReinvestmentRateToProperty;
 
         static MainWindowViewModel()
         {
@@ -76,6 +78,8 @@ namespace FmpAnalyzer
             RoeGrowthKoefSelectedProperty = DependencyProperty.Register("RoeGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             SymbolProperty = DependencyProperty.Register("Symbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             SymbolResultSetListProperty = DependencyProperty.Register("SymbolResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
+            RoeToProperty = DependencyProperty.Register("RoeTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
+            ReinvestmentRateToProperty = DependencyProperty.Register("ReinvestmentRateTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
 
         }
 
@@ -89,6 +93,9 @@ namespace FmpAnalyzer
             YearTo = 2020;
             GenerateCountMessage();
             InitComboboxes();
+
+            RoeTo = 1000;
+            ReinvestmentRateTo = 5000;
 
             CommandGo = new RelayCommand(p => { OnCommandGo(p); });
             CommandCount = new RelayCommand(p => { OnCommandCount(p); });
@@ -350,6 +357,24 @@ namespace FmpAnalyzer
         {
             get { return (string)GetValue(SymbolProperty); }
             set { SetValue(SymbolProperty, value); }
+        }
+
+        /// <summary>
+        /// RoeTo
+        /// </summary>
+        public double RoeTo
+        {
+            get { return (double)GetValue(RoeToProperty); }
+            set { SetValue(RoeToProperty, value); }
+        }
+
+        /// <summary>
+        /// ReinvestmentRateTo
+        /// </summary>
+        public double ReinvestmentRateTo
+        {
+            get { return (double)GetValue(ReinvestmentRateToProperty); }
+            set { SetValue(ReinvestmentRateToProperty, value); }
         }
 
         #endregion

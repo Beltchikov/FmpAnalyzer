@@ -72,13 +72,24 @@
                         <TextBox x:Name="txtRoeFrom" Margin="0,2,0,5" Grid.Row="1"
                              Text="{Binding RoeFrom, Converter={StaticResource RoeConverter}}"
                                  Grid.Column="2"></TextBox>
+                        <Label Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2"
+                           Content="to:"></Label>
+                        <TextBox x:Name="txtRoeTo" Margin="0,2,0,5" Grid.Row="1"
+                             Text="{Binding RoeTo, Converter={StaticResource RoeConverter}}"
+                                 Grid.Column="4"></TextBox>
                         <Label Grid.Column="0" Grid.Row="2"
                                Grid.ColumnSpan="2"
-                           Content="RR from"></Label>
+                           Content="RR from" Height="30" VerticalAlignment="Bottom"></Label>
                         <TextBox x:Name="txtReinvestmentRateFrom" Grid.Row="2" 
                                  Margin="0,2,0,5"
                              Text="{Binding ReinvestmentRateFrom}"
                                  Grid.Column="2"></TextBox>
+                        <Label Grid.Column="3" Grid.Row="2"
+                           Content="to:" Height="30" VerticalAlignment="Bottom"></Label>
+                        <TextBox x:Name="txtReinvestmentRateTo" Grid.Row="2" 
+                                 Margin="0,2,0,5"
+                             Text="{Binding ReinvestmentRateTo}"
+                                 Grid.Column="4"></TextBox>
                         <Label Grid.Column="0" Grid.Row="4"
                                Grid.ColumnSpan="3"
                            Content="Sort by:"></Label>
