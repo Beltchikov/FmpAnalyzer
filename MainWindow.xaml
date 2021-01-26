@@ -82,7 +82,7 @@
                            Content="RR from" Height="30" VerticalAlignment="Bottom"></Label>
                         <TextBox x:Name="txtReinvestmentRateFrom" Grid.Row="2" 
                                  Margin="0,2,0,5"
-                             Text="{Binding ReinvestmentRateFrom}"
+                             Text="{Binding ReinvestmentRateFrom, Converter={StaticResource DoubleToStringConverter}}"
                                  Grid.Column="2"></TextBox>
                         <Label Grid.Column="3" Grid.Row="2"
                            Content="to:" Height="30" HorizontalContentAlignment="Center"
