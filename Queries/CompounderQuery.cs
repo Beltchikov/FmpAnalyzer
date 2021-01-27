@@ -173,6 +173,7 @@ namespace FmpAnalyzer.Queries
             command.CommandType = CommandType.Text;
 
             AddDoubleParameter(command, "@RoeFrom", DbType.Double, parameters.RoeFrom);
+            AddDoubleParameter(command, "@RoeTo", DbType.Double, parameters.RoeTo);
             AddDoubleParameter(command, "@ReinvestmentRateFrom", DbType.Double, parameters.ReinvestmentRateFrom);
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
             AddStringListParameter(command, "@Dates", DbType.String, dates);
@@ -197,6 +198,11 @@ namespace FmpAnalyzer.Queries
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
             string datesAsParam = CreateCommaSeparatedParams("@Dates", dates.Count);
             string sql = sqlBase.Replace("@Dates", datesAsParam);
+
+            if(parameters.RoeTo > 0)
+            {
+                sql += " and Roe <= @RoeTo ";
+            }
 
             return sql;
         }
