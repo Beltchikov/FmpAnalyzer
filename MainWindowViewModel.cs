@@ -98,11 +98,12 @@ namespace FmpAnalyzer
         public MainWindowViewModel()
         {
             ConnectionString = Configuration.Instance["ConnectionString"];
-            RoeFrom = 15;
+            RoeFrom = 30;
             CurrentAction = "Willkommen!";
             ReinvestmentRateFrom = 50;
             YearFrom = 2019;
             YearTo = 2020;
+            DebtToEquityTo = 2.0;
             GenerateCountMessage();
             InitComboboxes();
 
@@ -655,7 +656,7 @@ namespace FmpAnalyzer
 
             // RoeGrowthKoefList
             RoeGrowthKoefList = new List<int> { 0, 2, 3, 4 };
-            RoeGrowthKoefSelected = RoeGrowthKoefList[0];
+            RoeGrowthKoefSelected = RoeGrowthKoefList[1];
 
             // RevenueGrowthKoefList
             RevenueGrowthKoefList = new List<int> { 0, 2, 3, 4 };
@@ -663,7 +664,7 @@ namespace FmpAnalyzer
 
             // EpsGrowthKoefList
             EpsGrowthKoefList = new List<int> { 0, 2, 3, 4 };
-            EpsGrowthKoefSelected = EpsGrowthKoefList[0];
+            EpsGrowthKoefSelected = EpsGrowthKoefList[2];
         }
 
         /// <summary>
