@@ -440,6 +440,8 @@ namespace FmpAnalyzer
                 ReinvestmentRateTo = ReinvestmentRateTo,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
                 RoeGrowthKoef = RoeGrowthKoefSelected,
+                RevenueGrowthKoef = RevenueGrowthKoefSelected,
+                EpsGrowthKoef = EpsGrowthKoefSelected,
                 OrderFunction = SortBySelected.Function,
                 Descending = SortBySelected.Descending,
                 PageSize = PageSizeSelected,
@@ -625,6 +627,14 @@ namespace FmpAnalyzer
             // RoeGrowthKoefList
             RoeGrowthKoefList = new List<int> { 0, 2, 3, 4 };
             RoeGrowthKoefSelected = RoeGrowthKoefList[0];
+
+            // RevenueGrowthKoefList
+            RevenueGrowthKoefList = new List<int> { 0, 2, 3, 4 };
+            RevenueGrowthKoefSelected = RevenueGrowthKoefList[0];
+
+            // EpsGrowthKoefList
+            EpsGrowthKoefList = new List<int> { 0, 2, 3, 4 };
+            EpsGrowthKoefSelected = EpsGrowthKoefList[0];
         }
 
         /// <summary>

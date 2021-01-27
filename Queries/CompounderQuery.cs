@@ -120,7 +120,7 @@ namespace FmpAnalyzer.Queries
 
             var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
-            queryAsEnumerable = AdjustToRoeGrowthKoef(queryAsEnumerable, parameters);
+            queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RoeGrowthKoef, r => r.RoeHistory);
 
             var p = parameters;
             List<ResultSet> roeFiltered = p.Descending
@@ -370,16 +370,17 @@ namespace FmpAnalyzer.Queries
             return inputResultSetList;
         }
 
+
         /// <summary>
-        /// 
+        /// AdjustToRoeGrowthKoef
         /// </summary>
-        /// <typeparam name="TKey"></typeparam>
         /// <param name="inputResultSetList"></param>
-        /// <param name="parameters"></param>
+        /// <param name="growthKoef"></param>
+        /// <param name="funcResultSetParam"></param>
         /// <returns></returns>
-        private List<ResultSet> AdjustToRoeGrowthKoef<TKey>(List<ResultSet> inputResultSetList, CompounderQueryParams<TKey> parameters)
+        private List<ResultSet> AdjustToGrowthKoef(List<ResultSet> inputResultSetList, int growthKoef, Func<ResultSet, List<double>> funcResultSetParam)
         {
-            if (parameters.RoeGrowthKoef == 0)
+            if (growthKoef == 0)
             {
                 return inputResultSetList;
             }
@@ -388,7 +389,7 @@ namespace FmpAnalyzer.Queries
 
             foreach (ResultSet resultSet in inputResultSetList)
             {
-                if (resultSet.RoeHistory.Grows() >= parameters.RoeGrowthKoef)
+                if (funcResultSetParam(resultSet).Grows() >= growthKoef)
                 {
                     resultSetList.Add(resultSet);
                 }
