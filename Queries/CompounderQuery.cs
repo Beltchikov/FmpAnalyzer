@@ -141,30 +141,13 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         private IEnumerable<ResultSet> QueryAsEnumerable(CompounderCountQueryParams parameters)
         {
-            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
-
-            string sql = $@"select Symbol, Equity, Debt, NetIncome, Roe, ReinvestmentRate
-                from ViewCompounder 
-                where 1 = 1
-                and Date in (@Dates)
-                and Roe >= @RoeFrom
-                and ReinvestmentRate >= @ReinvestmentRateFrom";
-
-            string datesAsParam = CreateCommaSeparatedParams("@Dates", dates.Count);
-            sql = sql.Replace("@Dates", datesAsParam);
-
-            DataTable dataTable = null;
+            string sql = GenerateSql(parameters);
 
             var connection = DataContext.Database.GetDbConnection();
             connection.Open();
-            var command = connection.CreateCommand();
-            command.CommandText = sql;
-            command.CommandType = CommandType.Text;
+            var command = CreateCommand(connection, sql, parameters);
 
-            AddDoubleParameter(command, "@RoeFrom", DbType.Double, parameters.RoeFrom);
-            AddDoubleParameter(command, "@ReinvestmentRateFrom", DbType.Double, parameters.ReinvestmentRateFrom);
-            AddStringListParameter(command, "@Dates", DbType.String, dates);
-
+            DataTable dataTable = null;
             using (var reader = command.ExecuteReader())
             {
                 dataTable = new DataTable();
@@ -176,6 +159,54 @@ namespace FmpAnalyzer.Queries
             return DataTableToResultSetList(dataTable);
         }
 
+        /// <summary>
+        /// CreateCommand
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        private DbCommand CreateCommand(DbConnection connection, string sql, CompounderCountQueryParams parameters)
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = sql;
+            command.CommandType = CommandType.Text;
+
+            AddDoubleParameter(command, "@RoeFrom", DbType.Double, parameters.RoeFrom);
+            AddDoubleParameter(command, "@ReinvestmentRateFrom", DbType.Double, parameters.ReinvestmentRateFrom);
+            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
+            AddStringListParameter(command, "@Dates", DbType.String, dates);
+
+            return command;
+        }
+
+        /// <summary>
+        /// GenerateSql
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        private string GenerateSql(CompounderCountQueryParams parameters)
+        {
+            string sqlBase = $@"select Symbol, Equity, Debt, NetIncome, Roe, ReinvestmentRate
+                from ViewCompounder 
+                where 1 = 1
+                and Date in (@Dates)
+                and Roe >= @RoeFrom
+                and ReinvestmentRate >= @ReinvestmentRateFrom";
+
+            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
+            string datesAsParam = CreateCommaSeparatedParams("@Dates", dates.Count);
+            string sql = sqlBase.Replace("@Dates", datesAsParam);
+
+            return sql;
+        }
+
+        /// <summary>
+        /// CreateCommaSeparatedParams
+        /// </summary>
+        /// <param name="paramBase"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         private string CreateCommaSeparatedParams(string paramBase, int count)
         {
             StringBuilder sb = new StringBuilder();
@@ -201,7 +232,6 @@ namespace FmpAnalyzer.Queries
         private void AddStringListParameter(DbCommand command, string name, DbType dbType, List<string> dates)
         {
             //var datesAsSql = "'" + dates.Aggregate((r, n) => r + "','" + n) + "'";
-
 
             for (int i = 0; i < dates.Count; i++)
             {
