@@ -541,15 +541,34 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="10"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TextBox
+                    <Grid Grid.Column="1"
+                        Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="400"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="txtCompanies"
                         Height="auto"
                         Width="230"
-                        Grid.Column="1"
-                        Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.Row="0"
                         TextWrapping="Wrap"
                         AcceptsReturn="True"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Auto"/>
+                        <TextBox x:Name="txtNotProcessed"
+                        Height="auto"
+                        Width="230"
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="True"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Auto"/>
+                    </Grid>
                     <Button  
                            Cursor="Hand" Grid.Row="1"
                           Command="{Binding CommandEarnings}"
