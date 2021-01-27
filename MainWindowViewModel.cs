@@ -51,6 +51,10 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty SymbolResultSetListProperty;
         public static readonly DependencyProperty RoeToProperty;
         public static readonly DependencyProperty ReinvestmentRateToProperty;
+        public static readonly DependencyProperty RevenueGrowthKoefListProperty;
+        public static readonly DependencyProperty EpsGrowthKoefListProperty;
+        public static readonly DependencyProperty RevenueGrowthKoefSelectedProperty;
+        public static readonly DependencyProperty EpsGrowthKoefSelectedProperty;
 
         static MainWindowViewModel()
         {
@@ -80,7 +84,10 @@ namespace FmpAnalyzer
             SymbolResultSetListProperty = DependencyProperty.Register("SymbolResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
             RoeToProperty = DependencyProperty.Register("RoeTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             ReinvestmentRateToProperty = DependencyProperty.Register("ReinvestmentRateTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
-
+            RevenueGrowthKoefListProperty = DependencyProperty.Register("RevenueGrowthKoefList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
+            EpsGrowthKoefListProperty = DependencyProperty.Register("EpsGrowthKoefList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
+            RevenueGrowthKoefSelectedProperty = DependencyProperty.Register("RevenueGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            EpsGrowthKoefSelectedProperty = DependencyProperty.Register("EpsGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
         }
 
         public MainWindowViewModel()
@@ -345,6 +352,42 @@ namespace FmpAnalyzer
         {
             get { return (int)GetValue(RoeGrowthKoefSelectedProperty); }
             set { SetValue(RoeGrowthKoefSelectedProperty, value); }
+        }
+
+        /// <summary>
+        /// RevenueGrowthKoefList
+        /// </summary>
+        public List<int> RevenueGrowthKoefList
+        {
+            get { return (List<int>)GetValue(RevenueGrowthKoefListProperty); }
+            set { SetValue(RevenueGrowthKoefListProperty, value); }
+        }
+
+        /// <summary>
+        /// EpsGrowthKoefList
+        /// </summary>
+        public List<int> EpsGrowthKoefList
+        {
+            get { return (List<int>)GetValue(EpsGrowthKoefListProperty); }
+            set { SetValue(EpsGrowthKoefListProperty, value); }
+        }
+
+        /// <summary>
+        /// RevenueGrowthKoefSelected
+        /// </summary>
+        public int RevenueGrowthKoefSelected
+        {
+            get { return (int)GetValue(RevenueGrowthKoefSelectedProperty); }
+            set { SetValue(RevenueGrowthKoefSelectedProperty, value); }
+        }
+
+        /// <summary>
+        /// EpsGrowthKoefSelected
+        /// </summary>
+        public int EpsGrowthKoefSelected
+        {
+            get { return (int)GetValue(EpsGrowthKoefSelectedProperty); }
+            set { SetValue(EpsGrowthKoefSelectedProperty, value); }
         }
 
         /// <summary>

@@ -45,11 +45,15 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="45"></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
                             <ColumnDefinition Width="50"></ColumnDefinition>
                             <ColumnDefinition Width="50"></ColumnDefinition>
                             <ColumnDefinition Width="50"></ColumnDefinition>
@@ -93,23 +97,35 @@
                                  Grid.Column="4"></TextBox>
                         <Label Grid.Column="0" Grid.Row="4"
                                Grid.ColumnSpan="3"
+                           Content="ROE Growth:"></Label>
+                        <ComboBox x:Name="cmbRoeGrowthKoef" Grid.Row="4" Grid.Column="2"  Grid.ColumnSpan="3" 
+                                  ItemsSource="{Binding RoeGrowthKoefList}" 
+                                  SelectedItem="{Binding RoeGrowthKoefSelected}"></ComboBox>
+                        <Label Grid.Column="0" Grid.Row="5"
+                               Grid.ColumnSpan="3"
+                           Content="Revenue Growth:"></Label>
+                        <ComboBox x:Name="cmbRevenueGrowth" Grid.Row="5" Grid.Column="2"  Grid.ColumnSpan="3" 
+                                  ItemsSource="{Binding RevenueGrowthKoefList}" 
+                                  SelectedItem="{Binding RevenueGrowthKoefSelected}"></ComboBox>
+                        <Label Grid.Column="0" Grid.Row="6"
+                               Grid.ColumnSpan="3"
+                           Content="EPS Growth:"></Label>
+                        <ComboBox x:Name="cmbEpsGrowth" Grid.Row="6" Grid.Column="2"  Grid.ColumnSpan="3" 
+                                  ItemsSource="{Binding EpsGrowthKoefList}" 
+                                  SelectedItem="{Binding EpsGrowthKoefSelected}"></ComboBox>
+                        <Label Grid.Column="0" Grid.Row="9"
+                               Grid.ColumnSpan="3"
                            Content="Sort by:"></Label>
-                        <ComboBox x:Name="cmbSortBy" Grid.Row="4" Grid.Column="2"  Grid.ColumnSpan="3" 
+                        <ComboBox x:Name="cmbSortBy" Grid.Row="9" Grid.Column="2"  Grid.ColumnSpan="3" 
                                   ItemsSource="{Binding SortByList}" 
                                   DisplayMemberPath="Text" 
                                   SelectedItem="{Binding SortBySelected}"></ComboBox>
-                        <Label Grid.Column="0" Grid.Row="5"
+                        <Label Grid.Column="0" Grid.Row="10"
                                Grid.ColumnSpan="3"
                            Content="Page size:"></Label>
-                        <ComboBox x:Name="cmbPageSize" Grid.Row="5" Grid.Column="2"  Grid.ColumnSpan="3" 
+                        <ComboBox x:Name="cmbPageSize" Grid.Row="10" Grid.Column="2"  Grid.ColumnSpan="3" 
                                   ItemsSource="{Binding PageSizeList}" 
                                   SelectedItem="{Binding PageSizeSelected}"></ComboBox>
-                        <Label Grid.Column="0" Grid.Row="6"
-                               Grid.ColumnSpan="3"
-                           Content="ROE Growth:"></Label>
-                        <ComboBox x:Name="cmbRoeGrowthKoef" Grid.Row="6" Grid.Column="2"  Grid.ColumnSpan="3" 
-                                  ItemsSource="{Binding RoeGrowthKoefList}" 
-                                  SelectedItem="{Binding RoeGrowthKoefSelected}"></ComboBox>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="2"
