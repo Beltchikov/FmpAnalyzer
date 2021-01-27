@@ -175,6 +175,7 @@ namespace FmpAnalyzer.Queries
             AddDoubleParameter(command, "@RoeFrom", DbType.Double, parameters.RoeFrom);
             AddDoubleParameter(command, "@RoeTo", DbType.Double, parameters.RoeTo);
             AddDoubleParameter(command, "@ReinvestmentRateFrom", DbType.Double, parameters.ReinvestmentRateFrom);
+            AddDoubleParameter(command, "@ReinvestmentRateTo", DbType.Double, parameters.ReinvestmentRateTo);
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
             AddStringListParameter(command, "@Dates", DbType.String, dates);
 
@@ -188,7 +189,7 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         private string GenerateSql(CompounderCountQueryParams parameters)
         {
-            string sqlBase = $@"select Symbol, Equity, Debt, NetIncome, Roe, ReinvestmentRate
+            string sqlBase = $@"select Symbol, Date, Equity, Debt, NetIncome, Roe, ReinvestmentRate, DebtEquityRatio
                 from ViewCompounder 
                 where 1 = 1
                 and Date in (@Dates)
@@ -202,6 +203,10 @@ namespace FmpAnalyzer.Queries
             if(parameters.RoeTo > 0)
             {
                 sql += " and Roe <= @RoeTo ";
+            }
+            if (parameters.ReinvestmentRateTo > 0)
+            {
+                sql += " and ReinvestmentRate <= @ReinvestmentRateTo ";
             }
 
             return sql;
@@ -281,11 +286,13 @@ namespace FmpAnalyzer.Queries
                 ResultSet resultSet = new ResultSet();
 
                 resultSet.Symbol = (string)row["Symbol"];
+                resultSet.Date = (string)row["Date"];
                 resultSet.Equity = row["Equity"] == DBNull.Value ? null : (double)row["Equity"];
                 resultSet.Debt = row["Debt"] == DBNull.Value ? null : (double)row["Debt"];
                 resultSet.NetIncome = row["NetIncome"] == DBNull.Value ? null : (double)row["NetIncome"];
                 resultSet.Roe = row["Roe"] == DBNull.Value ? null : Math.Round((double)row["Roe"], 0);
                 resultSet.ReinvestmentRate = row["ReinvestmentRate"] == DBNull.Value ? null : Math.Round((double)row["ReinvestmentRate"], 0);
+                resultSet.DebtEquityRatio = row["DebtEquityRatio"] == DBNull.Value ? null : Math.Round((double)row["DebtEquityRatio"], 0);
 
                 listOfResultSets.Add(resultSet);
             }

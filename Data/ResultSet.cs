@@ -21,6 +21,7 @@ namespace FmpAnalyzer.Data
         }
 
         public string Symbol { get; set; }
+        public string Date { get; set; }
         public string Name { get; set; }
         public double? Roe { get; set; }
         public double? Equity { get; set; }
@@ -35,7 +36,6 @@ namespace FmpAnalyzer.Data
         public List<double> Eps { get; set; }
         public List<double> CashConversionHistory { get; set; }
         public List<double> DebtEquityIncome { get; set; }
-
-        
+        public double? DebtEquityRatio { get; set; }
     }
 }
