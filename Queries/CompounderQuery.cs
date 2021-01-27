@@ -60,7 +60,6 @@ namespace FmpAnalyzer.Queries
             catch (Exception exception)
             {
                 MessageBox.Show(exception.ToString());
-
             }
 
             ReportProgress(100, 100, $"OK! Finished query.");
@@ -165,8 +164,12 @@ namespace FmpAnalyzer.Queries
             AddDoubleParameter(command, "@RoeTo", DbType.Double, parameters.RoeTo);
             AddDoubleParameter(command, "@ReinvestmentRateFrom", DbType.Double, parameters.ReinvestmentRateFrom);
             AddDoubleParameter(command, "@ReinvestmentRateTo", DbType.Double, parameters.ReinvestmentRateTo);
+
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
             AddStringListParameter(command, "@Dates", DbType.String, dates);
+
+            AddDoubleParameter(command, "@DebtEquityRatioFrom", DbType.Double, parameters.DebtEquityRatioFrom);
+            AddDoubleParameter(command, "@DebtEquityRatioTo", DbType.Double, parameters.DebtEquityRatioTo);
 
             return command;
         }
@@ -189,13 +192,21 @@ namespace FmpAnalyzer.Queries
             string datesAsParam = CreateCommaSeparatedParams("@Dates", dates.Count);
             string sql = sqlBase.Replace("@Dates", datesAsParam);
 
-            if(parameters.RoeTo > 0)
+            if (parameters.RoeTo != 0)
             {
                 sql += " and Roe <= @RoeTo ";
             }
-            if (parameters.ReinvestmentRateTo > 0)
+            if (parameters.ReinvestmentRateTo != 0)
             {
                 sql += " and ReinvestmentRate <= @ReinvestmentRateTo ";
+            }
+            if (parameters.DebtEquityRatioFrom != 0)
+            {
+                sql += " and DebtEquityRatio >= @DebtEquityRatioFrom ";
+            }
+            if (parameters.DebtEquityRatioTo != 0)
+            {
+                sql += " and DebtEquityRatio <= @DebtEquityRatioTo ";
             }
 
             return sql;

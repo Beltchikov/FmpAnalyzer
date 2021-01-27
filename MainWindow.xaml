@@ -113,6 +113,20 @@
                         <ComboBox x:Name="cmbEpsGrowth" Grid.Row="6" Grid.Column="2"  Grid.ColumnSpan="3" 
                                   ItemsSource="{Binding EpsGrowthKoefList}" 
                                   SelectedItem="{Binding EpsGrowthKoefSelected}"></ComboBox>
+                        <Label Grid.Column="0" Grid.Row="7"
+                               Grid.ColumnSpan="2"
+                           Content="Debt to Equity:" Height="30" VerticalAlignment="Bottom"></Label>
+                        <TextBox x:Name="txtDebtToEquityFrom" Grid.Row="7" 
+                                 Margin="0,2,0,5"
+                             Text="{Binding DebtToEquityFrom, Converter={StaticResource DoubleToStringConverter}}"
+                                 Grid.Column="2"></TextBox>
+                        <Label Grid.Column="3" Grid.Row="7"
+                           Content="to:" Height="30" HorizontalContentAlignment="Center"
+                               VerticalAlignment="Bottom"></Label>
+                        <TextBox x:Name="txtDebtToEquityTo" Grid.Row="7" 
+                                 Margin="0,2,0,5"
+                             Text="{Binding DebtToEquityTo, Converter={StaticResource DoubleToStringConverter}}"
+                                 Grid.Column="4"></TextBox>
                         <Label Grid.Column="0" Grid.Row="9"
                                Grid.ColumnSpan="3"
                            Content="Sort by:"></Label>

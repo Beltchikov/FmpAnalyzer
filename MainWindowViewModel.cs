@@ -55,6 +55,8 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty EpsGrowthKoefListProperty;
         public static readonly DependencyProperty RevenueGrowthKoefSelectedProperty;
         public static readonly DependencyProperty EpsGrowthKoefSelectedProperty;
+        public static readonly DependencyProperty DebtToEquityFromProperty;
+        public static readonly DependencyProperty DebtToEquityToProperty;
 
         static MainWindowViewModel()
         {
@@ -88,6 +90,9 @@ namespace FmpAnalyzer
             EpsGrowthKoefListProperty = DependencyProperty.Register("EpsGrowthKoefList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
             RevenueGrowthKoefSelectedProperty = DependencyProperty.Register("RevenueGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             EpsGrowthKoefSelectedProperty = DependencyProperty.Register("EpsGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
+            DebtToEquityFromProperty = DependencyProperty.Register("DebtToEquityFrom", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
+            DebtToEquityToProperty = DependencyProperty.Register("DebtToEquityTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
+
         }
 
         public MainWindowViewModel()
@@ -417,6 +422,24 @@ namespace FmpAnalyzer
             set { SetValue(ReinvestmentRateToProperty, value); }
         }
 
+        /// <summary>
+        /// DebtToEquityFrom
+        /// </summary>
+        public double DebtToEquityFrom
+        {
+            get { return (double)GetValue(DebtToEquityFromProperty); }
+            set { SetValue(DebtToEquityFromProperty, value); }
+        }
+
+        /// <summary>
+        /// DebtToEquityTo
+        /// </summary>
+        public double DebtToEquityTo
+        {
+            get { return (double)GetValue(DebtToEquityToProperty); }
+            set { SetValue(DebtToEquityToProperty, value); }
+        }
+
         #endregion
 
         #region Commands
@@ -445,7 +468,9 @@ namespace FmpAnalyzer
                 OrderFunction = SortBySelected.Function,
                 Descending = SortBySelected.Descending,
                 PageSize = PageSizeSelected,
-                CurrentPage = CurrentPage
+                CurrentPage = CurrentPage,
+                DebtEquityRatioFrom = DebtToEquityFrom,
+                DebtEquityRatioTo = DebtToEquityTo
             };
 
             BackgroundWork((s, e) =>
@@ -480,7 +505,11 @@ namespace FmpAnalyzer
                 RoeFrom = RoeFrom,
                 ReinvestmentRateFrom = ReinvestmentRateFrom,
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"]),
-                RoeGrowthKoef = RoeGrowthKoefSelected
+                RoeGrowthKoef = RoeGrowthKoefSelected,
+                RevenueGrowthKoef = RevenueGrowthKoefSelected,
+                EpsGrowthKoef = EpsGrowthKoefSelected,
+                DebtEquityRatioFrom = DebtToEquityFrom,
+                DebtEquityRatioTo = DebtToEquityTo
             };
 
             BackgroundWork((s, e) =>

@@ -15,5 +15,7 @@ namespace FmpAnalyzer.Queries
         public int RoeGrowthKoef { get; internal set; }
         public int RevenueGrowthKoef { get; internal set; }
         public int EpsGrowthKoef { get; internal set; }
+        public double DebtEquityRatioFrom { get; internal set; }
+        public double DebtEquityRatioTo { get; internal set; }
     }
 }
