@@ -31,13 +31,28 @@ namespace FmpAnalyzer.Queries
             try
             {
                 var p = parameters;
-                resultSetList = MainQuery<T>(parameters);
+                ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.RoeFrom}");
+
+                var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
+                queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
+                queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
+                queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.EpsHistoryQuery, a => a.EpsHistory);
+
+                queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RoeGrowthKoef, r => r.RoeHistory);
+                queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RevenueGrowthKoef, r => r.RevenueHistory);
+                queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.EpsGrowthKoef, r => r.EpsHistory);
+
+                List<ResultSet> roeFiltered = p.Descending
+                    ? queryAsEnumerable.OrderByDescending(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList()
+                    : queryAsEnumerable.OrderBy(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList();
+                resultSetList = new ResultSetList(roeFiltered);
+                resultSetList.CountTotal = queryAsEnumerable.Count();
+
+                ReportProgress(100, 20, $"OK! {resultSetList.CountTotal} companies found.");
 
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.EpsHistoryQuery, a => a.Eps);
                 resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
                 resultSetList = AddCompanyName(resultSetList);
                 resultSetList = AddDebtEquityIncome(resultSetList);
@@ -100,36 +115,10 @@ namespace FmpAnalyzer.Queries
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
-            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.EpsHistoryQuery, a => a.Eps);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.EpsHistoryQuery, a => a.EpsHistory);
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
             resultSetList = AddCompanyName(resultSetList);
             resultSetList = AddDebtEquityIncome(resultSetList);
-
-            return resultSetList;
-        }
-
-        /// <summary>
-        /// MainQuery
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        private ResultSetList MainQuery<TKey>(CompounderQueryParams<TKey> parameters)
-        {
-            ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.RoeFrom}");
-
-            var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
-            queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
-            queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RoeGrowthKoef, r => r.RoeHistory);
-
-            var p = parameters;
-            List<ResultSet> roeFiltered = p.Descending
-                ? queryAsEnumerable.OrderByDescending(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList()
-                : queryAsEnumerable.OrderBy(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList();
-            ResultSetList resultSetList = new ResultSetList(roeFiltered);
-            resultSetList.CountTotal = queryAsEnumerable.Count();
-
-            ReportProgress(100, 20, $"OK! {resultSetList.CountTotal} companies found.");
 
             return resultSetList;
         }

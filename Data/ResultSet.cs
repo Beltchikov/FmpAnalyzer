@@ -15,7 +15,7 @@ namespace FmpAnalyzer.Data
             ReinvestmentHistory = new List<double>();
             IncrementalRoe = new List<double>();
             OperatingIncome = new List<double>();
-            Eps = new List<double>();
+            EpsHistory = new List<double>();
             CashConversionHistory = new List<double>();
             DebtEquityIncome = new List<double>();
         }
@@ -33,7 +33,7 @@ namespace FmpAnalyzer.Data
         public List<double> ReinvestmentHistory { get; set; }
         public List<double> IncrementalRoe { get; set; }
         public List<double> OperatingIncome { get; set; }
-        public List<double> Eps { get; set; }
+        public List<double> EpsHistory { get; set; }
         public List<double> CashConversionHistory { get; set; }
         public List<double> DebtEquityIncome { get; set; }
         public double? DebtEquityRatio { get; set; }

@@ -278,7 +278,7 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <local:Histogram ItemsSource="{Binding Path=Eps}"
+                                                    <local:Histogram ItemsSource="{Binding Path=EpsHistory}"
                                                          Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
                                                     </local:Histogram>
                                                 </StackPanel>
