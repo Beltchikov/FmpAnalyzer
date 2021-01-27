@@ -526,6 +526,37 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
+            <TabItem Header="Earnings">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"></ColumnDefinition>
+                        <ColumnDefinition Width="250"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="10"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        Height="auto"
+                        Width="230"
+                        Grid.Column="1"
+                        Grid.Row="3"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="True"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Auto"/>
+                    <Button  
+                           Cursor="Hand" Grid.Row="1"
+                          Command="{Binding CommandEarnings}"
+                            Grid.Column="2">Show Data
+                    </Button>
+                </Grid>
+            </TabItem>
             <TabItem Header="..."></TabItem>
         </TabControl>
     </Grid>
