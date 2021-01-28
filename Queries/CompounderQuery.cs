@@ -33,7 +33,7 @@ namespace FmpAnalyzer.Queries
 
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
             var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), Sql.Compounder(parameters, dates), parameters, dates);
-            var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionCompounder).OrderByDescending(parameters.OrderFunction).ToList();
+            var queryAsEnumerable = QueryAsEnumerable(command, ResultSetFunctions.Compounder).OrderByDescending(parameters.OrderFunction).ToList();
 
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
@@ -71,7 +71,7 @@ namespace FmpAnalyzer.Queries
         {
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
             var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), Sql.Compounder(parameters, dates), parameters, dates);
-            return QueryAsEnumerable(command, ResultsetFunctionCompounder).Count();
+            return QueryAsEnumerable(command, ResultSetFunctions.Compounder).Count();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace FmpAnalyzer.Queries
             ResultSetList resultSetList = null;
 
             var command = DbCommands.FindBySymbol(DataContext.Database.GetDbConnection(), Sql.FindBySymbol(symbol), symbol);
-            var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionFindBySymbol).ToList();
+            var queryAsEnumerable = QueryAsEnumerable(command, ResultSetFunctions.FindBySymbol).ToList();
 
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
@@ -123,7 +123,7 @@ namespace FmpAnalyzer.Queries
             string result = string.Empty;
 
             var command = DbCommands.FindByCompany(DataContext.Database.GetDbConnection(), Sql.FindByCompany(company), company);
-            var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionFindByCompany).ToList();
+            var queryAsEnumerable = QueryAsEnumerable(command, ResultSetFunctions.FindByCompany).ToList();
             if(!queryAsEnumerable.Any())
             {
                 return string.Empty;
@@ -152,65 +152,6 @@ namespace FmpAnalyzer.Queries
             }
             command.Connection.Close();
             return resultSetFunction(dataTable);
-        }
-
-        /// <summary>
-        /// ResultsetFunctionCompounder
-        /// </summary>
-        /// <param name="dataTable"></param>
-        /// <returns></returns>
-        private IEnumerable<ResultSet> ResultsetFunctionCompounder(DataTable dataTable)
-        {
-            List<ResultSet> listOfResultSets = new List<ResultSet>();
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                ResultSet resultSet = new ResultSet();
-
-                resultSet.Symbol = (string)row["Symbol"];
-                resultSet.Date = (string)row["Date"];
-                resultSet.Equity = row["Equity"] == DBNull.Value ? null : (double)row["Equity"];
-                resultSet.Debt = row["Debt"] == DBNull.Value ? null : (double)row["Debt"];
-                resultSet.NetIncome = row["NetIncome"] == DBNull.Value ? null : (double)row["NetIncome"];
-                resultSet.Roe = row["Roe"] == DBNull.Value ? null : Math.Round((double)row["Roe"], 0);
-                resultSet.ReinvestmentRate = row["ReinvestmentRate"] == DBNull.Value ? null : Math.Round((double)row["ReinvestmentRate"], 0);
-                resultSet.DebtEquityRatio = row["DebtEquityRatio"] == DBNull.Value ? null : Math.Round((double)row["DebtEquityRatio"], 2);
-
-                listOfResultSets.Add(resultSet);
-            }
-
-            return listOfResultSets;
-        }
-
-        /// <summary>
-        /// ResultsetFunctionFindBySymbol
-        /// </summary>
-        /// <param name="dataTable"></param>
-        /// <returns></returns>
-        private IEnumerable<ResultSet> ResultsetFunctionFindBySymbol(DataTable dataTable)
-        {
-            return ResultsetFunctionCompounder(dataTable);
-        }
-
-        /// <summary>
-        /// ResultsetFunctionFindByCompany
-        /// </summary>
-        /// <param name="dataTable"></param>
-        /// <returns></returns>
-        private IEnumerable<ResultSet> ResultsetFunctionFindByCompany(DataTable dataTable)
-        {
-            List<ResultSet> listOfResultSets = new List<ResultSet>();
-            foreach (DataRow row in dataTable.Rows)
-            {
-                ResultSet resultSet = new ResultSet();
-
-                resultSet.Symbol = (string)row["Symbol"];
-                resultSet.Name = (string)row["Name"];
-                
-                listOfResultSets.Add(resultSet);
-            }
-
-            return listOfResultSets;
         }
 
         /// <summary>
