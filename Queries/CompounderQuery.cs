@@ -28,41 +28,34 @@ namespace FmpAnalyzer.Queries
         {
             ResultSetList resultSetList = null;
 
-            try
-            {
-                var p = parameters;
-                ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.RoeFrom}");
+            var p = parameters;
+            ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.RoeFrom}");
 
-                var command = CommandCompounder(DataContext.Database.GetDbConnection(), SqlCompounder(parameters), parameters);
-                var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionCompounder).OrderByDescending(parameters.OrderFunction).ToList();
+            var command = CommandCompounder(DataContext.Database.GetDbConnection(), SqlCompounder(parameters), parameters);
+            var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionCompounder).OrderByDescending(parameters.OrderFunction).ToList();
 
-                queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
-                queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
-                queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.EpsHistoryQuery, a => a.EpsHistory);
+            queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
+            queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
+            queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.EpsHistoryQuery, a => a.EpsHistory);
 
-                queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RoeGrowthKoef, r => r.RoeHistory);
-                queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RevenueGrowthKoef, r => r.RevenueHistory);
-                queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.EpsGrowthKoef, r => r.EpsHistory);
+            queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RoeGrowthKoef, r => r.RoeHistory);
+            queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RevenueGrowthKoef, r => r.RevenueHistory);
+            queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.EpsGrowthKoef, r => r.EpsHistory);
 
-                List<ResultSet> roeFiltered = p.Descending
-                    ? queryAsEnumerable.OrderByDescending(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList()
-                    : queryAsEnumerable.OrderBy(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList();
-                resultSetList = new ResultSetList(roeFiltered);
-                resultSetList.CountTotal = queryAsEnumerable.Count();
+            List<ResultSet> listOfResultSets = p.Descending
+                ? queryAsEnumerable.OrderByDescending(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList()
+                : queryAsEnumerable.OrderBy(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList();
+            resultSetList = new ResultSetList(listOfResultSets);
+            resultSetList.CountTotal = queryAsEnumerable.Count();
 
-                ReportProgress(100, 20, $"OK! {resultSetList.CountTotal} companies found.");
+            ReportProgress(100, 20, $"OK! {resultSetList.CountTotal} companies found.");
 
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
-                resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
-                resultSetList = AddCompanyName(resultSetList);
-                resultSetList = AddDebtEquityIncome(resultSetList);
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.ToString());
-            }
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
+            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
+            resultSetList = AddCompanyName(resultSetList);
+            resultSetList = AddDebtEquityIncome(resultSetList);
 
             ReportProgress(100, 100, $"OK! Finished query.");
             return resultSetList;
@@ -86,43 +79,36 @@ namespace FmpAnalyzer.Queries
         /// <param name="parameters"></param>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public List<ResultSet> Run<T>(CompounderQueryParams<T> parameters, string symbol)
+        public ResultSetList Run<T>(CompounderQueryParams<T> parameters, string symbol)
         {
-            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
+            ResultSetList resultSetList = null;
 
-            List<ResultSet> resultSetList =
-                   (from income in DataContext.IncomeStatements
-                    join balance in DataContext.BalanceSheets
-                    on new { a = income.Symbol, b = income.Date } equals new { a = balance.Symbol, b = balance.Date }
-                    join cash in DataContext.CashFlowStatements
-                    on new { a = income.Symbol, b = income.Date } equals new { a = cash.Symbol, b = cash.Date }
-                    where dates.Contains(income.Date)
-                    && income.Symbol == symbol
-                    select new ResultSet
-                    {
-                        Symbol = income.Symbol,
-                        Equity = balance.TotalStockholdersEquity,
-                        Debt = balance.TotalLiabilities,
-                        NetIncome = income.NetIncome,
-                        Roe = balance.TotalStockholdersEquity == 0
-                           ? 0
-                           : Math.Round(income.NetIncome * 100 / balance.TotalStockholdersEquity, 0),
-                        ReinvestmentRate = income.NetIncome == 0
-                           ? 0
-                           : Math.Round(cash.CapitalExpenditure * -100 / income.NetIncome, 0)
-                    }).ToList();
+            var p = parameters;
+            
+            var command = CommandFindBySymbol(DataContext.Database.GetDbConnection(), SqlFindBySymbol(symbol), symbol);
+            var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionFindBySymbol).ToList();
 
-            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
+            queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
+            queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
+            queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.EpsHistoryQuery, a => a.EpsHistory);
+
+            queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RoeGrowthKoef, r => r.RoeHistory);
+            queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RevenueGrowthKoef, r => r.RevenueHistory);
+            queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.EpsGrowthKoef, r => r.EpsHistory);
+
+            List<ResultSet> listOfResultSets = queryAsEnumerable.ToList();
+            resultSetList = new ResultSetList(listOfResultSets);
+            resultSetList.CountTotal = queryAsEnumerable.Count();
+
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
-            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
-            resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.EpsHistoryQuery, a => a.EpsHistory);
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.CashConversionQuery, a => a.CashConversionHistory);
             resultSetList = AddCompanyName(resultSetList);
             resultSetList = AddDebtEquityIncome(resultSetList);
 
             return resultSetList;
+
         }
 
         /// <summary>
@@ -173,6 +159,23 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
+        /// CommandFindBySymbol
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="sql"></param>
+        /// <param name="symbol"></param>
+        /// <returns></returns>
+        private DbCommand CommandFindBySymbol(DbConnection connection, string sql, string symbol)
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = sql;
+            command.CommandType = CommandType.Text;
+
+            AddStringParameter(command, "@Symbol", DbType.String, symbol);
+            return command;
+        }
+
+        /// <summary>
         /// SqlCompounder
         /// </summary>
         /// <param name="parameters"></param>
@@ -207,6 +210,22 @@ namespace FmpAnalyzer.Queries
                 sql += " and DebtEquityRatio <= @DebtEquityRatioTo ";
             }
 
+            return sql;
+        }
+
+        /// <summary>
+        /// SqlFindBySymbol
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <returns></returns>
+        private string SqlFindBySymbol(string symbol)
+        {
+            string sqlBase = $@"select Symbol, Date, Equity, Debt, NetIncome, Roe, ReinvestmentRate, DebtEquityRatio
+                from ViewCompounder 
+                where 1 = 1
+                and Symbol = '@Symbol'";
+
+            string sql = sqlBase.Replace("@Symbol", symbol);
             return sql;
         }
 
@@ -253,6 +272,22 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
+        /// AddStringParameter
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="name"></param>
+        /// <param name="dbType"></param>
+        /// <param name="value"></param>
+        private void AddStringParameter(DbCommand command, string name, DbType dbType, string value)
+        {
+            var param = command.CreateParameter();
+            param.ParameterName = name;
+            param.DbType = dbType;
+            param.Value = value;
+            command.Parameters.Add(param);
+        }
+
+        /// <summary>
         /// AddDoubleParameter
         /// </summary>
         /// <param name="command"></param>
@@ -294,6 +329,16 @@ namespace FmpAnalyzer.Queries
             }
 
             return listOfResultSets;
+        }
+
+        /// <summary>
+        /// ResultsetFunctionFindBySymbol
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <returns></returns>
+        private IEnumerable<ResultSet> ResultsetFunctionFindBySymbol(DataTable dataTable)
+        {
+            return ResultsetFunctionCompounder(dataTable);
         }
 
         /// <summary>
