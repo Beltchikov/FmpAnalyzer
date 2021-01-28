@@ -24,6 +24,7 @@ namespace FmpAnalyzer.Queries
         private static CashConversionQuery _cashConversionQuery;
         private static CompanyNameQuery _companyNameQuery;
         private static CountByYearsQuery _countByYearsQuery;
+        private static SymbolByCompanyQuery _symbolByCompanyQuery;
         
 
         /// <summary>
@@ -220,6 +221,24 @@ namespace FmpAnalyzer.Queries
                         _countByYearsQuery = new CountByYearsQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
                     }
                     return _countByYearsQuery;
+                }
+            }
+        }
+
+        /// <summary>
+        /// SymbolByCompanyQuery
+        /// </summary>
+        public static SymbolByCompanyQuery SymbolByCompanyQuery
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (_symbolByCompanyQuery == null)
+                    {
+                        _symbolByCompanyQuery = new SymbolByCompanyQuery(DataContext.Instance(Configuration.Instance["ConnectionString"]));
+                    }
+                    return _symbolByCompanyQuery;
                 }
             }
         }

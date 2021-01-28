@@ -624,7 +624,7 @@ namespace FmpAnalyzer
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
             };
 
-            SymbolsFound = QueryFactory.CompounderQuery.FindByCompany(compounderQueryParams, Company);
+            SymbolsFound = QueryFactory.SymbolByCompanyQuery.FindByCompany(compounderQueryParams, Company);
             SymbolsFound = string.IsNullOrWhiteSpace(SymbolsFound) ? "No matches!" : SymbolsFound;
         }
 
@@ -635,6 +635,9 @@ namespace FmpAnalyzer
         private void OnCommandEarnings(object p)
         {
             // TODO
+            // Finde Symbols
+            // Builde für Symbols ResultSet
+            // Zeige Daten im Grid
         }
 
         #endregion

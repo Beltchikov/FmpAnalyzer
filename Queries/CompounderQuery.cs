@@ -112,49 +112,6 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
-        /// FindByCompany
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="parameters"></param>
-        /// <param name="company"></param>
-        /// <returns></returns>
-        public string FindByCompany<T>(CompounderQueryParams<T> parameters, string company)
-        {
-            string result = string.Empty;
-
-            var command = DbCommands.FindByCompany(DataContext.Database.GetDbConnection(), Sql.FindByCompany(company), company);
-            var queryAsEnumerable = QueryAsEnumerable(command, ResultSetFunctions.FindByCompany).ToList();
-            if(!queryAsEnumerable.Any())
-            {
-                return string.Empty;
-            }
-            
-            result = queryAsEnumerable.Select(q => q.Symbol + "\t" + q.Name).Distinct().Aggregate((r, n) => r+ "\r\n" + n);
-
-            return result;
-        }
-
-        /// <summary>
-        /// QueryAsEnumerable
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="resultSetFunction"></param>
-        /// <returns></returns>
-        private IEnumerable<ResultSet> QueryAsEnumerable(DbCommand command, Func<DataTable, IEnumerable<ResultSet>> resultSetFunction)
-        {
-            command.Connection.Open();
-            DataTable dataTable = null;
-            using (var reader = command.ExecuteReader())
-            {
-                dataTable = new DataTable();
-                dataTable.Load(reader);
-
-            }
-            command.Connection.Close();
-            return resultSetFunction(dataTable);
-        }
-
-        /// <summary>
         /// AddHistoryData
         /// </summary>
         /// <param name="inputResultSetList"></param>

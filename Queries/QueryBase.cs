@@ -47,5 +47,25 @@ namespace FmpAnalyzer.Queries
                 MaxValue = max
             });
         }
+
+        /// <summary>
+        /// QueryAsEnumerable
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="resultSetFunction"></param>
+        /// <returns></returns>
+        protected IEnumerable<ResultSet> QueryAsEnumerable(DbCommand command, Func<DataTable, IEnumerable<ResultSet>> resultSetFunction)
+        {
+            command.Connection.Open();
+            DataTable dataTable = null;
+            using (var reader = command.ExecuteReader())
+            {
+                dataTable = new DataTable();
+                dataTable.Load(reader);
+
+            }
+            command.Connection.Close();
+            return resultSetFunction(dataTable);
+        }
     }
 }
