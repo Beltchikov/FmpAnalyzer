@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="FmpAnalyzer.FmpDataGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FmpAnalyzer"
+             mc:Ignorable="d" 
+             x:Name="ctrlFmpDataGrid"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                                      Grid.Row="6"
+                                       Grid.Column="1">
+            <DataGrid x:Name="gridCompounder"
+                       ItemsSource="{Binding ElementName=ctrlFmpDataGrid, Path=ItemsSource, Mode=OneWay}"
+                                AutoGenerateColumns="False"
+                                      RowHeight="30"
+                                      Background="{Binding Background}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Symbol" SortMemberPath="Symbol">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding Path=Symbol}"></Label>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Date" SortMemberPath="Date">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding Path=Date}"></Label>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Company"  SortMemberPath="Name">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding Path=Name}"></Label>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="ROE" SortMemberPath="Roe">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding Path= Roe}"></Label>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="ROE History">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <local:Histogram ItemsSource="{Binding Path=RoeHistory}"
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
+                                    </local:Histogram>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Reinvestment&#x0a;Rate" SortMemberPath="ReinvestmentRate">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding  Path=ReinvestmentRate}"></Label>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Reinvestment&#x0a;History">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <local:Histogram ItemsSource="{Binding Path=ReinvestmentHistory}"
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
+                                    </local:Histogram>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Incremental&#x0a;ROE">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <local:Histogram ItemsSource="{Binding Path=IncrementalRoe}"
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
+                                    </local:Histogram>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Revenue">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <local:Histogram ItemsSource="{Binding Path=RevenueHistory}"
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
+                                    </local:Histogram>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Operating&#x0a;Income">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <local:Histogram ItemsSource="{Binding Path=OperatingIncome}"
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
+                                    </local:Histogram>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="EPS">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <local:Histogram ItemsSource="{Binding Path=EpsHistory}"
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
+                                    </local:Histogram>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Cash Conversion&#x0a;History">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <local:Histogram ItemsSource="{Binding Path=CashConversionHistory}"
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
+                                    </local:Histogram>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Debt, Equity&#x0a;Income">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <local:Histogram ItemsSource="{Binding Path=DebtEquityIncome}"
+                                                         Height="{Binding ElementName=gridCompounder, Path=RowHeight}">
+                                    </local:Histogram>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Debt to&#x0a;Equity" SortMemberPath="DebtEquityRatio">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding  Path=DebtEquityRatio}"></Label>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
