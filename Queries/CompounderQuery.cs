@@ -79,7 +79,7 @@ namespace FmpAnalyzer.Queries
         /// <param name="parameters"></param>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public ResultSetList Run<T>(CompounderQueryParams<T> parameters, string symbol)
+        public ResultSetList FindBySymbol<T>(CompounderQueryParams<T> parameters, string symbol)
         {
             ResultSetList resultSetList = null;
 

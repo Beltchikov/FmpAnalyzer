@@ -607,7 +607,7 @@ namespace FmpAnalyzer
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
             };
 
-            SymbolResultSetList = QueryFactory.CompounderQuery.Run(compounderQueryParams, Symbol).ResultSets;
+            SymbolResultSetList = QueryFactory.CompounderQuery.FindBySymbol(compounderQueryParams, Symbol).ResultSets;
         }
 
         /// <summary>
