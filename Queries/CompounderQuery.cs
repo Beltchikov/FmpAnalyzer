@@ -31,7 +31,8 @@ namespace FmpAnalyzer.Queries
             var p = parameters;
             ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.RoeFrom}");
 
-            var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), SqlCompounder(parameters), parameters);
+            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
+            var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), SqlCompounder(parameters), parameters, dates);
             var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionCompounder).OrderByDescending(parameters.OrderFunction).ToList();
 
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
@@ -68,7 +69,8 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         public int Count(CompounderCountQueryParams parameters)
         {
-            var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), SqlCompounder(parameters), parameters);
+            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
+            var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), SqlCompounder(parameters), parameters, dates);
             return QueryAsEnumerable(command, ResultsetFunctionCompounder).Count();
         }
 

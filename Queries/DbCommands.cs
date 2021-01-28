@@ -18,7 +18,7 @@ namespace FmpAnalyzer.Queries
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static DbCommand Compounder(DbConnection connection, string sql, CompounderCountQueryParams parameters)
+        public static DbCommand Compounder(DbConnection connection, string sql, CompounderCountQueryParams parameters, List<string> dates)
         {
             var command = connection.CreateCommand();
             command.CommandText = sql;
@@ -29,7 +29,6 @@ namespace FmpAnalyzer.Queries
             AddDoubleParameter(command, "@ReinvestmentRateFrom", DbType.Double, parameters.ReinvestmentRateFrom);
             AddDoubleParameter(command, "@ReinvestmentRateTo", DbType.Double, parameters.ReinvestmentRateTo);
 
-            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
             AddStringListParameter(command, "@Dates", DbType.String, dates);
 
             AddDoubleParameter(command, "@DebtEquityRatioFrom", DbType.Double, parameters.DebtEquityRatioFrom);
