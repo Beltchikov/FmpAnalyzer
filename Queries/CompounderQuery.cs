@@ -128,7 +128,7 @@ namespace FmpAnalyzer.Queries
                 return string.Empty;
             }
             
-            result = queryAsEnumerable.Select(q => q.Symbol).Distinct().Aggregate((r, n) => r+ "\r\n" + n);
+            result = queryAsEnumerable.Select(q => q.Symbol + "\t" + q.Name).Distinct().Aggregate((r, n) => r+ "\r\n" + n);
 
             return result;
         }
@@ -275,7 +275,7 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         private string SqlFindByCompany(string company)
         {
-            string sqlBase = $@"select v.Symbol
+            string sqlBase = $@"select v.Symbol, s.Name
                 from ViewCompounder v
                 inner join Stocks s on s.Symbol = v.Symbol
                 where 1 = 1
@@ -410,6 +410,7 @@ namespace FmpAnalyzer.Queries
                 ResultSet resultSet = new ResultSet();
 
                 resultSet.Symbol = (string)row["Symbol"];
+                resultSet.Name = (string)row["Name"];
                 
                 listOfResultSets.Add(resultSet);
             }
