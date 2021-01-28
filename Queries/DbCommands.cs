@@ -12,11 +12,12 @@ namespace FmpAnalyzer.Queries
     public class DbCommands : DbCommandsBase
     {
         /// <summary>
-        /// CommandCompounder
+        /// Compounder
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
+        /// <param name="dates"></param>
         /// <returns></returns>
         public static DbCommand Compounder(DbConnection connection, string sql, CompounderCountQueryParams parameters, List<string> dates)
         {

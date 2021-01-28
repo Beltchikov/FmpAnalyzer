@@ -32,7 +32,7 @@ namespace FmpAnalyzer.Queries
             ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.RoeFrom}");
 
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
-            var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), SqlCompounder(parameters), parameters, dates);
+            var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), Sql.Compounder(parameters, dates), parameters, dates);
             var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionCompounder).OrderByDescending(parameters.OrderFunction).ToList();
 
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
@@ -70,7 +70,7 @@ namespace FmpAnalyzer.Queries
         public int Count(CompounderCountQueryParams parameters)
         {
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
-            var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), SqlCompounder(parameters), parameters, dates);
+            var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), Sql.Compounder(parameters, dates), parameters, dates);
             return QueryAsEnumerable(command, ResultsetFunctionCompounder).Count();
         }
 
@@ -85,7 +85,7 @@ namespace FmpAnalyzer.Queries
         {
             ResultSetList resultSetList = null;
 
-            var command = DbCommands.FindBySymbol(DataContext.Database.GetDbConnection(), SqlFindBySymbol(symbol), symbol);
+            var command = DbCommands.FindBySymbol(DataContext.Database.GetDbConnection(), Sql.FindBySymbol(symbol), symbol);
             var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionFindBySymbol).ToList();
 
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
@@ -111,7 +111,6 @@ namespace FmpAnalyzer.Queries
 
         }
 
-
         /// <summary>
         /// FindByCompany
         /// </summary>
@@ -123,7 +122,7 @@ namespace FmpAnalyzer.Queries
         {
             string result = string.Empty;
 
-            var command = DbCommands.FindByCompany(DataContext.Database.GetDbConnection(), SqlFindByCompany(company), company);
+            var command = DbCommands.FindByCompany(DataContext.Database.GetDbConnection(), Sql.FindByCompany(company), company);
             var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionFindByCompany).ToList();
             if(!queryAsEnumerable.Any())
             {
@@ -153,98 +152,6 @@ namespace FmpAnalyzer.Queries
             }
             command.Connection.Close();
             return resultSetFunction(dataTable);
-        }
-
-        /// <summary>
-        /// SqlCompounder
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        private string SqlCompounder(CompounderCountQueryParams parameters)
-        {
-            string sqlBase = $@"select Symbol, Date, Equity, Debt, NetIncome, Roe, ReinvestmentRate, DebtEquityRatio
-                from ViewCompounder 
-                where 1 = 1
-                and Date in (@Dates)
-                and Roe >= @RoeFrom
-                and ReinvestmentRate >= @ReinvestmentRateFrom";
-
-            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
-            string datesAsParam = CreateCommaSeparatedParams("@Dates", dates.Count);
-            string sql = sqlBase.Replace("@Dates", datesAsParam);
-
-            if (parameters.RoeTo != 0)
-            {
-                sql += " and Roe <= @RoeTo ";
-            }
-            if (parameters.ReinvestmentRateTo != 0)
-            {
-                sql += " and ReinvestmentRate <= @ReinvestmentRateTo ";
-            }
-            if (parameters.DebtEquityRatioFrom != 0)
-            {
-                sql += " and DebtEquityRatio >= @DebtEquityRatioFrom ";
-            }
-            if (parameters.DebtEquityRatioTo != 0)
-            {
-                sql += " and DebtEquityRatio <= @DebtEquityRatioTo ";
-            }
-
-            return sql;
-        }
-
-        /// <summary>
-        /// SqlFindBySymbol
-        /// </summary>
-        /// <param name="symbol"></param>
-        /// <returns></returns>
-        private string SqlFindBySymbol(string symbol)
-        {
-            string sqlBase = $@"select Symbol, Date, Equity, Debt, NetIncome, Roe, ReinvestmentRate, DebtEquityRatio
-                from ViewCompounder 
-                where 1 = 1
-                and Symbol = '@Symbol'";
-
-            string sql = sqlBase.Replace("@Symbol", symbol);
-            return sql;
-        }
-
-        /// <summary>
-        /// SqlFindByCompany
-        /// </summary>
-        /// <param name="company"></param>
-        /// <returns></returns>
-        private string SqlFindByCompany(string company)
-        {
-            string sqlBase = $@"select v.Symbol, s.Name
-                from ViewCompounder v
-                inner join Stocks s on s.Symbol = v.Symbol
-                where 1 = 1
-                and s.Name like '%@Company%';";
-
-            string sql = sqlBase.Replace("@Company", company);
-            return sql;
-        }
-
-        /// <summary>
-        /// CreateCommaSeparatedParams
-        /// </summary>
-        /// <param name="paramBase"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        private string CreateCommaSeparatedParams(string paramBase, int count)
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < count; i++)
-            {
-                sb.Append(paramBase + i.ToString());
-                if (i < count - 1)
-                {
-                    sb.Append(",");
-                }
-            }
-
-            return sb.ToString();
         }
 
         /// <summary>
