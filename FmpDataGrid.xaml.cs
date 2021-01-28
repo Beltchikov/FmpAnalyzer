@@ -41,5 +41,8 @@ namespace FmpAnalyzer
             get { return (IEnumerable)GetValue(ItemsSourceProperty); }
             set { SetValue(ItemsSourceProperty, value); }
         }
+
+
+
     }
 }

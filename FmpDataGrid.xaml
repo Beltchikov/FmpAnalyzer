@@ -15,7 +15,7 @@
                        ItemsSource="{Binding ElementName=ctrlFmpDataGrid, Path=ItemsSource, Mode=OneWay}"
                                 AutoGenerateColumns="False"
                                       RowHeight="30"
-                                      Background="{Binding Background}">
+                                      Background="{Binding ElementName=ctrlFmpDataGrid, Path=Background}">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Symbol" SortMemberPath="Symbol">
                         <DataGridTemplateColumn.CellTemplate>
