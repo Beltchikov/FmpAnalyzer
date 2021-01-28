@@ -25,6 +25,7 @@ namespace FmpAnalyzer
         public RelayCommand CommandLast { get; set; }
         public RelayCommand CommandFind { get; set; }
         public RelayCommand CommandEarnings { get; set; }
+        public RelayCommand CommandFindByCompany { get; set; }
 
         public static readonly DependencyProperty ConnectionStringProperty;
         public static readonly DependencyProperty RoeFromProperty;
@@ -58,6 +59,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty EpsGrowthKoefSelectedProperty;
         public static readonly DependencyProperty DebtToEquityFromProperty;
         public static readonly DependencyProperty DebtToEquityToProperty;
+        public static readonly DependencyProperty CompanyProperty;
 
         static MainWindowViewModel()
         {
@@ -93,6 +95,7 @@ namespace FmpAnalyzer
             EpsGrowthKoefSelectedProperty = DependencyProperty.Register("EpsGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             DebtToEquityFromProperty = DependencyProperty.Register("DebtToEquityFrom", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             DebtToEquityToProperty = DependencyProperty.Register("DebtToEquityTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
+            CompanyProperty = DependencyProperty.Register("Company", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
 
         }
 
@@ -116,6 +119,7 @@ namespace FmpAnalyzer
             CommandLast = new RelayCommand(p => { OnCommandLast(p); });
             CommandFind = new RelayCommand(p => { OnCommandFind(p); });
             CommandEarnings = new RelayCommand(p => { OnCommandEarnings(p); });
+            CommandFindByCompany = new RelayCommand(p => { OnCommandFindByCompany(p); });
 
             QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
         }
@@ -570,6 +574,16 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
+        /// Company
+        /// </summary>
+        public string Company
+        {
+            get { return (string)GetValue(CompanyProperty); }
+            set { SetValue(CompanyProperty, value); }
+        }
+
+
+        /// <summary>
         /// OnCommandFind
         /// </summary>
         /// <param name="p"></param>
@@ -584,6 +598,15 @@ namespace FmpAnalyzer
             };
 
             SymbolResultSetList = QueryFactory.CompounderQuery.Run(compounderQueryParams, Symbol).ResultSets;
+        }
+
+        /// <summary>
+        /// OnCommandFindByCompany
+        /// </summary>
+        /// <param name="p"></param>
+        private void OnCommandFindByCompany(object p)
+        {
+            // TODO
         }
 
         /// <summary>

@@ -219,7 +219,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Symbol Search">
+            <TabItem Header="Search by Symbol">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="10"></RowDefinition>
@@ -247,7 +247,35 @@
                                            Grid.Column="3" Grid.Row="3"></local:FmpDataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Earnings">
+            <TabItem Header="Search by Company">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"></ColumnDefinition>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="10"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="1" Grid.Row="1"
+                           Content="Symbol"></Label>
+                    <TextBox x:Name="txtCompany" Margin="0,2,0,5" Grid.Row="1" Grid.Column="2"
+                             Text="{Binding Company}"></TextBox>
+                    <Button  Grid.Column="3" Grid.Row="1"
+                            Cursor="Hand"
+                            Command="{Binding CommandFindByCompany}">Find</Button>
+                    <local:FmpDataGrid ItemsSource="{Binding SymbolResultSetList, Mode=OneWay}"
+                                           Background="{Binding BackgroundResults}"
+                                           Grid.Column="3" Grid.Row="3"></local:FmpDataGrid>
+                </Grid>
+                </TabItem>
+                <TabItem Header="Earnings">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="10"></RowDefinition>
