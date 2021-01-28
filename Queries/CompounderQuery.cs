@@ -33,7 +33,9 @@ namespace FmpAnalyzer.Queries
                 var p = parameters;
                 ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.RoeFrom}");
 
-                var queryAsEnumerable = QueryAsEnumerable(parameters).OrderByDescending(parameters.OrderFunction).ToList();
+                var command = CommandCompounder(DataContext.Database.GetDbConnection(), SqlCompounder(parameters), parameters);
+                var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionCompounder).OrderByDescending(parameters.OrderFunction).ToList();
+
                 queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
                 queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RevenueHistoryQuery, a => a.RevenueHistory);
                 queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.EpsHistoryQuery, a => a.EpsHistory);
@@ -73,7 +75,8 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         public int Count(CompounderCountQueryParams parameters)
         {
-            return QueryAsEnumerable(parameters).Count();
+            var command = CommandCompounder(DataContext.Database.GetDbConnection(), SqlCompounder(parameters), parameters);
+            return QueryAsEnumerable(command, ResultsetFunctionCompounder).Count();
         }
 
         /// <summary>
@@ -125,16 +128,12 @@ namespace FmpAnalyzer.Queries
         /// <summary>
         /// QueryAsEnumerable
         /// </summary>
-        /// <param name="parameters"></param>
+        /// <param name="command"></param>
+        /// <param name="resultSetFunction"></param>
         /// <returns></returns>
-        private IEnumerable<ResultSet> QueryAsEnumerable(CompounderCountQueryParams parameters)
+        private IEnumerable<ResultSet> QueryAsEnumerable(DbCommand command, Func<DataTable, IEnumerable<ResultSet>> resultSetFunction)
         {
-            string sql = GenerateSql(parameters);
-
-            var connection = DataContext.Database.GetDbConnection();
-            connection.Open();
-            var command = CreateCommand(connection, sql, parameters);
-
+            command.Connection.Open();
             DataTable dataTable = null;
             using (var reader = command.ExecuteReader())
             {
@@ -142,19 +141,18 @@ namespace FmpAnalyzer.Queries
                 dataTable.Load(reader);
 
             }
-            connection.Close();
-
-            return DataTableToResultSetList(dataTable);
+            command.Connection.Close();
+            return resultSetFunction(dataTable);
         }
 
         /// <summary>
-        /// CreateCommand
+        /// CommandCompounder
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        private DbCommand CreateCommand(DbConnection connection, string sql, CompounderCountQueryParams parameters)
+        private DbCommand CommandCompounder(DbConnection connection, string sql, CompounderCountQueryParams parameters)
         {
             var command = connection.CreateCommand();
             command.CommandText = sql;
@@ -175,11 +173,11 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
-        /// GenerateSql
+        /// SqlCompounder
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        private string GenerateSql(CompounderCountQueryParams parameters)
+        private string SqlCompounder(CompounderCountQueryParams parameters)
         {
             string sqlBase = $@"select Symbol, Date, Equity, Debt, NetIncome, Roe, ReinvestmentRate, DebtEquityRatio
                 from ViewCompounder 
@@ -242,8 +240,6 @@ namespace FmpAnalyzer.Queries
         /// <param name="dates"></param>
         private void AddStringListParameter(DbCommand command, string name, DbType dbType, List<string> dates)
         {
-            //var datesAsSql = "'" + dates.Aggregate((r, n) => r + "','" + n) + "'";
-
             for (int i = 0; i < dates.Count; i++)
             {
                 string date = dates[i];
@@ -273,11 +269,11 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
-        /// DataTableToResultSetList
+        /// ResultsetFunctionCompounder
         /// </summary>
         /// <param name="dataTable"></param>
         /// <returns></returns>
-        private IEnumerable<ResultSet> DataTableToResultSetList(DataTable dataTable)
+        private IEnumerable<ResultSet> ResultsetFunctionCompounder(DataTable dataTable)
         {
             List<ResultSet> listOfResultSets = new List<ResultSet>();
 
