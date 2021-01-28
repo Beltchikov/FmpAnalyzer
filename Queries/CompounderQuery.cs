@@ -83,8 +83,6 @@ namespace FmpAnalyzer.Queries
         {
             ResultSetList resultSetList = null;
 
-            var p = parameters;
-            
             var command = CommandFindBySymbol(DataContext.Database.GetDbConnection(), SqlFindBySymbol(symbol), symbol);
             var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionFindBySymbol).ToList();
 
@@ -109,6 +107,30 @@ namespace FmpAnalyzer.Queries
 
             return resultSetList;
 
+        }
+
+
+        /// <summary>
+        /// FindByCompany
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parameters"></param>
+        /// <param name="company"></param>
+        /// <returns></returns>
+        public string FindByCompany<T>(CompounderQueryParams<T> parameters, string company)
+        {
+            string result = string.Empty;
+
+            var command = CommandFindByCompany(DataContext.Database.GetDbConnection(), SqlFindByCompany(company), company);
+            var queryAsEnumerable = QueryAsEnumerable(command, ResultsetFunctionFindByCompany).ToList();
+            if(!queryAsEnumerable.Any())
+            {
+                return string.Empty;
+            }
+            
+            result = queryAsEnumerable.Select(q => q.Symbol).Distinct().Aggregate((r, n) => r+ "\r\n" + n);
+
+            return result;
         }
 
         /// <summary>
@@ -176,6 +198,23 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
+        /// CommandFindByCompany
+        /// </summary>
+        /// <param name="dbConnection"></param>
+        /// <param name="v"></param>
+        /// <param name="company"></param>
+        /// <returns></returns>
+        private DbCommand CommandFindByCompany(DbConnection connection, string sql, string company)
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = sql;
+            command.CommandType = CommandType.Text;
+
+            AddStringParameter(command, "@Symbol", DbType.String, company);
+            return command;
+        }
+
+        /// <summary>
         /// SqlCompounder
         /// </summary>
         /// <param name="parameters"></param>
@@ -226,6 +265,23 @@ namespace FmpAnalyzer.Queries
                 and Symbol = '@Symbol'";
 
             string sql = sqlBase.Replace("@Symbol", symbol);
+            return sql;
+        }
+
+        /// <summary>
+        /// SqlFindByCompany
+        /// </summary>
+        /// <param name="company"></param>
+        /// <returns></returns>
+        private string SqlFindByCompany(string company)
+        {
+            string sqlBase = $@"select v.Symbol
+                from ViewCompounder v
+                inner join Stocks s on s.Symbol = v.Symbol
+                where 1 = 1
+                and s.Name like '%@Company%';";
+
+            string sql = sqlBase.Replace("@Company", company);
             return sql;
         }
 
@@ -339,6 +395,26 @@ namespace FmpAnalyzer.Queries
         private IEnumerable<ResultSet> ResultsetFunctionFindBySymbol(DataTable dataTable)
         {
             return ResultsetFunctionCompounder(dataTable);
+        }
+
+        /// <summary>
+        /// ResultsetFunctionFindByCompany
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <returns></returns>
+        private IEnumerable<ResultSet> ResultsetFunctionFindByCompany(DataTable dataTable)
+        {
+            List<ResultSet> listOfResultSets = new List<ResultSet>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                ResultSet resultSet = new ResultSet();
+
+                resultSet.Symbol = (string)row["Symbol"];
+                
+                listOfResultSets.Add(resultSet);
+            }
+
+            return listOfResultSets;
         }
 
         /// <summary>

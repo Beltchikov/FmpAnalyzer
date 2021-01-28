@@ -247,7 +247,7 @@
                                            Grid.Column="3" Grid.Row="3"></local:FmpDataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Search by Company">
+            <TabItem Header="Symbol by Company">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="10"></RowDefinition>
@@ -259,23 +259,31 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10"></ColumnDefinition>
                         <ColumnDefinition Width="100"></ColumnDefinition>
-                        <ColumnDefinition Width="100"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="300"></ColumnDefinition>
+                        <ColumnDefinition Width="21*"></ColumnDefinition>
+                        <ColumnDefinition Width="566*"/>
                         <ColumnDefinition Width="10"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="1" Grid.Row="1"
-                           Content="Symbol"></Label>
+                           Content="Company"></Label>
                     <TextBox x:Name="txtCompany" Margin="0,2,0,5" Grid.Row="1" Grid.Column="2"
                              Text="{Binding Company}"></TextBox>
-                    <Button  Grid.Column="3" Grid.Row="1"
+                    <Button  Grid.Column="4" Grid.Row="1"
                             Cursor="Hand"
-                            Command="{Binding CommandFindByCompany}">Find</Button>
-                    <local:FmpDataGrid ItemsSource="{Binding SymbolResultSetList, Mode=OneWay}"
-                                           Background="{Binding BackgroundResults}"
-                                           Grid.Column="3" Grid.Row="3"></local:FmpDataGrid>
+                            Command="{Binding CommandFindByCompany}" Grid.ColumnSpan="1">Find</Button>
+                    <TextBox x:Name="txtSymbolsFound"
+                        Height="auto"
+                        Width="auto"
+                        Grid.Column="4"
+                        Grid.Row="3"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="True"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Auto"
+                            Text="{Binding SymbolsFound}"/>
                 </Grid>
-                </TabItem>
-                <TabItem Header="Earnings">
+            </TabItem>
+            <TabItem Header="Earnings">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="10"></RowDefinition>

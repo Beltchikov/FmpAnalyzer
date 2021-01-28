@@ -60,6 +60,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty DebtToEquityFromProperty;
         public static readonly DependencyProperty DebtToEquityToProperty;
         public static readonly DependencyProperty CompanyProperty;
+        public static readonly DependencyProperty SymbolsFoundProperty;
 
         static MainWindowViewModel()
         {
@@ -96,7 +97,7 @@ namespace FmpAnalyzer
             DebtToEquityFromProperty = DependencyProperty.Register("DebtToEquityFrom", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             DebtToEquityToProperty = DependencyProperty.Register("DebtToEquityTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             CompanyProperty = DependencyProperty.Register("Company", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-
+            SymbolsFoundProperty = DependencyProperty.Register("SymbolsFound", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
         }
 
         public MainWindowViewModel()
@@ -447,6 +448,15 @@ namespace FmpAnalyzer
             set { SetValue(DebtToEquityToProperty, value); }
         }
 
+        /// <summary>
+        /// SymbolsFound
+        /// </summary>
+        public string SymbolsFound
+        {
+            get { return (string)GetValue(SymbolsFoundProperty); }
+            set { SetValue(SymbolsFoundProperty, value); }
+        }
+
         #endregion
 
         #region Commands
@@ -606,7 +616,16 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandFindByCompany(object p)
         {
-            // TODO
+            var compounderQueryParams = new CompounderQueryParams<object>
+            {
+                YearFrom = YearFrom,
+                YearTo = YearTo,
+                Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
+                HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
+            };
+
+            SymbolsFound = QueryFactory.CompounderQuery.FindByCompany(compounderQueryParams, Company);
+            SymbolsFound = string.IsNullOrWhiteSpace(SymbolsFound) ? "No matches!" : SymbolsFound;
         }
 
         /// <summary>
