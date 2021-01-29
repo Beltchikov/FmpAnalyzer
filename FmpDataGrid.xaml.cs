@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FmpAnalyzer.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,21 @@ namespace FmpAnalyzer
             set { SetValue(ItemsSourceProperty, value); }
         }
 
+        /// <summary>
+        /// gridCompounder_CopyingRowClipboardContent
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void gridCompounder_CopyingRowClipboardContent(object sender, DataGridRowClipboardEventArgs e)
+        {
+            int columnIndex = gridCompounder.CurrentCell.Column.DisplayIndex;
+            var column = gridCompounder.Columns[columnIndex];
 
-
+            var companyName = ((ResultSet)e.Item).Name;
+            var cellContent = new DataGridClipboardCellContent(e.Item, column, companyName);
+            
+            e.ClipboardRowContent.Clear();
+            e.ClipboardRowContent.Add(cellContent);
+        }
     }
 }

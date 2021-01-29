@@ -15,7 +15,12 @@
                        ItemsSource="{Binding ElementName=ctrlFmpDataGrid, Path=ItemsSource, Mode=OneWay}"
                                 AutoGenerateColumns="False"
                                       RowHeight="30"
-                                      Background="{Binding ElementName=ctrlFmpDataGrid, Path=Background}">
+                                      Background="{Binding ElementName=ctrlFmpDataGrid, Path=Background}" CopyingRowClipboardContent="gridCompounder_CopyingRowClipboardContent">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="Copy" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Symbol" SortMemberPath="Symbol">
                         <DataGridTemplateColumn.CellTemplate>
