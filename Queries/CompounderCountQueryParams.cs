@@ -3,6 +3,7 @@ using FmpAnalyzer.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace FmpAnalyzer.Queries
 {
@@ -18,6 +19,14 @@ namespace FmpAnalyzer.Queries
         public int EpsGrowthKoef { get; internal set; }
         public double DebtEquityRatioFrom { get; internal set; }
         public double DebtEquityRatioTo { get; internal set; }
-        public List<Exchange> Exchages { get; internal set; }
+        public List<Exchange> Exchanges { get; internal set; }
+
+        public List<string> SelectedFmpExchanges
+        {
+            get
+            {
+                return Exchanges.Where(e => e.Selected).SelectMany(s => s.ExchangesFmp).ToList();
+            }
+        }
     }
 }

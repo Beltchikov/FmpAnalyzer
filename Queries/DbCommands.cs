@@ -31,7 +31,8 @@ namespace FmpAnalyzer.Queries
             AddDoubleParameter(command, "@ReinvestmentRateTo", DbType.Double, parameters.ReinvestmentRateTo);
 
             AddStringListParameter(command, "@Dates", DbType.String, dates);
-
+            AddStringListParameter(command, "@Exchanges", DbType.String, parameters.SelectedFmpExchanges);
+            
             AddDoubleParameter(command, "@DebtEquityRatioFrom", DbType.Double, parameters.DebtEquityRatioFrom);
             AddDoubleParameter(command, "@DebtEquityRatioTo", DbType.Double, parameters.DebtEquityRatioTo);
 

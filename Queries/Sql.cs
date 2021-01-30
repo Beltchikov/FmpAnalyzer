@@ -17,15 +17,21 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         public static string Compounder(CompounderCountQueryParams parameters, List<string> dates)
         {
-            string sqlBase = $@"select Symbol, Date, Equity, Debt, NetIncome, Roe, ReinvestmentRate, DebtEquityRatio
-                from ViewCompounder 
+            string sqlBase = $@"select v.Symbol, v.Date, v.Equity, v.Debt, v.NetIncome, v.Roe, v.ReinvestmentRate, v.DebtEquityRatio
+                from ViewCompounder v 
+                inner join Stocks s
+                on v.Symbol = s.Symbol
                 where 1 = 1
-                and Date in (@Dates)
-                and Roe >= @RoeFrom
-                and ReinvestmentRate >= @ReinvestmentRateFrom";
+                and v.Date in (@Dates)
+                and s.Exchange in(@Exchanges)
+                and v.Roe >= @RoeFrom
+                and v.ReinvestmentRate >= @ReinvestmentRateFrom";
 
             string datesAsParam = CreateCommaSeparatedParams("@Dates", dates.Count);
             string sql = sqlBase.Replace("@Dates", datesAsParam);
+
+            string exchangesAsParam = CreateCommaSeparatedParams("@Exchanges", parameters.SelectedFmpExchanges.Count);
+            sql = sql.Replace("@Exchanges", exchangesAsParam);
 
             if (parameters.RoeTo != 0)
             {

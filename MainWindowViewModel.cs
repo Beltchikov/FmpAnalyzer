@@ -501,7 +501,7 @@ namespace FmpAnalyzer
                 CurrentPage = CurrentPage,
                 DebtEquityRatioFrom = DebtToEquityFrom,
                 DebtEquityRatioTo = DebtToEquityTo,
-                Exchages = Exchanges
+                Exchanges = Exchanges
             };
 
             BackgroundWork((s, e) =>
@@ -541,7 +541,7 @@ namespace FmpAnalyzer
                 EpsGrowthKoef = EpsGrowthKoefSelected,
                 DebtEquityRatioFrom = DebtToEquityFrom,
                 DebtEquityRatioTo = DebtToEquityTo,
-                Exchages = Exchanges
+                Exchanges = Exchanges
             };
 
             BackgroundWork((s, e) =>
