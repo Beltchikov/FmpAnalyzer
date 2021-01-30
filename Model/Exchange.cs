@@ -85,7 +85,7 @@ namespace FmpAnalyzer.Model
                 return new Exchange
                 {
                     Name = "HKSE",
-                    Selected = true,
+                    Selected = false,
                     ExchangesFmp = new List<string>
                     { "HKSE"}
                 };
@@ -119,7 +119,7 @@ namespace FmpAnalyzer.Model
                 return new Exchange
                 {
                     Name = "NSE",
-                    Selected = true,
+                    Selected = false,
                     ExchangesFmp = new List<string>
                     { "NSE"}
                 };
