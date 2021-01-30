@@ -1,4 +1,5 @@
 ﻿using FmpAnalyzer.Data;
+using FmpAnalyzer.Model;
 using FmpAnalyzer.Queries;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty DebtToEquityToProperty;
         public static readonly DependencyProperty CompanyProperty;
         public static readonly DependencyProperty SymbolsFoundProperty;
+        public static readonly DependencyProperty ExchangesProperty;
 
         static MainWindowViewModel()
         {
@@ -98,7 +100,8 @@ namespace FmpAnalyzer
             DebtToEquityToProperty = DependencyProperty.Register("DebtToEquityTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             CompanyProperty = DependencyProperty.Register("Company", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             SymbolsFoundProperty = DependencyProperty.Register("SymbolsFound", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-        }
+            ExchangesProperty = DependencyProperty.Register("Exchanges", typeof(List<Exchange>), typeof(MainWindowViewModel), new PropertyMetadata(new List<Exchange>()));
+    }
 
         public MainWindowViewModel()
         {
@@ -457,6 +460,16 @@ namespace FmpAnalyzer
             set { SetValue(SymbolsFoundProperty, value); }
         }
 
+
+        /// <summary>
+        /// Exchanges
+        /// </summary>
+        public List<Exchange> Exchanges
+        {
+            get { return (List<Exchange>)GetValue(ExchangesProperty); }
+            set { SetValue(ExchangesProperty, value); }
+        }
+
         #endregion
 
         #region Commands
@@ -721,6 +734,19 @@ namespace FmpAnalyzer
             // EpsGrowthKoefList
             EpsGrowthKoefList = new List<int> { 0, 2, 3, 4 };
             EpsGrowthKoefSelected = EpsGrowthKoefList[2];
+
+            // Exchages
+            Exchanges = new List<Exchange>()
+            {
+                new Exchange {Name = "NYSE", Selected = true},
+                new Exchange {Name = "NASDAQ", Selected = true},
+                new Exchange {Name = "LSE", Selected = true},
+                new Exchange {Name = "HKSE", Selected = true},
+                new Exchange {Name = "ASX", Selected = true},
+                new Exchange {Name = "NSE", Selected = true},
+                new Exchange {Name = "Canada", Selected = true},
+                new Exchange {Name = "Europe", Selected = true}
+            };
         }
 
         /// <summary>
