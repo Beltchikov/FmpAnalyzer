@@ -15,15 +15,18 @@ namespace FmpAnalyzer.Model
         /// <summary>
         /// Exchange
         /// </summary>
-        Exchange() 
+        Exchange()
         {
             ExchangesFmp = new List<string>();
         }
-                
+
         public string Name { get; private set; }
         public bool Selected { get; set; }
         public List<string> ExchangesFmp { get; private set; }
-        
+
+        /// <summary>
+        /// Nyse
+        /// </summary>
         public static Exchange Nyse
         {
             get
@@ -38,6 +41,9 @@ namespace FmpAnalyzer.Model
             }
         }
 
+        /// <summary>
+        /// Nasdaq
+        /// </summary>
         public static Exchange Nasdaq
         {
             get
@@ -52,6 +58,9 @@ namespace FmpAnalyzer.Model
             }
         }
 
+        /// <summary>
+        /// Lse
+        /// </summary>
         public static Exchange Lse
         {
             get
@@ -66,6 +75,9 @@ namespace FmpAnalyzer.Model
             }
         }
 
+        /// <summary>
+        /// Hkse
+        /// </summary>
         public static Exchange Hkse
         {
             get
@@ -80,6 +92,9 @@ namespace FmpAnalyzer.Model
             }
         }
 
+        /// <summary>
+        /// Asx
+        /// </summary>
         public static Exchange Asx
         {
             get
@@ -94,6 +109,9 @@ namespace FmpAnalyzer.Model
             }
         }
 
+        /// <summary>
+        /// Nse
+        /// </summary>
         public static Exchange Nse
         {
             get
@@ -108,6 +126,9 @@ namespace FmpAnalyzer.Model
             }
         }
 
+        /// <summary>
+        /// Canada
+        /// </summary>
         public static Exchange Canada
         {
             get
@@ -122,6 +143,9 @@ namespace FmpAnalyzer.Model
             }
         }
 
+        /// <summary>
+        /// Europe
+        /// </summary>
         public static Exchange Europe
         {
             get
@@ -138,7 +162,5 @@ namespace FmpAnalyzer.Model
                 };
             }
         }
-
-
     }
 }
