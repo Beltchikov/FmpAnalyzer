@@ -500,7 +500,8 @@ namespace FmpAnalyzer
                 PageSize = PageSizeSelected,
                 CurrentPage = CurrentPage,
                 DebtEquityRatioFrom = DebtToEquityFrom,
-                DebtEquityRatioTo = DebtToEquityTo
+                DebtEquityRatioTo = DebtToEquityTo,
+                Exchages = Exchanges
             };
 
             BackgroundWork((s, e) =>
@@ -539,7 +540,8 @@ namespace FmpAnalyzer
                 RevenueGrowthKoef = RevenueGrowthKoefSelected,
                 EpsGrowthKoef = EpsGrowthKoefSelected,
                 DebtEquityRatioFrom = DebtToEquityFrom,
-                DebtEquityRatioTo = DebtToEquityTo
+                DebtEquityRatioTo = DebtToEquityTo,
+                Exchages = Exchanges
             };
 
             BackgroundWork((s, e) =>
@@ -738,14 +740,14 @@ namespace FmpAnalyzer
             // Exchages
             Exchanges = new List<Exchange>()
             {
-                new Exchange {Name = "NYSE", Selected = true},
-                new Exchange {Name = "NASDAQ", Selected = true},
-                new Exchange {Name = "LSE", Selected = true},
-                new Exchange {Name = "HKSE", Selected = true},
-                new Exchange {Name = "ASX", Selected = true},
-                new Exchange {Name = "NSE", Selected = true},
-                new Exchange {Name = "Canada", Selected = true},
-                new Exchange {Name = "Europe", Selected = true}
+                Exchange.Nyse,
+                Exchange.Nasdaq,
+                Exchange.Lse,
+                Exchange.Hkse,
+                Exchange.Asx,
+                Exchange.Nse,
+                Exchange.Canada,
+                Exchange.Europe
             };
         }
 

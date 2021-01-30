@@ -1,4 +1,5 @@
 ﻿using FmpAnalyzer.Data;
+using FmpAnalyzer.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,5 +18,6 @@ namespace FmpAnalyzer.Queries
         public int EpsGrowthKoef { get; internal set; }
         public double DebtEquityRatioFrom { get; internal set; }
         public double DebtEquityRatioTo { get; internal set; }
+        public List<Exchange> Exchages { get; internal set; }
     }
 }
