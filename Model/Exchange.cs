@@ -23,7 +23,7 @@ namespace FmpAnalyzer.Model
         public string Name { get; private set; }
         public bool Selected { get; set; }
         public List<string> ExchangesFmp { get; private set; }
-
+        
         public static Exchange Nyse
         {
             get
@@ -31,7 +31,9 @@ namespace FmpAnalyzer.Model
                 return new Exchange
                 {
                     Name = "NYSE",
-                    Selected = true
+                    Selected = true,
+                    ExchangesFmp = new List<string>
+                    { "New York Stock Exchange","NYSE Arca","NYSE","NYSE American","NYSEArca"}
                 };
             }
         }
@@ -43,7 +45,9 @@ namespace FmpAnalyzer.Model
                 return new Exchange
                 {
                     Name = "NASDAQ",
-                    Selected = true
+                    Selected = true,
+                    ExchangesFmp = new List<string>
+                    { "Nasdaq","Nasdaq Global Select","NASDAQ Capital Market","NASDAQ Global Market","NasdaqGS", "NasdaqCM", "NasdaqGM"}
                 };
             }
         }
@@ -55,7 +59,9 @@ namespace FmpAnalyzer.Model
                 return new Exchange
                 {
                     Name = "LSE",
-                    Selected = true
+                    Selected = true,
+                    ExchangesFmp = new List<string>
+                    { "LSE"}
                 };
             }
         }
@@ -67,7 +73,9 @@ namespace FmpAnalyzer.Model
                 return new Exchange
                 {
                     Name = "HKSE",
-                    Selected = true
+                    Selected = true,
+                    ExchangesFmp = new List<string>
+                    { "HKSE"}
                 };
             }
         }
@@ -79,7 +87,9 @@ namespace FmpAnalyzer.Model
                 return new Exchange
                 {
                     Name = "ASX",
-                    Selected = true
+                    Selected = true,
+                    ExchangesFmp = new List<string>
+                    { "ASX"}
                 };
             }
         }
@@ -91,7 +101,9 @@ namespace FmpAnalyzer.Model
                 return new Exchange
                 {
                     Name = "NSE",
-                    Selected = true
+                    Selected = true,
+                    ExchangesFmp = new List<string>
+                    { "NSE"}
                 };
             }
         }
@@ -103,7 +115,9 @@ namespace FmpAnalyzer.Model
                 return new Exchange
                 {
                     Name = "Canada",
-                    Selected = true
+                    Selected = true,
+                    ExchangesFmp = new List<string>
+                    { "Toronto", "YHD"}
                 };
             }
         }
@@ -115,7 +129,12 @@ namespace FmpAnalyzer.Model
                 return new Exchange
                 {
                     Name = "Europe",
-                    Selected = true
+                    Selected = true,
+                    ExchangesFmp = new List<string>
+                    { "Paris", "XETRA", "BATS Exchange",
+                    "MCX","Brussels","BATS",
+                    "Amsterdam", "OSE", "SIX",
+                    "NMS","Lisbon","NCM"}
                 };
             }
         }
