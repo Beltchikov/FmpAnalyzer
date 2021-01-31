@@ -63,6 +63,8 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty CompanyProperty;
         public static readonly DependencyProperty SymbolsFoundProperty;
         public static readonly DependencyProperty ExchangesProperty;
+        public static readonly DependencyProperty CompaniesEarningsProperty;
+        public static readonly DependencyProperty CompaniesEarningsNotProcessedProperty;
 
         static MainWindowViewModel()
         {
@@ -101,7 +103,9 @@ namespace FmpAnalyzer
             CompanyProperty = DependencyProperty.Register("Company", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             SymbolsFoundProperty = DependencyProperty.Register("SymbolsFound", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             ExchangesProperty = DependencyProperty.Register("Exchanges", typeof(List<Exchange>), typeof(MainWindowViewModel), new PropertyMetadata(new List<Exchange>()));
-    }
+            CompaniesEarningsProperty = DependencyProperty.Register("CompaniesEarnings", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
+            CompaniesEarningsNotProcessedProperty = DependencyProperty.Register("CompaniesEarningsNotProcessed", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
+        }
 
         public MainWindowViewModel()
         {
@@ -460,6 +464,17 @@ namespace FmpAnalyzer
             set { SetValue(SymbolsFoundProperty, value); }
         }
 
+        public string CompaniesEarnings
+        {
+            get { return (string)GetValue(CompaniesEarningsProperty); }
+            set { SetValue(CompaniesEarningsProperty, value); }
+        }
+
+        public string CompaniesEarningsNotProcessed
+        {
+            get { return (string)GetValue(CompaniesEarningsNotProcessedProperty); }
+            set { SetValue(CompaniesEarningsNotProcessedProperty, value); }
+        }
 
         /// <summary>
         /// Exchanges
@@ -639,7 +654,8 @@ namespace FmpAnalyzer
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
             };
 
-            SymbolsFound = QueryFactory.SymbolByCompanyQuery.FindByCompany(compounderQueryParams, Company);
+            var symbolsAsList = QueryFactory.SymbolByCompanyQuery.FindByCompany(compounderQueryParams, Company);
+            SymbolsFound = symbolsAsList.Aggregate((r, n) => r + "\r\n" + n);
             SymbolsFound = string.IsNullOrWhiteSpace(SymbolsFound) ? "No matches!" : SymbolsFound;
         }
 
@@ -649,6 +665,16 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandEarnings(object p)
         {
+            var listOfCompanies = CompaniesEarnings.Split("\r\n").ToList();
+            foreach(var company in listOfCompanies)
+            {
+
+            }
+
+
+
+            //var symbols = QueryFactory.SymbolByCompanyQuery.FindByCompany(compounderQueryParams, Company);
+
             // TODO
             // Finde Symbols
             // Builde für Symbols ResultSet
