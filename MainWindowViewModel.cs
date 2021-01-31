@@ -65,6 +65,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty ExchangesProperty;
         public static readonly DependencyProperty CompaniesEarningsProperty;
         public static readonly DependencyProperty CompaniesEarningsNotProcessedProperty;
+        public static readonly DependencyProperty EarningsResultSetListProperty;
 
         static MainWindowViewModel()
         {
@@ -105,6 +106,7 @@ namespace FmpAnalyzer
             ExchangesProperty = DependencyProperty.Register("Exchanges", typeof(List<Exchange>), typeof(MainWindowViewModel), new PropertyMetadata(new List<Exchange>()));
             CompaniesEarningsProperty = DependencyProperty.Register("CompaniesEarnings", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             CompaniesEarningsNotProcessedProperty = DependencyProperty.Register("CompaniesEarningsNotProcessed", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
+            EarningsResultSetListProperty = DependencyProperty.Register("EarningsResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
         }
 
         public MainWindowViewModel()
@@ -195,6 +197,15 @@ namespace FmpAnalyzer
         {
             get { return (List<ResultSet>)GetValue(SymbolResultSetListProperty); }
             set { SetValue(SymbolResultSetListProperty, value); }
+        }
+
+        /// <summary>
+        /// EarningsResultSetList
+        /// </summary>
+        public List<ResultSet> EarningsResultSetList
+        {
+            get { return (List<ResultSet>)GetValue(EarningsResultSetListProperty); }
+            set { SetValue(EarningsResultSetListProperty, value); }
         }
 
         /// <summary>
@@ -666,35 +677,36 @@ namespace FmpAnalyzer
         private void OnCommandEarnings(object p)
         {
             List<string> companiesNotResolved = new List<string>();
-            List<string> symbols = new List<string>();
+            List<string> symbolList = new List<string>();
 
             var listOfCompanies = CompaniesEarnings.Split("\r\n").ToList();
             listOfCompanies = listOfCompanies.Where(c => !string.IsNullOrWhiteSpace(c)).ToList();
             listOfCompanies = listOfCompanies.Select(c => c.Trim()).ToList();
-            
+
             foreach (var company in listOfCompanies)
             {
                 var symbolsAsList = QueryFactory.SymbolByCompanyQuery.FindByCompany(company);
-                if(!symbolsAsList.Any())
+                if (!symbolsAsList.Any())
                 {
                     companiesNotResolved.Add(company);
                 }
                 else
                 {
                     var currentSymbols = symbolsAsList.Select(s => s.Split("\t")[0]);
-                    symbols.AddRange(currentSymbols);
+                    symbolList.AddRange(currentSymbols);
                 }
             }
 
             CompaniesEarningsNotProcessed = companiesNotResolved.Aggregate((r, n) => r + "\r\n" + n);
 
-
-            //var symbols = QueryFactory.SymbolByCompanyQuery.FindByCompany(compounderQueryParams, Company);
-
-            // TODO
-            // Finde Symbols
-            // Builde für Symbols ResultSet
-            // Zeige Daten im Grid
+            var compounderQueryParams = new CompounderQueryParams<object>
+            {
+                YearFrom = YearFrom,
+                YearTo = YearTo,
+                Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
+                HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
+            };
+            EarningsResultSetList = QueryFactory.CompounderQuery.FindBySymbol(compounderQueryParams, symbolList).ResultSets;
         }
 
         #endregion

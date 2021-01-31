@@ -349,6 +349,9 @@
                           Command="{Binding CommandEarnings}"
                             Grid.Column="2">Show Data
                     </Button>
+                    <local:FmpDataGrid ItemsSource="{Binding EarningsResultSetList, Mode=OneWay}"
+                                           Background="{Binding BackgroundResults}"
+                                           Grid.Column="2" Grid.Row="3"></local:FmpDataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="..."></TabItem>
