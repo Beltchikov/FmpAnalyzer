@@ -22,11 +22,9 @@ namespace FmpAnalyzer.Queries
         /// <summary>
         /// FindByCompany
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="parameters"></param>
         /// <param name="company"></param>
         /// <returns></returns>
-        public List<string> FindByCompany<T>(CompounderQueryParams<T> parameters, string company)
+        public List<string> FindByCompany(string company)
         {
             var command = DbCommands.FindByCompany(DataContext.Database.GetDbConnection(), Sql.FindByCompany(company), company);
             var queryAsEnumerable = QueryAsEnumerable(command, ResultSetFunctions.FindByCompany).ToList();

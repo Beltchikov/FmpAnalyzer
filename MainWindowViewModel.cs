@@ -654,7 +654,7 @@ namespace FmpAnalyzer
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
             };
 
-            var symbolsAsList = QueryFactory.SymbolByCompanyQuery.FindByCompany(compounderQueryParams, Company);
+            var symbolsAsList = QueryFactory.SymbolByCompanyQuery.FindByCompany(Company);
             SymbolsFound = symbolsAsList.Aggregate((r, n) => r + "\r\n" + n);
             SymbolsFound = string.IsNullOrWhiteSpace(SymbolsFound) ? "No matches!" : SymbolsFound;
         }
@@ -668,7 +668,11 @@ namespace FmpAnalyzer
             var listOfCompanies = CompaniesEarnings.Split("\r\n").ToList();
             foreach(var company in listOfCompanies)
             {
+                var symbolsAsList = QueryFactory.SymbolByCompanyQuery.FindByCompany(Company);
+                if(symbolsAsList.Any())
+                {
 
+                }
             }
 
 
