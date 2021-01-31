@@ -1,6 +1,6 @@
-﻿using FmpAnalyzer.ResultSet;
-using FmpAnalyzer.Model;
-using FmpAnalyzer.Queries;
+﻿using FmpAnalyzer.Model;
+using FmpDataContext.Model;
+using FmpDataContext.Queries;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -74,7 +74,7 @@ namespace FmpAnalyzer
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             BackgroundResultsProperty = DependencyProperty.Register("BackgroundResults", typeof(Brush), typeof(MainWindowViewModel), new PropertyMetadata(default(Brush)));
-            ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet.ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet.ResultSet>()));
+            ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
             ReinvestmentRateFromProperty = DependencyProperty.Register("ReinvestmentRateFrom", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             SelectedSymbolProperty = DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             YearFromProperty = DependencyProperty.Register("YearFrom", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0, YearFromChanged));
@@ -92,7 +92,7 @@ namespace FmpAnalyzer
             RoeGrowthKoefListProperty = DependencyProperty.Register("RoeGrowthKoefList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
             RoeGrowthKoefSelectedProperty = DependencyProperty.Register("RoeGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             SymbolProperty = DependencyProperty.Register("Symbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            SymbolResultSetListProperty = DependencyProperty.Register("SymbolResultSetList", typeof(List<ResultSet.ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet.ResultSet>()));
+            SymbolResultSetListProperty = DependencyProperty.Register("SymbolResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
             RoeToProperty = DependencyProperty.Register("RoeTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             ReinvestmentRateToProperty = DependencyProperty.Register("ReinvestmentRateTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             RevenueGrowthKoefListProperty = DependencyProperty.Register("RevenueGrowthKoefList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
@@ -106,7 +106,7 @@ namespace FmpAnalyzer
             ExchangesProperty = DependencyProperty.Register("Exchanges", typeof(List<Exchange>), typeof(MainWindowViewModel), new PropertyMetadata(new List<Exchange>()));
             CompaniesEarningsProperty = DependencyProperty.Register("CompaniesEarnings", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             CompaniesEarningsNotProcessedProperty = DependencyProperty.Register("CompaniesEarningsNotProcessed", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            EarningsResultSetListProperty = DependencyProperty.Register("EarningsResultSetList", typeof(List<ResultSet.ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet.ResultSet>()));
+            EarningsResultSetListProperty = DependencyProperty.Register("EarningsResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
         }
 
         public MainWindowViewModel()
@@ -182,27 +182,27 @@ namespace FmpAnalyzer
         /// <summary>
         /// ResultSetList
         /// </summary>
-        public List<ResultSet.ResultSet> ResultSetList
+        public List<ResultSet> ResultSetList
         {
-            get { return (List<ResultSet.ResultSet>)GetValue(ResultSetListProperty); }
+            get { return (List<ResultSet>)GetValue(ResultSetListProperty); }
             set { SetValue(ResultSetListProperty, value); }
         }
 
         /// <summary>
         /// SymbolResultSetList
         /// </summary>
-        public List<ResultSet.ResultSet> SymbolResultSetList
+        public List<ResultSet> SymbolResultSetList
         {
-            get { return (List<ResultSet.ResultSet>)GetValue(SymbolResultSetListProperty); }
+            get { return (List<ResultSet>)GetValue(SymbolResultSetListProperty); }
             set { SetValue(SymbolResultSetListProperty, value); }
         }
 
         /// <summary>
         /// EarningsResultSetList
         /// </summary>
-        public List<ResultSet.ResultSet> EarningsResultSetList
+        public List<ResultSet> EarningsResultSetList
         {
-            get { return (List<ResultSet.ResultSet>)GetValue(EarningsResultSetListProperty); }
+            get { return (List<ResultSet>)GetValue(EarningsResultSetListProperty); }
             set { SetValue(EarningsResultSetListProperty, value); }
         }
 
@@ -884,7 +884,7 @@ namespace FmpAnalyzer
         /// </summary>
         private void LockControls()
         {
-            ResultSetList = new List<ResultSet.ResultSet>();
+            ResultSetList = new List<ResultSet>();
             ProgressCurrent = 0;
             BackgroundResults = Brushes.DarkGray;
         }

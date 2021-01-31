@@ -14,15 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appSettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Reference Include="FmpDataContext">
+      <HintPath>..\FmpDataContext\bin\Debug\net5.0\FmpDataContext.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="FmpDataContext">
-      <HintPath>..\FmpDataContext\bin\Release\net5.0\FmpDataContext.dll</HintPath>
-    </Reference>
+    <None Update="appSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using FmpAnalyzer.ResultSet;
+﻿using FmpDataContext.Queries;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ namespace FmpAnalyzer
             int columnIndex = gridCompounder.CurrentCell.Column.DisplayIndex;
             var column = gridCompounder.Columns[columnIndex];
 
-            var companyName = ((ResultSet.ResultSet)e.Item).Name;
+            var companyName = ((ResultSet)e.Item).Name;
             var cellContent = new DataGridClipboardCellContent(e.Item, column, companyName);
             
             e.ClipboardRowContent.Clear();
