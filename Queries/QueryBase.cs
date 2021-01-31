@@ -13,9 +13,6 @@ namespace FmpAnalyzer.Queries
     /// </summary>
     public class QueryBase
     {
-        public delegate void DatabaseActionDelegate(object sender, DatabaseActionEventArgs e);
-        public event DatabaseActionDelegate DatabaseAction;
-
         QueryBase() { }
 
         /// <summary>
@@ -30,22 +27,6 @@ namespace FmpAnalyzer.Queries
         protected QueryBase(DataContext dataContext)
         {
             DataContext = dataContext;
-        }
-
-        /// <summary>
-        /// ReportProgress
-        /// </summary>
-        /// <param name="max"></param>
-        /// <param name="current"></param>
-        /// <param name="message"></param>
-        public void ReportProgress(int max, int current, string message)
-        {
-            DatabaseAction?.Invoke(this, new DatabaseActionEventArgs
-            {
-                Action = message,
-                ProgressValue = current,
-                MaxValue = max
-            });
         }
 
         /// <summary>

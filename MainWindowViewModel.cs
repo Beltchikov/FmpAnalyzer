@@ -130,8 +130,6 @@ namespace FmpAnalyzer
             CommandFind = new RelayCommand(p => { OnCommandFindBySymbol(p); });
             CommandEarnings = new RelayCommand(p => { OnCommandEarnings(p); });
             CommandFindByCompany = new RelayCommand(p => { OnCommandFindByCompany(p); });
-
-            QueryFactory.CompounderQuery.DatabaseAction += CompounderQuery_DatabaseAction;
         }
 
         #region Properties
@@ -879,20 +877,6 @@ namespace FmpAnalyzer
             }
 
             instance.GenerateCountMessage();
-        }
-
-        /// <summary>
-        /// CompounderQuery_DatabaseAction
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CompounderQuery_DatabaseAction(object sender, DatabaseActionEventArgs e)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                ProgressCurrent = e.ProgressValue;
-                CurrentAction = e.Action;
-            });
         }
 
         /// <summary>

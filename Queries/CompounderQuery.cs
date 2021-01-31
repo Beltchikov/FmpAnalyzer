@@ -29,8 +29,7 @@ namespace FmpAnalyzer.Queries
             ResultSetList resultSetList = null;
 
             var p = parameters;
-            ReportProgress(100, 10, $"Retrieving companies with ROE > {parameters.RoeFrom}");
-
+            
             var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
             var command = DbCommands.Compounder(DataContext.Database.GetDbConnection(), Sql.Compounder(parameters, dates), parameters, dates);
             var queryAsEnumerable = QueryAsEnumerable(command, ResultSetFunctions.Compounder).OrderByDescending(parameters.OrderFunction).ToList();
@@ -49,8 +48,6 @@ namespace FmpAnalyzer.Queries
             resultSetList = new ResultSetList(listOfResultSets);
             resultSetList.CountTotal = queryAsEnumerable.Count();
 
-            ReportProgress(100, 20, $"OK! {resultSetList.CountTotal} companies found.");
-
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.ReinvestmentHistoryQuery, a => a.ReinvestmentHistory);
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.IncrementalRoeQuery, a => a.IncrementalRoe);
             resultSetList = AddHistoryData(resultSetList, parameters, QueryFactory.OperatingIncomeHistoryQuery, a => a.OperatingIncome);
@@ -58,7 +55,6 @@ namespace FmpAnalyzer.Queries
             resultSetList = AddCompanyName(resultSetList);
             resultSetList = AddDebtEquityIncome(resultSetList);
 
-            ReportProgress(100, 100, $"OK! Finished query.");
             return resultSetList;
         }
 
@@ -217,9 +213,7 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         private ResultSetList AddCompanyName(ResultSetList inputResultSetList)
         {
-            ReportProgress(100, 70, $"Searching for the companies names ...");
             ResultSetList resultSetList = QueryFactory.CompanyNameQuery.Run(inputResultSetList);
-            ReportProgress(100, 80, $"Search for the companies names ended ...");
             return resultSetList;
         }
 
@@ -230,9 +224,7 @@ namespace FmpAnalyzer.Queries
         /// <returns></returns>
         private List<ResultSet> AddCompanyName(List<ResultSet> inputResultSetList)
         {
-            ReportProgress(100, 70, $"Searching for the companies names ...");
             List<ResultSet> resultSetList = QueryFactory.CompanyNameQuery.Run(inputResultSetList);
-            ReportProgress(100, 80, $"Search for the companies names ended ...");
             return resultSetList;
         }
 
