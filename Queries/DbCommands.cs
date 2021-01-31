@@ -44,15 +44,15 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="sql"></param>
-        /// <param name="symbol"></param>
+        /// <param name="symbolList"></param>
         /// <returns></returns>
-        public static DbCommand FindBySymbol(DbConnection connection, string sql, string symbol)
+        public static DbCommand FindBySymbol(DbConnection connection, string sql, List<string> symbolList)
         {
             var command = connection.CreateCommand();
             command.CommandText = sql;
             command.CommandType = CommandType.Text;
 
-            AddStringParameter(command, "@Symbol", DbType.String, symbol);
+            AddStringListParameter(command, "@Symbols", DbType.String, symbolList);
             return command;
         }
 

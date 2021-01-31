@@ -56,16 +56,18 @@ namespace FmpAnalyzer.Queries
         /// <summary>
         /// SqlFindBySymbol
         /// </summary>
-        /// <param name="symbol"></param>
+        /// <param name="symbolList"></param>
         /// <returns></returns>
-        public static string FindBySymbol(string symbol)
+        public static string FindBySymbol(List<string> symbolList)
         {
             string sqlBase = $@"select Symbol, Date, Equity, Debt, NetIncome, Roe, ReinvestmentRate, DebtEquityRatio
                 from ViewCompounder 
                 where 1 = 1
-                and Symbol = '@Symbol'";
+                and Symbol in (@Symbols)";
 
-            string sql = sqlBase.Replace("@Symbol", symbol);
+            string symbolsAsParam = CreateCommaSeparatedParams("@Symbols", symbolList.Count);
+            var sql = sqlBase.Replace("@Symbols", symbolsAsParam);
+            
             return sql;
         }
 

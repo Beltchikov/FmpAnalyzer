@@ -125,7 +125,7 @@ namespace FmpAnalyzer
             CommandPrevious = new RelayCommand(p => { OnCommandPrevious(p); });
             CommandNext = new RelayCommand(p => { OnCommandCommandNext(p); });
             CommandLast = new RelayCommand(p => { OnCommandLast(p); });
-            CommandFind = new RelayCommand(p => { OnCommandFind(p); });
+            CommandFind = new RelayCommand(p => { OnCommandFindBySymbol(p); });
             CommandEarnings = new RelayCommand(p => { OnCommandEarnings(p); });
             CommandFindByCompany = new RelayCommand(p => { OnCommandFindByCompany(p); });
 
@@ -485,6 +485,15 @@ namespace FmpAnalyzer
             set { SetValue(ExchangesProperty, value); }
         }
 
+        /// <summary>
+        /// Company
+        /// </summary>
+        public string Company
+        {
+            get { return (string)GetValue(CompanyProperty); }
+            set { SetValue(CompanyProperty, value); }
+        }
+
         #endregion
 
         #region Commands
@@ -614,20 +623,10 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
-        /// Company
-        /// </summary>
-        public string Company
-        {
-            get { return (string)GetValue(CompanyProperty); }
-            set { SetValue(CompanyProperty, value); }
-        }
-
-
-        /// <summary>
-        /// OnCommandFind
+        /// OnCommandFindBySymbol
         /// </summary>
         /// <param name="p"></param>
-        private void OnCommandFind(object p)
+        private void OnCommandFindBySymbol(object p)
         {
             var compounderQueryParams = new CompounderQueryParams<object>
             {
@@ -637,7 +636,8 @@ namespace FmpAnalyzer
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
             };
 
-            SymbolResultSetList = QueryFactory.CompounderQuery.FindBySymbol(compounderQueryParams, Symbol).ResultSets;
+            var symbolList = new List<string> { Symbol };
+            SymbolResultSetList = QueryFactory.CompounderQuery.FindBySymbol(compounderQueryParams, symbolList).ResultSets;
         }
 
         /// <summary>

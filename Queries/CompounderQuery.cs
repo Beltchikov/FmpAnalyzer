@@ -79,13 +79,13 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="parameters"></param>
-        /// <param name="symbol"></param>
+        /// <param name="symbolList"></param>
         /// <returns></returns>
-        public ResultSetList FindBySymbol<T>(CompounderQueryParams<T> parameters, string symbol)
+        public ResultSetList FindBySymbol<T>(CompounderQueryParams<T> parameters, List<string> symbolList)
         {
             ResultSetList resultSetList = null;
 
-            var command = DbCommands.FindBySymbol(DataContext.Database.GetDbConnection(), Sql.FindBySymbol(symbol), symbol);
+            var command = DbCommands.FindBySymbol(DataContext.Database.GetDbConnection(), Sql.FindBySymbol(symbolList), symbolList);
             var queryAsEnumerable = QueryAsEnumerable(command, ResultSetFunctions.FindBySymbol).ToList();
 
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
