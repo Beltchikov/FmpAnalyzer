@@ -711,7 +711,21 @@ namespace FmpAnalyzer
                 Dates = Configuration.Instance["Dates"].Split(",").Select(d => d.Trim()).ToList(),
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
             };
-            EarningsResultSetList = QueryFactory.CompounderQuery.FindBySymbol(compounderQueryParams, symbolList).ResultSets;
+            
+            LockControls();
+
+            BackgroundWork((s, e) =>
+            {
+                var resultSetList = QueryFactory.CompounderQuery.FindBySymbol(compounderQueryParams, symbolList);
+                (s as BackgroundWorker).ReportProgress(100, resultSetList);
+            }, (s, e) =>
+            {
+                EarningsResultSetList = ((ResultSetList)e.UserState).ResultSets;
+                CountTotal = ((ResultSetList)e.UserState).CountTotal;
+            }, (s, e) =>
+            {
+                UnlockControls();
+            });
         }
 
         #endregion
