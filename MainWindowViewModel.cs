@@ -699,6 +699,11 @@ namespace FmpAnalyzer
 
             CompaniesEarningsNotProcessed = companiesNotResolved.Aggregate((r, n) => r + "\r\n" + n);
 
+            if(!symbolList.Any())
+            {
+                return;
+            }
+
             var compounderQueryParams = new CompounderQueryParams<object>
             {
                 YearFrom = YearFrom,
