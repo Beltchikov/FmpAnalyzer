@@ -665,16 +665,28 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandEarnings(object p)
         {
-            var listOfCompanies = CompaniesEarnings.Split("\r\n").ToList();
-            foreach(var company in listOfCompanies)
-            {
-                var symbolsAsList = QueryFactory.SymbolByCompanyQuery.FindByCompany(Company);
-                if(symbolsAsList.Any())
-                {
+            List<string> companiesNotResolved = new List<string>();
+            List<string> symbols = new List<string>();
 
+            var listOfCompanies = CompaniesEarnings.Split("\r\n").ToList();
+            listOfCompanies = listOfCompanies.Where(c => !string.IsNullOrWhiteSpace(c)).ToList();
+            listOfCompanies = listOfCompanies.Select(c => c.Trim()).ToList();
+            
+            foreach (var company in listOfCompanies)
+            {
+                var symbolsAsList = QueryFactory.SymbolByCompanyQuery.FindByCompany(company);
+                if(!symbolsAsList.Any())
+                {
+                    companiesNotResolved.Add(company);
+                }
+                else
+                {
+                    var currentSymbols = symbolsAsList.Select(s => s.Split("\t")[0]);
+                    symbols.AddRange(currentSymbols);
                 }
             }
 
+            CompaniesEarningsNotProcessed = companiesNotResolved.Aggregate((r, n) => r + "\r\n" + n);
 
 
             //var symbols = QueryFactory.SymbolByCompanyQuery.FindByCompany(compounderQueryParams, Company);
