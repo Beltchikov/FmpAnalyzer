@@ -40,19 +40,26 @@ namespace FmpAnalyzer.Queries
         }
 
         /// <summary>
-        /// CommandFindBySymbol
+        /// FindBySymbol
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="sql"></param>
         /// <param name="symbolList"></param>
+        /// <param name="dates"></param>
         /// <returns></returns>
-        public static DbCommand FindBySymbol(DbConnection connection, string sql, List<string> symbolList)
+        public static DbCommand FindBySymbol(DbConnection connection, string sql, List<string> symbolList, List<string> dates)
         {
             var command = connection.CreateCommand();
             command.CommandText = sql;
             command.CommandType = CommandType.Text;
 
             AddStringListParameter(command, "@Symbols", DbType.String, symbolList);
+
+            if(dates.Any())
+            {
+                AddStringListParameter(command, "@Dates", DbType.String, dates);
+            }
+
             return command;
         }
 

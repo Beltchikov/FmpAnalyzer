@@ -85,7 +85,8 @@ namespace FmpAnalyzer.Queries
         {
             ResultSetList resultSetList = null;
 
-            var command = DbCommands.FindBySymbol(DataContext.Database.GetDbConnection(), Sql.FindBySymbol(symbolList), symbolList);
+            var dates = FmpHelper.BuildDatesList(parameters.YearFrom, parameters.YearTo, parameters.Dates);
+            var command = DbCommands.FindBySymbol(DataContext.Database.GetDbConnection(), Sql.FindBySymbol(symbolList, dates), symbolList, dates);
             var queryAsEnumerable = QueryAsEnumerable(command, ResultSetFunctions.FindBySymbol).ToList();
 
             queryAsEnumerable = AddHistoryData(queryAsEnumerable, parameters, QueryFactory.RoeHistoryQuery, a => a.RoeHistory);
