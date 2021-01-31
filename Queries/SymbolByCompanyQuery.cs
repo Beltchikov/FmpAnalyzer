@@ -1,4 +1,4 @@
-﻿using FmpAnalyzer.Data;
+﻿using FmpAnalyzer.ResultSet;
 using FmpDataContext;
 using Microsoft.EntityFrameworkCore;
 using System;

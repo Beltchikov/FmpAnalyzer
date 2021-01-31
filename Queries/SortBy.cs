@@ -1,4 +1,4 @@
-﻿using FmpAnalyzer.Data;
+﻿using FmpAnalyzer.ResultSet;
 using FmpDataContext;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,6 +19,6 @@ namespace FmpAnalyzer.Queries
 
         public bool Descending { get; set; }
 
-        public Func<ResultSet, object> Function;
+        public Func<ResultSet.ResultSet, object> Function;
     }
 }

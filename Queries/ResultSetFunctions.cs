@@ -1,4 +1,4 @@
-﻿using FmpAnalyzer.Data;
+﻿using FmpAnalyzer.ResultSet;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,13 +15,13 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <param name="dataTable"></param>
         /// <returns></returns>
-        public static IEnumerable<ResultSet> Compounder(DataTable dataTable)
+        public static IEnumerable<ResultSet.ResultSet> Compounder(DataTable dataTable)
         {
-            List<ResultSet> listOfResultSets = new List<ResultSet>();
+            List<ResultSet.ResultSet> listOfResultSets = new List<ResultSet.ResultSet>();
 
             foreach (DataRow row in dataTable.Rows)
             {
-                ResultSet resultSet = new ResultSet();
+                ResultSet.ResultSet resultSet = new ResultSet.ResultSet();
 
                 resultSet.Symbol = (string)row["Symbol"];
                 resultSet.Date = (string)row["Date"];
@@ -43,7 +43,7 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <param name="dataTable"></param>
         /// <returns></returns>
-        public static IEnumerable<ResultSet> FindBySymbol(DataTable dataTable)
+        public static IEnumerable<ResultSet.ResultSet> FindBySymbol(DataTable dataTable)
         {
             return Compounder(dataTable);
         }
@@ -53,12 +53,12 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <param name="dataTable"></param>
         /// <returns></returns>
-        public static IEnumerable<ResultSet> FindByCompany(DataTable dataTable)
+        public static IEnumerable<ResultSet.ResultSet> FindByCompany(DataTable dataTable)
         {
-            List<ResultSet> listOfResultSets = new List<ResultSet>();
+            List<ResultSet.ResultSet> listOfResultSets = new List<ResultSet.ResultSet>();
             foreach (DataRow row in dataTable.Rows)
             {
-                ResultSet resultSet = new ResultSet();
+                ResultSet.ResultSet resultSet = new ResultSet.ResultSet();
 
                 resultSet.Symbol = (string)row["Symbol"];
                 resultSet.Name = (string)row["Name"];

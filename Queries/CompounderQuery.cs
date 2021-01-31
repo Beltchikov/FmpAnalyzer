@@ -1,4 +1,4 @@
-﻿using FmpAnalyzer.Data;
+﻿using FmpAnalyzer.ResultSet;
 using FmpDataContext;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -42,7 +42,7 @@ namespace FmpAnalyzer.Queries
             queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RevenueGrowthKoef, r => r.RevenueHistory);
             queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.EpsGrowthKoef, r => r.EpsHistory);
 
-            List<ResultSet> listOfResultSets = p.Descending
+            List<ResultSet.ResultSet> listOfResultSets = p.Descending
                 ? queryAsEnumerable.OrderByDescending(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList()
                 : queryAsEnumerable.OrderBy(p.OrderFunction).Skip(p.CurrentPage * p.PageSize).Take(p.PageSize).ToList();
             resultSetList = new ResultSetList(listOfResultSets);
@@ -93,7 +93,7 @@ namespace FmpAnalyzer.Queries
             queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.RevenueGrowthKoef, r => r.RevenueHistory);
             queryAsEnumerable = AdjustToGrowthKoef(queryAsEnumerable, parameters.EpsGrowthKoef, r => r.EpsHistory);
 
-            List<ResultSet> listOfResultSets = queryAsEnumerable.ToList();
+            List<ResultSet.ResultSet> listOfResultSets = queryAsEnumerable.ToList();
             resultSetList = new ResultSetList(listOfResultSets);
             resultSetList.CountTotal = queryAsEnumerable.Count();
 
@@ -117,7 +117,7 @@ namespace FmpAnalyzer.Queries
         /// <param name="funcAttributeToSet"></param>
         /// <returns></returns>
         private ResultSetList AddHistoryData(ResultSetList inputResultSetList, HistoryQueryParams parameters,
-            HistoryQuery query, Func<ResultSet, List<double>> funcAttributeToSet)
+            HistoryQuery query, Func<ResultSet.ResultSet, List<double>> funcAttributeToSet)
         {
             for (int i = 0; i < inputResultSetList.ResultSets.Count(); i++)
             {
@@ -151,8 +151,8 @@ namespace FmpAnalyzer.Queries
         /// <param name="query"></param>
         /// <param name="funcAttributeToSet"></param>
         /// <returns></returns>
-        private List<ResultSet> AddHistoryData(List<ResultSet> inputResultSetList, HistoryQueryParams parameters,
-            HistoryQuery query, Func<ResultSet, List<double>> funcAttributeToSet)
+        private List<ResultSet.ResultSet> AddHistoryData(List<ResultSet.ResultSet> inputResultSetList, HistoryQueryParams parameters,
+            HistoryQuery query, Func<ResultSet.ResultSet, List<double>> funcAttributeToSet)
         {
             for (int i = 0; i < inputResultSetList.Count(); i++)
             {
@@ -186,16 +186,16 @@ namespace FmpAnalyzer.Queries
         /// <param name="growthKoef"></param>
         /// <param name="funcResultSetParam"></param>
         /// <returns></returns>
-        private List<ResultSet> AdjustToGrowthKoef(List<ResultSet> inputResultSetList, int growthKoef, Func<ResultSet, List<double>> funcResultSetParam)
+        private List<ResultSet.ResultSet> AdjustToGrowthKoef(List<ResultSet.ResultSet> inputResultSetList, int growthKoef, Func<ResultSet.ResultSet, List<double>> funcResultSetParam)
         {
             if (growthKoef == 0)
             {
                 return inputResultSetList;
             }
 
-            List<ResultSet> resultSetList = new List<ResultSet>();
+            List<ResultSet.ResultSet> resultSetList = new List<ResultSet.ResultSet>();
 
-            foreach (ResultSet resultSet in inputResultSetList)
+            foreach (ResultSet.ResultSet resultSet in inputResultSetList)
             {
                 if (funcResultSetParam(resultSet).Grows() >= growthKoef)
                 {
@@ -222,9 +222,9 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <param name="inputResultSetList"></param>
         /// <returns></returns>
-        private List<ResultSet> AddCompanyName(List<ResultSet> inputResultSetList)
+        private List<ResultSet.ResultSet> AddCompanyName(List<ResultSet.ResultSet> inputResultSetList)
         {
-            List<ResultSet> resultSetList = QueryFactory.CompanyNameQuery.Run(inputResultSetList);
+            List<ResultSet.ResultSet> resultSetList = QueryFactory.CompanyNameQuery.Run(inputResultSetList);
             return resultSetList;
         }
 
@@ -237,7 +237,7 @@ namespace FmpAnalyzer.Queries
         {
             for (int i = 0; i < inputResultSetList.ResultSets.Count(); i++)
             {
-                ResultSet resultSet = inputResultSetList.ResultSets[i];
+                ResultSet.ResultSet resultSet = inputResultSetList.ResultSets[i];
                 resultSet.DebtEquityIncome.Add(resultSet.Debt.Value);
                 resultSet.DebtEquityIncome.Add(resultSet.Equity.Value);
                 resultSet.DebtEquityIncome.Add(resultSet.NetIncome.Value);
@@ -250,11 +250,11 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <param name="inputResultSetList"></param>
         /// <returns></returns>
-        private List<ResultSet> AddDebtEquityIncome(List<ResultSet> inputResultSetList)
+        private List<ResultSet.ResultSet> AddDebtEquityIncome(List<ResultSet.ResultSet> inputResultSetList)
         {
             for (int i = 0; i < inputResultSetList.Count(); i++)
             {
-                ResultSet resultSet = inputResultSetList[i];
+                ResultSet.ResultSet resultSet = inputResultSetList[i];
                 resultSet.DebtEquityIncome.Add(resultSet.Debt.Value);
                 resultSet.DebtEquityIncome.Add(resultSet.Equity.Value);
                 resultSet.DebtEquityIncome.Add(resultSet.NetIncome.Value);

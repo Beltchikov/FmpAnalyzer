@@ -1,4 +1,4 @@
-﻿using FmpAnalyzer.Data;
+﻿using FmpAnalyzer.ResultSet;
 using FmpAnalyzer.Model;
 using System;
 using System.Collections.Generic;

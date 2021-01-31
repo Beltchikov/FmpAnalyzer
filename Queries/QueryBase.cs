@@ -1,4 +1,4 @@
-﻿using FmpAnalyzer.Data;
+﻿using FmpAnalyzer.ResultSet;
 using FmpDataContext;
 using System;
 using System.Collections.Generic;
@@ -35,7 +35,7 @@ namespace FmpAnalyzer.Queries
         /// <param name="command"></param>
         /// <param name="resultSetFunction"></param>
         /// <returns></returns>
-        protected IEnumerable<ResultSet> QueryAsEnumerable(DbCommand command, Func<DataTable, IEnumerable<ResultSet>> resultSetFunction)
+        protected IEnumerable<ResultSet.ResultSet> QueryAsEnumerable(DbCommand command, Func<DataTable, IEnumerable<ResultSet.ResultSet>> resultSetFunction)
         {
             command.Connection.Open();
             DataTable dataTable = null;

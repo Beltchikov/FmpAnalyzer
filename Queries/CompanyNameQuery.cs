@@ -1,4 +1,4 @@
-﻿using FmpAnalyzer.Data;
+﻿using FmpAnalyzer.ResultSet;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -42,7 +42,7 @@ namespace FmpAnalyzer.Queries
         /// </summary>
         /// <param name="inputResultSetList"></param>
         /// <returns></returns>
-        public List<ResultSet> Run(List<ResultSet> inputResultSetList)
+        public List<ResultSet.ResultSet> Run(List<ResultSet.ResultSet> inputResultSetList)
         {
             var symbols = inputResultSetList.Select(i => i.Symbol).ToList();
             var listSymbolNameQuery = DataContext.Stocks.Where(s => symbols.Contains(s.Symbol))
