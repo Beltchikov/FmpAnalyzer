@@ -701,7 +701,10 @@ namespace FmpAnalyzer
                 }
             }
 
-            CompaniesEarningsNotProcessed = companiesNotResolved.Aggregate((r, n) => r + "\r\n" + n);
+            if (companiesNotResolved.Any())
+            {
+                CompaniesEarningsNotProcessed = companiesNotResolved.Aggregate((r, n) => r + "\r\n" + n);
+            }
 
             if(!symbolList.Any())
             {
