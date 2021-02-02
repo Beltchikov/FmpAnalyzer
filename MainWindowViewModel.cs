@@ -663,8 +663,15 @@ namespace FmpAnalyzer
             };
 
             var symbolsAsList = QueryFactory.SymbolByCompanyQuery.FindByCompany(Company);
-            SymbolsFound = symbolsAsList.Aggregate((r, n) => r + "\r\n" + n);
-            SymbolsFound = string.IsNullOrWhiteSpace(SymbolsFound) ? "No matches!" : SymbolsFound;
+            if (symbolsAsList.Any())
+            {
+                SymbolsFound = symbolsAsList.Aggregate((r, n) => r + "\r\n" + n);
+                SymbolsFound = string.IsNullOrWhiteSpace(SymbolsFound) ? "No matches!" : SymbolsFound;
+            }
+            else
+            {
+                SymbolsFound = "No data found.";
+            }
         }
 
         /// <summary>
