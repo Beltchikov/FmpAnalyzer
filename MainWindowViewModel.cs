@@ -686,6 +686,7 @@ namespace FmpAnalyzer
             var listOfCompanies = CompaniesEarnings.Split("\r\n").ToList();
             listOfCompanies = listOfCompanies.Where(c => !string.IsNullOrWhiteSpace(c)).ToList();
             listOfCompanies = listOfCompanies.Select(c => c.Trim()).ToList();
+            listOfCompanies = listOfCompanies.Select(c => c.Replace("'"," ")).ToList();
 
             foreach (var company in listOfCompanies)
             {
