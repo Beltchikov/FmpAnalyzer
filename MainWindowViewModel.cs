@@ -519,7 +519,7 @@ namespace FmpAnalyzer
         {
             LockControls();
 
-            var compounderQueryParams = new CompounderQueryParams<object>
+            var compounderQueryParams = new CompounderQueryParams
             {
                 YearFrom = YearFrom,
                 YearTo = YearTo,
@@ -532,7 +532,7 @@ namespace FmpAnalyzer
                 RoeGrowthKoef = RoeGrowthKoefSelected == 0 ? null : RoeGrowthKoefSelected,
                 RevenueGrowthKoef = RevenueGrowthKoefSelected == 0 ? null : RevenueGrowthKoefSelected,
                 EpsGrowthKoef = EpsGrowthKoefSelected == 0 ? null : EpsGrowthKoefSelected,
-                OrderFunction = SortBySelected.Function,
+                OrderBy = SortBySelected.Value,
                 Descending = SortBySelected.Descending,
                 PageSize = PageSizeSelected,
                 CurrentPage = CurrentPage,
@@ -587,7 +587,7 @@ namespace FmpAnalyzer
         {
             LockControls();
 
-            var compounderCountQueryParams = new CompounderCountQueryParams
+            var compounderQueryParams = new CompounderQueryParams
             {
                 YearFrom = YearFrom,
                 YearTo = YearTo,
@@ -605,7 +605,7 @@ namespace FmpAnalyzer
 
             BackgroundWork((s, e) =>
             {
-                var count = QueryFactory.CompounderQuery.Count(compounderCountQueryParams);
+                var count = QueryFactory.CompounderQuery.Count(compounderQueryParams);
                 (s as BackgroundWorker).ReportProgress(100, count);
             }, (s, e) =>
             {
@@ -663,7 +663,7 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandFindBySymbol(object p)
         {
-            var compounderQueryParams = new CompounderQueryParams<object>
+            var compounderQueryParams = new CompounderQueryParams
             {
                 YearFrom = YearFrom,
                 YearTo = YearTo,
@@ -681,7 +681,7 @@ namespace FmpAnalyzer
         /// <param name="p"></param>
         private void OnCommandFindByCompany(object p)
         {
-            var compounderQueryParams = new CompounderQueryParams<object>
+            var compounderQueryParams = new CompounderQueryParams
             {
                 YearFrom = YearFrom,
                 YearTo = YearTo,
@@ -739,7 +739,7 @@ namespace FmpAnalyzer
                 return;
             }
 
-            var compounderQueryParams = new CompounderQueryParams<object>
+            var compounderQueryParams = new CompounderQueryParams
             {
                 YearFrom = YearFrom,
                 YearTo = YearTo,
@@ -805,25 +805,25 @@ namespace FmpAnalyzer
                 {
                     Text = "ROE Desc",
                     Descending = true,
-                    Function = (r) => r.Roe
+                    Value = "Roe"
                 },
                 new SortBy
                 {
                     Text = "ROE Asc",
                     Descending = false,
-                    Function = (r) => r.Roe
+                    Value = "Roe"
                 },
                 new SortBy
                 {
                     Text = "RR Asc",
                     Descending = false,
-                    Function = (r) => r.ReinvestmentRate
+                    Value = "ReinvestmentRate"
                 },
                 new SortBy
                 {
                     Text = "RR Desc",
                     Descending = true,
-                    Function = (r) => r.ReinvestmentRate
+                    Value = "ReinvestmentRate"
                 }
             };
 
