@@ -566,6 +566,11 @@ namespace FmpAnalyzer
         /// <returns></returns>
         private string GenerateCurrentActionMessage(ResultSetList resultSetList)
         {
+            if(resultSetList == null)
+            {
+                return string.Empty;
+            }    
+            
             if(resultSetList.ResultSets.Any())
             {
                 return $"{CountTotal} companies found. Showing companies {ShowingCompanyFrom} - {ShowingCompanyTo}";
