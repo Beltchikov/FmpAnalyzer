@@ -195,7 +195,7 @@
                                  Value="{Binding ProgressCurrent}"
                                  Grid.Row="4"
                                      Grid.Column="1"/>
-                        <local:FmpDataGrid ItemsSource="{Binding ResultSetList, Mode=OneWay}"
+                        <local:FmpDataGrid ItemsSource="{Binding ListOfResultSets, Mode=OneWay}"
                                            Background="{Binding BackgroundResults}"
                                            Grid.Row="6"
                                        Grid.Column="1"></local:FmpDataGrid>

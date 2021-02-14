@@ -32,7 +32,7 @@ namespace FmpAnalyzer
         public static readonly DependencyProperty CurrentActionProperty;
         public static readonly DependencyProperty ProgressCurrentProperty;
         public static readonly DependencyProperty BackgroundResultsProperty;
-        public static readonly DependencyProperty ResultSetListProperty;
+        public static readonly DependencyProperty ListOfResultSetsProperty;
         public static readonly DependencyProperty ReinvestmentRateFromProperty;
         public static readonly DependencyProperty SelectedSymbolProperty;
         public static readonly DependencyProperty YearFromProperty;
@@ -73,7 +73,7 @@ namespace FmpAnalyzer
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             BackgroundResultsProperty = DependencyProperty.Register("BackgroundResults", typeof(Brush), typeof(MainWindowViewModel), new PropertyMetadata(default(Brush)));
-            ResultSetListProperty = DependencyProperty.Register("ResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
+            ListOfResultSetsProperty = DependencyProperty.Register("ListOfResultSets", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
             ReinvestmentRateFromProperty = DependencyProperty.Register("ReinvestmentRateFrom", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             SelectedSymbolProperty = DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             YearFromProperty = DependencyProperty.Register("YearFrom", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0, YearFromChanged));
@@ -179,12 +179,12 @@ namespace FmpAnalyzer
         }
 
         /// <summary>
-        /// ResultSetList
+        /// ListOfResultSets
         /// </summary>
-        public List<ResultSet> ResultSetList
+        public List<ResultSet> ListOfResultSets
         {
-            get { return (List<ResultSet>)GetValue(ResultSetListProperty); }
-            set { SetValue(ResultSetListProperty, value); }
+            get { return (List<ResultSet>)GetValue(ListOfResultSetsProperty); }
+            set { SetValue(ListOfResultSetsProperty, value); }
         }
 
         /// <summary>
@@ -502,6 +502,11 @@ namespace FmpAnalyzer
             set { SetValue(CompanyProperty, value); }
         }
 
+        /// <summary>
+        /// ResultSetList
+        /// </summary>
+        public ResultSetList ResultSetList { get; set; }
+
         #endregion
 
         #region Commands
@@ -533,7 +538,8 @@ namespace FmpAnalyzer
                 CurrentPage = CurrentPage,
                 DebtEquityRatioFrom = DebtToEquityFrom,
                 DebtEquityRatioTo = DebtToEquityTo,
-                Exchanges = Exchanges
+                Exchanges = Exchanges,
+                MaxResultCount = Convert.ToInt32(Configuration.Instance["MaxResultCount"])
             };
 
             BackgroundWork((s, e) =>
@@ -542,14 +548,30 @@ namespace FmpAnalyzer
                 (s as BackgroundWorker).ReportProgress(100, symbols);
             }, (s, e) =>
             {
-                ResultSetList = ((ResultSetList)e.UserState).ResultSets;
-                CountTotal = ((ResultSetList)e.UserState).CountTotal;
+                ResultSetList = (ResultSetList)e.UserState;
+                ListOfResultSets = ResultSetList.ResultSets;
+                CountTotal = ResultSetList.CountTotal;
             }, (s, e) =>
             {
-                CurrentAction += $" {CountTotal} companies found. Showing companies {ShowingCompanyFrom} - {ShowingCompanyTo}";
+                CurrentAction = GenerateCurrentActionMessage(ResultSetList);
                 UnlockControls();
                 UpdatePageButtons();
             });
+        }
+
+        /// <summary>
+        /// GenerateCurrentActionMessage
+        /// </summary>
+        /// <param name="resultSetList"></param>
+        /// <returns></returns>
+        private string GenerateCurrentActionMessage(ResultSetList resultSetList)
+        {
+            if(resultSetList.ResultSets.Any())
+            {
+                return $"{CountTotal} companies found. Showing companies {ShowingCompanyFrom} - {ShowingCompanyTo}";
+            }
+
+            return $"Too many companies found ({CountTotal}). Please restrict your query.";
         }
 
         /// <summary>
@@ -894,7 +916,7 @@ namespace FmpAnalyzer
         /// </summary>
         private void LockControls()
         {
-            ResultSetList = new List<ResultSet>();
+            ListOfResultSets = new List<ResultSet>();
             ProgressCurrent = 0;
             BackgroundResults = Brushes.DarkGray;
         }
