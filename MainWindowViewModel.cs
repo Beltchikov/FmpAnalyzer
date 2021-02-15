@@ -17,6 +17,8 @@ namespace FmpAnalyzer
     /// </summary>
     public class MainWindowViewModel : DependencyObject
     {
+        QueryFactory _queryFactory;
+
         public RelayCommand CommandGo { get; set; }
         public RelayCommand CommandCount { get; set; }
         public RelayCommand CommandFirst { get; set; }
@@ -26,6 +28,7 @@ namespace FmpAnalyzer
         public RelayCommand CommandFind { get; set; }
         public RelayCommand CommandEarnings { get; set; }
         public RelayCommand CommandFindByCompany { get; set; }
+
 
         public static readonly DependencyProperty ConnectionStringProperty;
         public static readonly DependencyProperty RoeFromProperty;
@@ -111,6 +114,7 @@ namespace FmpAnalyzer
         public MainWindowViewModel()
         {
             ConnectionString = Configuration.Instance["ConnectionString"];
+            _queryFactory = new QueryFactory(ConnectionString);
             RoeFrom = 30;
             CurrentAction = "Willkommen!";
             ReinvestmentRateFrom = 50;
@@ -544,7 +548,7 @@ namespace FmpAnalyzer
 
             BackgroundWork((s, e) =>
             {
-                var symbols = QueryFactory.CompounderQuery.Run(compounderQueryParams);
+                var symbols = _queryFactory.CompounderQuery.Run(compounderQueryParams);
                 (s as BackgroundWorker).ReportProgress(100, symbols);
             }, (s, e) =>
             {
@@ -605,7 +609,7 @@ namespace FmpAnalyzer
 
             BackgroundWork((s, e) =>
             {
-                var count = QueryFactory.CompounderQuery.Count(compounderQueryParams);
+                var count = _queryFactory.CompounderQuery.Count(compounderQueryParams);
                 (s as BackgroundWorker).ReportProgress(100, count);
             }, (s, e) =>
             {
@@ -672,7 +676,7 @@ namespace FmpAnalyzer
             };
 
             var symbolList = new List<string> { Symbol };
-            SymbolResultSetList = QueryFactory.CompounderQuery.FindBySymbol(compounderQueryParams, symbolList).ResultSets;
+            SymbolResultSetList = _queryFactory.CompounderQuery.FindBySymbol(compounderQueryParams, symbolList).ResultSets;
         }
 
         /// <summary>
@@ -689,7 +693,7 @@ namespace FmpAnalyzer
                 HistoryDepth = Convert.ToInt32(Configuration.Instance["HistoryDepth"])
             };
 
-            var symbolsAsList = QueryFactory.SymbolByCompanyQuery.FindByCompany(Company);
+            var symbolsAsList = _queryFactory.SymbolByCompanyQuery.FindByCompany(Company);
             if (symbolsAsList.Any())
             {
                 SymbolsFound = symbolsAsList.Aggregate((r, n) => r + "\r\n" + n);
@@ -717,7 +721,7 @@ namespace FmpAnalyzer
 
             foreach (var company in listOfCompanies)
             {
-                var symbolsAsList = QueryFactory.SymbolByCompanyQuery.FindByCompany(company);
+                var symbolsAsList = _queryFactory.SymbolByCompanyQuery.FindByCompany(company);
                 if (!symbolsAsList.Any())
                 {
                     companiesNotResolved.Add(company);
@@ -751,7 +755,7 @@ namespace FmpAnalyzer
 
             BackgroundWork((s, e) =>
             {
-                var resultSetList = QueryFactory.CompounderQuery.FindBySymbol(compounderQueryParams, symbolList);
+                var resultSetList = _queryFactory.CompounderQuery.FindBySymbol(compounderQueryParams, symbolList);
                 (s as BackgroundWorker).ReportProgress(100, resultSetList);
             }, (s, e) =>
             {
@@ -781,7 +785,7 @@ namespace FmpAnalyzer
             int count = 0;
             BackgroundWork((s, e) =>
             {
-                var count = QueryFactory.CountByYearsQuery.Run(yearFrom, yearTo, dates);
+                var count = _queryFactory.CountByYearsQuery.Run(yearFrom, yearTo, dates);
                 (s as BackgroundWorker).ReportProgress(100, count);
             }, (s, e) =>
             {
