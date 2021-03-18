@@ -76,7 +76,7 @@ namespace FmpAnalyzer
             CurrentActionProperty = DependencyProperty.Register("CurrentAction", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             ProgressCurrentProperty = DependencyProperty.Register("ProgressCurrent", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             BackgroundResultsProperty = DependencyProperty.Register("BackgroundResults", typeof(Brush), typeof(MainWindowViewModel), new PropertyMetadata(default(Brush)));
-            ListOfResultSetsProperty = DependencyProperty.Register("ListOfResultSets", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
+            ListOfResultSetsProperty = DependencyProperty.Register("ListOfResultSets", typeof(List<ResultSetReinvestment>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSetReinvestment>()));
             ReinvestmentRateFromProperty = DependencyProperty.Register("ReinvestmentRateFrom", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             SelectedSymbolProperty = DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             YearFromProperty = DependencyProperty.Register("YearFrom", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0, YearFromChanged));
@@ -94,7 +94,7 @@ namespace FmpAnalyzer
             RoeGrowthKoefListProperty = DependencyProperty.Register("RoeGrowthKoefList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
             RoeGrowthKoefSelectedProperty = DependencyProperty.Register("RoeGrowthKoefSelected", typeof(int), typeof(MainWindowViewModel), new PropertyMetadata(0));
             SymbolProperty = DependencyProperty.Register("Symbol", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            SymbolResultSetListProperty = DependencyProperty.Register("SymbolResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
+            SymbolResultSetListProperty = DependencyProperty.Register("SymbolResultSetList", typeof(List<ResultSetReinvestment>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSetReinvestment>()));
             RoeToProperty = DependencyProperty.Register("RoeTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             ReinvestmentRateToProperty = DependencyProperty.Register("ReinvestmentRateTo", typeof(double), typeof(MainWindowViewModel), new PropertyMetadata(default(double)));
             RevenueGrowthKoefListProperty = DependencyProperty.Register("RevenueGrowthKoefList", typeof(List<int>), typeof(MainWindowViewModel), new PropertyMetadata(new List<int>()));
@@ -108,7 +108,7 @@ namespace FmpAnalyzer
             ExchangesProperty = DependencyProperty.Register("Exchanges", typeof(List<Exchange>), typeof(MainWindowViewModel), new PropertyMetadata(new List<Exchange>()));
             CompaniesEarningsProperty = DependencyProperty.Register("CompaniesEarnings", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
             CompaniesEarningsNotProcessedProperty = DependencyProperty.Register("CompaniesEarningsNotProcessed", typeof(string), typeof(MainWindowViewModel), new PropertyMetadata(String.Empty));
-            EarningsResultSetListProperty = DependencyProperty.Register("EarningsResultSetList", typeof(List<ResultSet>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSet>()));
+            EarningsResultSetListProperty = DependencyProperty.Register("EarningsResultSetList", typeof(List<ResultSetReinvestment>), typeof(MainWindowViewModel), new PropertyMetadata(new List<ResultSetReinvestment>()));
         }
 
         public MainWindowViewModel()
@@ -185,27 +185,27 @@ namespace FmpAnalyzer
         /// <summary>
         /// ListOfResultSets
         /// </summary>
-        public List<ResultSet> ListOfResultSets
+        public List<ResultSetReinvestment> ListOfResultSets
         {
-            get { return (List<ResultSet>)GetValue(ListOfResultSetsProperty); }
+            get { return (List<ResultSetReinvestment>)GetValue(ListOfResultSetsProperty); }
             set { SetValue(ListOfResultSetsProperty, value); }
         }
 
         /// <summary>
         /// SymbolResultSetList
         /// </summary>
-        public List<ResultSet> SymbolResultSetList
+        public List<ResultSetReinvestment> SymbolResultSetList
         {
-            get { return (List<ResultSet>)GetValue(SymbolResultSetListProperty); }
+            get { return (List<ResultSetReinvestment>)GetValue(SymbolResultSetListProperty); }
             set { SetValue(SymbolResultSetListProperty, value); }
         }
 
         /// <summary>
         /// EarningsResultSetList
         /// </summary>
-        public List<ResultSet> EarningsResultSetList
+        public List<ResultSetReinvestment> EarningsResultSetList
         {
-            get { return (List<ResultSet>)GetValue(EarningsResultSetListProperty); }
+            get { return (List<ResultSetReinvestment>)GetValue(EarningsResultSetListProperty); }
             set { SetValue(EarningsResultSetListProperty, value); }
         }
 
@@ -509,7 +509,7 @@ namespace FmpAnalyzer
         /// <summary>
         /// ResultSetList
         /// </summary>
-        public ResultSetList ResultSetList { get; set; }
+        public ResultSetListReinvestment ResultSetList { get; set; }
 
         #endregion
 
@@ -552,7 +552,7 @@ namespace FmpAnalyzer
                 (s as BackgroundWorker).ReportProgress(100, symbols);
             }, (s, e) =>
             {
-                ResultSetList = (ResultSetList)e.UserState;
+                ResultSetList = (ResultSetListReinvestment)e.UserState;
                 ListOfResultSets = ResultSetList.ResultSets;
                 CountTotal = ResultSetList.CountTotal;
             }, (s, e) =>
@@ -568,7 +568,7 @@ namespace FmpAnalyzer
         /// </summary>
         /// <param name="resultSetList"></param>
         /// <returns></returns>
-        private string GenerateCurrentActionMessage(ResultSetList resultSetList)
+        private string GenerateCurrentActionMessage(ResultSetListReinvestment resultSetList)
         {
             if(resultSetList == null)
             {
@@ -759,8 +759,8 @@ namespace FmpAnalyzer
                 (s as BackgroundWorker).ReportProgress(100, resultSetList);
             }, (s, e) =>
             {
-                EarningsResultSetList = ((ResultSetList)e.UserState).ResultSets;
-                CountTotal = ((ResultSetList)e.UserState).CountTotal;
+                EarningsResultSetList = ((ResultSetListReinvestment)e.UserState).ResultSets;
+                CountTotal = ((ResultSetListReinvestment)e.UserState).CountTotal;
             }, (s, e) =>
             {
                 UnlockControls();
@@ -925,7 +925,7 @@ namespace FmpAnalyzer
         /// </summary>
         private void LockControls()
         {
-            ListOfResultSets = new List<ResultSet>();
+            ListOfResultSets = new List<ResultSetReinvestment>();
             ProgressCurrent = 0;
             BackgroundResults = Brushes.DarkGray;
         }
