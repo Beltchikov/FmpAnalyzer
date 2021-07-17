@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>codeblocks_icon_188894.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
