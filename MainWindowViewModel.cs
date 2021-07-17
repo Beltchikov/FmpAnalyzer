@@ -115,11 +115,11 @@ namespace FmpAnalyzer
         {
             ConnectionString = Configuration.Instance["ConnectionString"];
             _queryFactory = new QueryFactory(ConnectionString);
-            RoeFrom = 30;
+            RoeFrom = 15;
             CurrentAction = "Willkommen!";
             ReinvestmentRateFrom = 50;
-            YearFrom = 2019;
-            YearTo = 2020;
+            YearFrom = 2020;
+            YearTo = 2021;
             DebtToEquityTo = 2.0;
             GenerateCountMessage();
             InitComboboxes();
