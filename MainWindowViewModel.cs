@@ -120,7 +120,7 @@ namespace FmpAnalyzer
             ReinvestmentRateFrom = 50;
             YearFrom = 2020;
             YearTo = 2021;
-            DebtToEquityTo = 2.0;
+            DebtToEquityTo = 0;
             GenerateCountMessage();
             InitComboboxes();
 
@@ -847,7 +847,7 @@ namespace FmpAnalyzer
 
             // EpsGrowthKoefList
             EpsGrowthKoefList = new List<int> { 0, 2, 3, 4 };
-            EpsGrowthKoefSelected = EpsGrowthKoefList[2];
+            EpsGrowthKoefSelected = EpsGrowthKoefList[1];
 
             // Exchages
             Exchanges = new List<Exchange>()
